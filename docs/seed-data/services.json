@@ -1,0 +1,1014 @@
+[
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor KITAS",
+    "Service Name": "Investor KITAS 2 Years",
+    "Description": "Full processing for a 2-year Investor Stay Permit (KITAS), allowing foreign investors to reside and manage investments.",
+    "Target Client": "Foreign Investors",
+    "Key Deliverables / Outcome": "2-Year Investor KITAS, MERP",
+    "Estimated Timeline": "6-10 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor KITAS",
+    "Service Name": "Investor KITAS 2 Years (Extension)",
+    "Description": "Support for extending an existing 2-year Investor KITAS.",
+    "Target Client": "Existing Investor KITAS",
+    "Key Deliverables / Outcome": "Extended 2-Year Investor KITAS",
+    "Estimated Timeline": "4-8 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor KITAS",
+    "Service Name": "Investor KITAS 1 Year (Extension)",
+    "Description": "Support for extending an existing 1-year Investor KITAS.",
+    "Target Client": "Existing Investor KITAS",
+    "Key Deliverables / Outcome": "Extended 1-Year Investor KITAS",
+    "Estimated Timeline": "4-8 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Working & Remote KITAS",
+    "Service Name": "Working KITAS 6 Month",
+    "Description": "Processing for a 6-month Working Stay Permit.",
+    "Target Client": "Foreign Employees",
+    "Key Deliverables / Outcome": "6-Month Working KITAS, IMTA",
+    "Estimated Timeline": "6-10 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Working & Remote KITAS",
+    "Service Name": "Working KITAS (Extension) 1 Year",
+    "Description": "Support for extending a 1-year Working Stay Permit.",
+    "Target Client": "Existing Working KITAS",
+    "Key Deliverables / Outcome": "Extended 1-Year Working KITAS",
+    "Estimated Timeline": "4-8 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Working & Remote KITAS",
+    "Service Name": "Working KITAS (Extension) 2 Years",
+    "Description": "Support for extending a 2-year Working Stay Permit.",
+    "Target Client": "Existing Working KITAS",
+    "Key Deliverables / Outcome": "Extended 2-Year Working KITAS",
+    "Estimated Timeline": "4-8 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Working & Remote KITAS",
+    "Service Name": "Remote Worker KITAS - Digital Nomad (E33G) - 1 Year",
+    "Description": "Assistance for obtaining a 1-year Digital Nomad Stay Permit for eligible remote workers.",
+    "Target Client": "Digital Nomads",
+    "Key Deliverables / Outcome": "1-Year Digital Nomad KITAS",
+    "Estimated Timeline": "6-10 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Retirement KITAS",
+    "Service Name": "Retirement KITAS",
+    "Description": "Processing for a Retirement Stay Permit for eligible foreign nationals.",
+    "Target Client": "Foreign Retirees",
+    "Key Deliverables / Outcome": "Retirement KITAS",
+    "Estimated Timeline": "6-10 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Retirement KITAS",
+    "Service Name": "Retirement KITAS (Extension)",
+    "Description": "Support for extending an existing Retirement KITAS.",
+    "Target Client": "Existing Retirement KITAS",
+    "Key Deliverables / Outcome": "Extended Retirement KITAS",
+    "Estimated Timeline": "4-8 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visit Visa Single Entry 60 Days (C1)",
+    "Description": "Application processing for a single-entry visit visa valid for 60 days.",
+    "Target Client": "Tourists, Short-term Visits",
+    "Key Deliverables / Outcome": "60-Day Single Entry Visa",
+    "Estimated Timeline": "2-4 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visit Visa Single Entry 60 Days (Extension)",
+    "Description": "Extension services for a 60-day single-entry visit visa.",
+    "Target Client": "Existing 60-Day Visa",
+    "Key Deliverables / Outcome": "Extended Visit Visa",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visit Visa Single Entry 180 Days (C12)",
+    "Description": "Application processing for a single-entry visit visa valid for 180 days.",
+    "Target Client": "Longer-term Visits",
+    "Key Deliverables / Outcome": "180-Day Single Entry Visa",
+    "Estimated Timeline": "2-4 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visit Visa Single/Multiple Entry 180 Days (Extension)",
+    "Description": "Extension services for 180-day single or multiple-entry visit visas.",
+    "Target Client": "Existing 180-Day Visa",
+    "Key Deliverables / Outcome": "Extended Visit Visa",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Multiple Entry Visit Visa (1 Year) D1 & D2",
+    "Description": "Processing for a multiple-entry visit visa valid for 1 year.",
+    "Target Client": "Frequent Visitors",
+    "Key Deliverables / Outcome": "1-Year Multiple Entry Visa",
+    "Estimated Timeline": "3-5 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Multiple Entry Visit Visa (2 Years) D1 & D2",
+    "Description": "Processing for a multiple-entry visit visa valid for 2 years.",
+    "Target Client": "Frequent Visitors",
+    "Key Deliverables / Outcome": "2-Year Multiple Entry Visa",
+    "Estimated Timeline": "3-5 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visa On Arrival E-VOA",
+    "Description": "Assistance with the electronic Visa On Arrival application.",
+    "Target Client": "Eligible Nationalities",
+    "Key Deliverables / Outcome": "Approved E-VOA",
+    "Estimated Timeline": "1-3 Days"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visa On Arrival E-VOA (Extension)",
+    "Description": "Extension services for an E-VOA.",
+    "Target Client": "E-VOA Holders",
+    "Key Deliverables / Outcome": "Extended E-VOA",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visa On Arrival E-VOA (Extension) Express",
+    "Description": "Expedited extension services for an E-VOA.",
+    "Target Client": "E-VOA Holders (Urgent)",
+    "Key Deliverables / Outcome": "Expedited Extended E-VOA",
+    "Estimated Timeline": "3-5 Days"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Visitor Visa (Subclass 600)",
+    "Description": "Assistance for Indonesian citizens applying for Australian Visitor Visa (Subclass 600).",
+    "Target Client": "Indonesian Travelers",
+    "Key Deliverables / Outcome": "Australian Visa Approval",
+    "Estimated Timeline": "4-12 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Internship Visa - 180 Days (C22)",
+    "Description": "Application processing for a 180-day internship visa.",
+    "Target Client": "Foreign Interns",
+    "Key Deliverables / Outcome": "180-Day Internship Visa",
+    "Estimated Timeline": "4-8 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Visit Visas",
+    "Service Name": "Entertainment KITAS",
+    "Description": "Processing for a Stay Permit specific to foreign nationals working in the entertainment industry.",
+    "Target Client": "Entertainment Professionals",
+    "Key Deliverables / Outcome": "Entertainment KITAS",
+    "Estimated Timeline": "6-10 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Permits & Travel",
+    "Service Name": "Multiple Re-Entry Permit (MREP) (1 Year)",
+    "Description": "Application for a 1-year MREP, allowing multiple exits/entries for KITAS holders.",
+    "Target Client": "KITAS Holders",
+    "Key Deliverables / Outcome": "1-Year MREP",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Permits & Travel",
+    "Service Name": "Multiple Re-Entry Permit (MREP) (2 Years)",
+    "Description": "Application for a 2-year MREP.",
+    "Target Client": "KITAS Holders",
+    "Key Deliverables / Outcome": "2-Year MREP",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Permits & Travel",
+    "Service Name": "Multiple Re-Entry Permit (MREP) Unlimited",
+    "Description": "Application for an unlimited MREP.",
+    "Target Client": "KITAS Holders (Long-term)",
+    "Key Deliverables / Outcome": "Unlimited MREP",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Permits & Travel",
+    "Service Name": "Exit Permit Only (E.P.O)",
+    "Description": "Processing for an Exit Permit Only, required for certain visa/KITAS holders when permanently leaving Indonesia.",
+    "Target Client": "KITAS/Visa Holders (Exit)",
+    "Key Deliverables / Outcome": "EPO Document",
+    "Estimated Timeline": "3-7 Days"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Permits & Travel",
+    "Service Name": "Bridging Visa",
+    "Description": "Temporary visa status while awaiting a new visa or during status transition.",
+    "Target Client": "Special Circumstances",
+    "Key Deliverables / Outcome": "Temporary Visa Status",
+    "Estimated Timeline": "Varies"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Administrative Changes",
+    "Service Name": "Changing KITAS Address",
+    "Description": "Assistance with updating the registered address on a KITAS.",
+    "Target Client": "KITAS Holders",
+    "Key Deliverables / Outcome": "Updated KITAS Details",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Tax Registration",
+    "Service Name": "NPWP (Company)",
+    "Description": "Assistance with obtaining a Taxpayer Identification Number (NPWP) for a company.",
+    "Target Client": "All Businesses",
+    "Key Deliverables / Outcome": "Company NPWP Certificate",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Tax Registration",
+    "Service Name": "NPWPD (Regional)",
+    "Description": "Support for obtaining a Regional Taxpayer Identification Number.",
+    "Target Client": "Businesses (Regional Tax)",
+    "Key Deliverables / Outcome": "Regional Tax ID",
+    "Estimated Timeline": "1-3 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Tax Registration",
+    "Service Name": "NPWPD Abt (Underground Water Wells)",
+    "Description": "Specialized assistance for obtaining a Regional Taxpayer Identification Number for underground water well usage.",
+    "Target Client": "Businesses (Water Usage)",
+    "Key Deliverables / Outcome": "Regional Tax ID (Water)",
+    "Estimated Timeline": "2-4 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Tax Registration",
+    "Service Name": "NPWP (Personal)",
+    "Description": "Assistance for foreign individuals to obtain an Indonesian Taxpayer Identification Number.",
+    "Target Client": "Foreign Individuals",
+    "Key Deliverables / Outcome": "Personal NPWP Certificate",
+    "Estimated Timeline": "1-2 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Translation",
+    "Service Name": "Sworn Translation",
+    "Description": "Official translation of documents by a sworn and certified translator.",
+    "Target Client": "Individuals/Businesses",
+    "Key Deliverables / Outcome": "Certified Translated Document",
+    "Estimated Timeline": "3-7 Days"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Reporting",
+    "Service Name": "BKPM Reports (LKPM)",
+    "Description": "Preparation and submission of Capital Investment Activity Reports (LKPM) to BKPM.",
+    "Target Client": "PMA Companies",
+    "Key Deliverables / Outcome": "Timely LKPM Submission",
+    "Estimated Timeline": "Per Report Cycle"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Closing & Dissolution PMA",
+    "Service Name": "Closing Local Company / PT, CV, Firma",
+    "Description": "Comprehensive support for the legal dissolution and closure of local companies.",
+    "Target Client": "Local Companies",
+    "Key Deliverables / Outcome": "Dissolution Deed, Tax Clearance, Deregistration",
+    "Estimated Timeline": "3-6 Months"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Closing & Dissolution PMA",
+    "Service Name": "Closing PMA",
+    "Description": "Expert guidance and processing for the legal dissolution and liquidation of a Foreign Capital Investment Company (PMA).",
+    "Target Client": "PMA Companies",
+    "Key Deliverables / Outcome": "Liquidation Deed, BKPM Clearance, Deregistration",
+    "Estimated Timeline": "6-12 Months"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Closing & Dissolution PMA",
+    "Service Name": "Company Valuation",
+    "Description": "Professional assessment to determine the economic value of a company or its assets.",
+    "Target Client": "Businesses (M&A, Funding)",
+    "Key Deliverables / Outcome": "Valuation Report",
+    "Estimated Timeline": "2-4 Weeks"
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor ITAS Offshore",
+    "Service Name": "Investor ITAS Offshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor ITAS Offshore",
+    "Service Name": "Investor ITAS Offshore 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor ITAS Onshore",
+    "Service Name": "Investor ITAS Onshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Investor ITAS Onshore",
+    "Service Name": "Investor ITAS Onshore 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Worker ITAS Offshore",
+    "Service Name": "Worker ITAS Offshore 6 Months",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Worker ITAS Offshore",
+    "Service Name": "Worker ITAS Offshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Worker ITAS Offshore",
+    "Service Name": "Worker ITAS Offshore 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Worker ITAS Onshore",
+    "Service Name": "Worker ITAS Onshore 6 Months",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Worker ITAS Onshore",
+    "Service Name": "Worker ITAS Onshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Worker ITAS Onshore",
+    "Service Name": "Worker ITAS Onshore 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Freelance ITAS",
+    "Service Name": "Freelance ITAS 6 Months",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Family ITAS Offshore",
+    "Service Name": "Family ITAS Offshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Family ITAS Offshore",
+    "Service Name": "Family ITAS Offshore 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Family ITAS Onshore",
+    "Service Name": "Family ITAS Onshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Family ITAS Onshore",
+    "Service Name": "Family ITAS Onshore 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Family ITAS Extension",
+    "Service Name": "Family ITAS Extension 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Family ITAS Extension",
+    "Service Name": "Family ITAS Extension 2 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Retirement ITAS Offshore",
+    "Service Name": "Retirement ITAS Offshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Retirement ITAS Onshore",
+    "Service Name": "Retirement ITAS Onshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "KITAP Permanent Stay Permit",
+    "Service Name": "Investor KITAP 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "KITAP Permanent Stay Permit",
+    "Service Name": "Family KITAP 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "KITAP Permanent Stay Permit",
+    "Service Name": "Retirement KITAP 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Single Entry Visa",
+    "Service Name": "Business Single Entry 60 Days",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Single Entry Visa",
+    "Service Name": "Social or Volunteer Single Entry 60 Days",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Golden Visa",
+    "Service Name": "Golden Visa Offshore 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Golden Visa",
+    "Service Name": "Golden Visa Onshore 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Golden Visa",
+    "Service Name": "Golden Visa Extension",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Multiple Entry Visa",
+    "Service Name": "Tourist Multiple Entry 1 Year 60 Days",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Multiple Entry Visa",
+    "Service Name": "Business Multiple Entry 1 Year 60 Days",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Multiple Entry Visa",
+    "Service Name": "Multiple Entry Visa Extension",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Pre-Investment Visa",
+    "Service Name": "Pre-Investment Visa 1 Year 180 Days",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Pre-Investment Visa",
+    "Service Name": "Pre-Investment Visa 2 Years 180 Days",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Second Home Visa",
+    "Service Name": "Second Home Visa Offshore 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Second Home Visa",
+    "Service Name": "Second Home Visa Onshore 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Second Home Visa",
+    "Service Name": "Second Home Visa Extension",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Remote Worker",
+    "Service Name": "Remote Worker Offshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Remote Worker",
+    "Service Name": "Remote Worker Onshore 1 Year",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Remote Worker",
+    "Service Name": "Remote Worker Extension",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Address Mutations in ITAS",
+    "Service Name": "Address Mutations in ITAS",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Affidavit",
+    "Service Name": "Affidavit",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Apostille Documents",
+    "Service Name": "Apostille Documents",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Brand Registration",
+    "Service Name": "Brand Registration",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Domicile Letter",
+    "Service Name": "Domicile Letter",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "E-Passport",
+    "Service Name": "E-Passport 5 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "E-Passport",
+    "Service Name": "E-Passport 10 Years",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "ERP",
+    "Service Name": "ERP",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "Passport Mutation",
+    "Service Name": "Passport Mutation from Old to New",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "SKCK / Police Letter",
+    "Service Name": "SKCK / Police Letter",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Visa",
+    "Sub-Category": "SKTT",
+    "Service Name": "SKTT",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "PT Local - Set Up",
+    "Description": "Comprehensive assistance for establishing a local Limited Liability Company (PT), including all legal and administrative requirements.",
+    "Target Client": "Local Entrepreneurs",
+    "Key Deliverables / Outcome": "Notarial Deed, NIB, Business Licenses",
+    "Estimated Timeline": "4-8 Weeks",
+    "Real Time Work": "1 Week"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "PT Local - Hospitality Set Up",
+    "Description": "Specialized support for establishing a local PT tailored for the hospitality sector (hotels, villas).",
+    "Target Client": "Hospitality Investors",
+    "Key Deliverables / Outcome": "Notarial Deed, NIB, Hospitality Licenses",
+    "Estimated Timeline": "6-12 Weeks",
+    "Real Time Work": "1 Week"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "PMA - Set Up",
+    "Description": "Full-service support for establishing a Foreign Capital Investment Company (PMA).",
+    "Target Client": "Foreign Investors",
+    "Key Deliverables / Outcome": "Notarial Deed, BKPM Approval, NIB, Business Licenses",
+    "Estimated Timeline": "8-16 Weeks",
+    "Real Time Work": "1 Week"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "CV (Commanditaire Vennootschap)",
+    "Description": "Assistance with the establishment of a Commanditaire Vennootschap (limited partnership).",
+    "Target Client": "Small Business Owners",
+    "Key Deliverables / Outcome": "Deed of Establishment, Registration",
+    "Estimated Timeline": "3-6 Weeks",
+    "Real Time Work": "1 Week"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "PT Perorangan",
+    "Description": "Support for establishing a Single-Person Limited Liability Company for individual entrepreneurs.",
+    "Target Client": "Individual Entrepreneurs",
+    "Key Deliverables / Outcome": "Deed of Establishment, NIB",
+    "Estimated Timeline": "2-4 Weeks",
+    "Real Time Work": "1 Week"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "NIB & OSS Process",
+    "Description": "Guidance through the Online Single Submission (OSS) system to obtain a Business Identification Number (NIB).",
+    "Target Client": "All Businesses",
+    "Key Deliverables / Outcome": "NIB, Standard Business Licenses",
+    "Estimated Timeline": "1-3 Weeks",
+    "Real Time Work": "3 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Company Set-Up",
+    "Service Name": "OSS Username & Password",
+    "Description": "Support for obtaining or recovering OSS system credentials.",
+    "Target Client": "All Businesses",
+    "Key Deliverables / Outcome": "OSS Account Access",
+    "Estimated Timeline": "1-3 Days",
+    "Real Time Work": "3 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Compliance",
+    "Service Name": "Company Legal Documents Review",
+    "Description": "Thorough review of a company's legal documents to ensure compliance and identify risks.",
+    "Target Client": "All Businesses",
+    "Key Deliverables / Outcome": "Legal Review Report, Recommendations",
+    "Estimated Timeline": "1-2 Weeks",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Compliance",
+    "Service Name": "Document Review By Lawyer",
+    "Description": "Review of legal documents by a qualified lawyer with professional legal opinion.",
+    "Target Client": "Individuals/Businesses",
+    "Key Deliverables / Outcome": "Legal Opinion/Advice",
+    "Estimated Timeline": "3-7 Days",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Changes & Restructuring",
+    "Service Name": "Change Acte For PT Or PMA",
+    "Description": "Processing of legal deeds (akta) for fundamental company changes (shareholders, directors, capital, Articles of Association).",
+    "Target Client": "Existing Companies",
+    "Key Deliverables / Outcome": "Amended Articles of Association, Legal Updates",
+    "Estimated Timeline": "3-6 Weeks",
+    "Real Time Work": "1-2 Weeks"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Agreements",
+    "Service Name": "Prenuptial & Postnuptial Agreement",
+    "Description": "Drafting and legal processing of prenuptial or postnuptial agreements regarding asset division.",
+    "Target Client": "Couples",
+    "Key Deliverables / Outcome": "Notarized Agreement",
+    "Estimated Timeline": "2-4 Weeks",
+    "Real Time Work": "3 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Agreements",
+    "Service Name": "Shareholder Agreement",
+    "Description": "Drafting of an agreement between shareholders outlining rights, obligations, and company management.",
+    "Target Client": "Shareholders",
+    "Key Deliverables / Outcome": "Shareholder Agreement",
+    "Estimated Timeline": "1-3 Weeks",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Employment Contracts",
+    "Service Name": "Draft Employment Contract",
+    "Description": "Drafting of legally compliant employment contracts for local employees.",
+    "Target Client": "Employers",
+    "Key Deliverables / Outcome": "Legal Employment Contract",
+    "Estimated Timeline": "3-7 Days",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Contract & Notary",
+    "Service Name": "Land/Building Rental Contract With Waarmerking",
+    "Description": "Drafting of land or building rental contracts with official Waarmerking by a notary.",
+    "Target Client": "Landlords/Tenants",
+    "Key Deliverables / Outcome": "Waarmerking Contract",
+    "Estimated Timeline": "3-7 Days",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Contract & Notary",
+    "Service Name": "Notary Verification Lease Contract",
+    "Description": "Notarial verification of an existing lease contract, confirming authenticity of signatures and dates.",
+    "Target Client": "Landlords/Tenants",
+    "Key Deliverables / Outcome": "Verified Lease Contract",
+    "Estimated Timeline": "1-3 Days",
+    "Real Time Work": "1-3 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Contract & Notary",
+    "Service Name": "Waarmerking",
+    "Description": "Notarial service to authenticate signatures and the date of a private document.",
+    "Target Client": "Individuals/Businesses",
+    "Key Deliverables / Outcome": "Waarmerking Document",
+    "Estimated Timeline": "1-3 Days",
+    "Real Time Work": "1-3 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Contract & Notary",
+    "Service Name": "Notary For Property/Land Contract Leasing",
+    "Description": "Services of a notary for drafting and authenticating property or land lease contracts.",
+    "Target Client": "Landlords/Tenants",
+    "Key Deliverables / Outcome": "Notarized Lease Contract",
+    "Estimated Timeline": "3-7 Days",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Management & Licensing",
+    "Service Name": "Joint Property Management",
+    "Description": "Services for managing jointly owned properties, including legal agreements and operational oversight.",
+    "Target Client": "Co-Owners",
+    "Key Deliverables / Outcome": "Management Agreement",
+    "Estimated Timeline": "Varies",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Management & Licensing",
+    "Service Name": "Pondok Wisata License",
+    "Description": "Assistance with obtaining a specific license for small tourist accommodations (Pondok Wisata).",
+    "Target Client": "Guesthouse Owners",
+    "Key Deliverables / Outcome": "Pondok Wisata License",
+    "Estimated Timeline": "6-10 Weeks",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Management & Licensing",
+    "Service Name": "Housing Contract Price Negotiation",
+    "Description": "Professional negotiation services to secure favorable terms for housing rental or purchase contracts.",
+    "Target Client": "Renters/Buyers",
+    "Key Deliverables / Outcome": "Negotiated Contract Terms",
+    "Estimated Timeline": "Varies",
+    "Real Time Work": "Varies"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Property Information & Checks",
+    "Service Name": "Land Due Diligence",
+    "Description": "Comprehensive investigation and verification of land ownership, legal status, zoning, and potential risks.",
+    "Target Client": "Individual Property Buyers",
+    "Key Deliverables / Outcome": "Due Diligence Report",
+    "Estimated Timeline": "1-3 Weeks",
+    "Real Time Work": "1-2 Weeks"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Property Information & Checks",
+    "Service Name": "ITR (Informasi Tata Ruang) Official",
+    "Description": "Official retrieval of Spatial Planning Information detailing land use regulations and zoning.",
+    "Target Client": "Individual Property Buyers",
+    "Key Deliverables / Outcome": "ITR Document",
+    "Estimated Timeline": "1-2 Weeks",
+    "Real Time Work": "3-7 Days"
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "Yayasan",
+    "Service Name": "Yayasan (Foundation) Setup",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "RUPS",
+    "Service Name": "RUPS (General Meeting of Shareholders)",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  },
+  {
+    "Category": "Legal",
+    "Sub-Category": "JBS Per Transaction",
+    "Service Name": "JBS Per Transaction",
+    "Description": "",
+    "Target Client": "",
+    "Key Deliverables / Outcome": "",
+    "Estimated Timeline": ""
+  }
+]

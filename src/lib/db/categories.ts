@@ -9,7 +9,7 @@ export async function getCategories(): Promise<Category[]> {
     .eq('is_active', true)
     .order('sort_order')
 
-  if (error) throw new Error(`getCategories: ${error.message}`)
+  if (error) return []
   return data ?? []
 }
 
