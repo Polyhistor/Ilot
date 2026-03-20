@@ -719,7 +719,7 @@ begin
   select id into cat_id from public.categories where slug = 'visa';
 
   insert into public.services (category_id, sub_category_id, slug, name, sort_order)
-  select cat_id, sc.id, v.slug, v.name, 0
+  select cat_id, sc.id, v.svc_slug, v.svc_name, 0
   from public.sub_categories sc
   join (values
     ('address-mutations',   'address-mutations-in-itas',  'Address Mutations in ITAS'),
@@ -812,7 +812,7 @@ begin
   select id into cat_id from public.categories where slug = 'legal';
 
   insert into public.services (category_id, sub_category_id, slug, name, sort_order)
-  select cat_id, sc.id, v.slug, v.name, 0
+  select cat_id, sc.id, v.svc_slug, v.svc_name, 0
   from public.sub_categories sc
   join (values
     ('yayasan', 'yayasan-foundation-setup',    'Yayasan (Foundation) Setup'),

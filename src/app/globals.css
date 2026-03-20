@@ -30,11 +30,19 @@
   }
 }
 
-/* Partner marquee */
+/* Marquee animations */
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
 .animate-marquee {
   animation: marquee 30s linear infinite;
+}
+.animate-scroll-left {
+  animation: marquee 30s linear infinite;
+}
+
+/* Caveat font utility */
+.font-caveat {
+  font-family: var(--font-caveat), cursive;
 }

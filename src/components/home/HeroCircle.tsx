@@ -1,17 +1,10 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useMotionValueEvent,
-  MotionValue,
-} from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
 import Link from 'next/link'
-import * as LucideIcons from 'lucide-react'
-import { Star } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight } from 'lucide-react'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
 
 interface HeroCard {
@@ -26,170 +19,199 @@ interface HeroCircleProps {
   cards: HeroCard[]
 }
 
-// 7 evenly spaced angles starting at top (-90°) going clockwise
-const ANGLES = Array.from({ length: 7 }, (_, i) => -90 + (360 / 7) * i)
-const RADIUS_VW = 26 // circle radius in vw units
+const TOTAL = 7
 
-function getCirclePosition(angleIndex: number) {
-  const angleDeg = ANGLES[angleIndex]
-  const angleRad = (angleDeg * Math.PI) / 180
-  return {
-    x: Math.cos(angleRad) * RADIUS_VW,
-    y: Math.sin(angleRad) * RADIUS_VW,
-    rotate: angleDeg + 90, // face outward from center
-  }
+const SERVICE_COLORS = [
+  'from-blue-900 via-blue-900/80',
+  'from-slate-900 via-slate-900/80',
+  'from-teal-900 via-teal-900/80',
+  'from-amber-900 via-amber-900/80',
+  'from-indigo-900 via-indigo-900/80',
+  'from-purple-900 via-purple-900/80',
+  'from-emerald-900 via-emerald-900/80',
+]
+
+const SERVICE_IMAGES = [
+  '1589829085413-56de8ae18c73',
+  '1556761175-5973dc0f32d7',
+  '1454165804606-c3d57bc86b40',
+  '1505664194779-8beaceb93744',
+  '1600880292203-757bb62b4baf',
+  '1521791136064-7986c2920216',
+  '1554224155-8d04cb21cd6c',
+]
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 })
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+  return windowSize
 }
 
-const SPRING_CONFIG = { stiffness: 80, damping: 20, mass: 0.8 }
+function ServiceCard({
+  index,
+  total,
+  card,
+  progress,
+  color,
+  imageId,
+  containerWidth,
+  windowHeight,
+}: {
+  index: number
+  total: number
+  card: HeroCard
+  progress: MotionValue<number>
+  color: string
+  imageId: string
+  containerWidth: number
+  windowHeight: number
+}) {
+  // Responsive card sizing based on viewport width
+  const isXL = containerWidth > 1200
+  const is2XL = containerWidth > 1400
+  const gap = is2XL ? 28 : isXL ? 24 : 20
+  const maxCardWidth = is2XL ? 300 : isXL ? 260 : 220
+  const cardWidth = Math.min((containerWidth - (total - 1) * gap) / total, maxCardWidth)
+  const cardSpacing = cardWidth + gap
+
+  const xInitial = (index - (total - 1) / 2) * cardSpacing
+  // Push cards closer to the bottom of the viewport
+  const yOffsetRatio = is2XL ? 0.36 : isXL ? 0.38 : 0.40
+  const yInitial = windowHeight * yOffsetRatio - cardWidth / 2
+
+  // Scale circle radius for larger viewports
+  const radiusWidthRatio = is2XL ? 0.32 : isXL ? 0.3 : 0.3
+  const radiusHeightRatio = is2XL ? 0.42 : isXL ? 0.4 : 0.38
+  const radiusFinal = Math.min(containerWidth * radiusWidthRatio, windowHeight * radiusHeightRatio)
+  const angleFinal = index * (360 / total) - 90
+  const xFinal = radiusFinal * Math.cos((angleFinal * Math.PI) / 180)
+  const yFinal = radiusFinal * Math.sin((angleFinal * Math.PI) / 180)
+  const x = useTransform(progress, [0.05, 0.6], [xInitial, xFinal])
+  const y = useTransform(progress, [0.05, 0.6], [yInitial, yFinal])
+
+  const imageSrc = card.imageUrl ?? `https://images.unsplash.com/photo-${imageId}?q=80&w=800&auto=format&fit=crop`
+
+  return (
+    <motion.div
+      style={{
+        x,
+        y,
+        width: cardWidth,
+        height: cardWidth,
+        marginLeft: -cardWidth / 2,
+        marginTop: -cardWidth / 2,
+      }}
+      className="absolute top-1/2 left-1/2 rounded-[2rem] overflow-hidden shadow-2xl pointer-events-auto group"
+    >
+      <Link href={`/${card.slug}`} className="block w-full h-full">
+        <Image
+          src={imageSrc}
+          alt={card.name}
+          fill
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="220px"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-80`} />
+        <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
+          <h3 className="text-white font-bold text-sm md:text-lg leading-tight">{card.name}</h3>
+        </div>
+      </Link>
+    </motion.div>
+  )
+}
 
 export function HeroCircle({ cards }: HeroCircleProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { width, height } = useWindowSize()
+
+  // Responsive max-width matching site-wide container pattern (max-w-[1500px])
+  const MAX_CARD_ROW_WIDTH = width >= 1920 ? 1600 : width >= 1440 ? 1400 : 1200
+  let containerWidth = Math.min(width, MAX_CARD_ROW_WIDTH) - 32
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  // Text fades out 30%→60% — fully visible until user starts scrolling meaningfully
-  const textOpacity = useTransform(scrollYProgress, [0.3, 0.6], [1, 0])
-  const textY = useTransform(scrollYProgress, [0.3, 0.6], [0, -40])
+  const textOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0])
+  const textY = useTransform(scrollYProgress, [0, 0.05], [0, -80])
+  const textVisibility = useTransform(scrollYProgress, (v) => v > 0.1 ? 'hidden' as const : 'visible' as const)
 
-  // Center label fades in 85%→100%
-  const centerOpacity = useTransform(scrollYProgress, [0.85, 1], [0, 1])
-  const centerScale = useTransform(scrollYProgress, [0.85, 1], [0.8, 1])
-
-  // isAnimating: true when scroll is between 30% and 95% (disables card hover)
-  const isAnimating = useTransform(scrollYProgress, (v) => v > 0.28 && v < 0.97)
+  const centerProgress = useTransform(scrollYProgress, [0.55, 0.75], [0, 1])
+  const centerTextOpacity = useTransform(centerProgress, [0, 1], [0, 1])
+  const centerTextScale = useTransform(centerProgress, [0, 1], [0.85, 1])
 
   return (
-    <div ref={containerRef} style={{ height: '300vh' }} className="relative">
-      <div className="sticky top-0 h-screen overflow-hidden bg-background flex items-center justify-center">
+    <section ref={containerRef} className="relative h-[300vh] bg-[#F4F4F0]">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
 
-        {/* Initial headline */}
+        {/* Initial Title */}
         <motion.div
-          style={{ opacity: textOpacity, y: textY }}
-          className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10"
+          style={{ opacity: textOpacity, y: textY, visibility: textVisibility }}
+          className="absolute top-[8%] left-1/2 -translate-x-1/2 text-center w-full max-w-4xl px-4 z-10"
         >
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground max-w-4xl leading-none mb-6">
-            Clear Legal Support.<br />Confident Decisions.
+          <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 mb-5 shadow-sm">
+            <span>Trusted legal services, Nationwide</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#0B0B1A] tracking-tight leading-[1.1] mb-4">
+            Clear Legal Support.<br />
+            Confident Decisions.
           </h1>
-          <p className="text-muted text-lg md:text-xl max-w-xl mb-8 leading-relaxed">
-            Elite visa, legal, and corporate solutions for global investors in Indonesia — handled end-to-end.
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl leading-relaxed mx-auto">
+            Elite legal, visa, and business solutions for global investors and expatriates. Secure your residency and protect your assets with one-touch efficiency.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center space-x-8">
             <WhatsAppCTA size="lg" label="Get your free quote" />
             <Link
-              href="/contact"
-              className="px-8 py-4 rounded-full border-2 border-foreground text-foreground font-bold hover:bg-foreground hover:text-white transition-all text-lg"
+              href="/visa"
+              className="group flex items-center space-x-2 text-[#0B0B1A] font-bold hover:text-gray-600 transition-colors border-b-2 border-[#0B0B1A] pb-1"
             >
-              Learn more
+              <span>View our offerings</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </motion.div>
 
-        {/* Center reveal */}
+        {/* Center Title (Circle) */}
         <motion.div
-          style={{ opacity: centerOpacity, scale: centerScale }}
-          className="absolute z-10 text-center pointer-events-none select-none"
+          style={{ opacity: centerTextOpacity, scale: centerTextScale, x: '-50%', y: '-50%' }}
+          className="absolute top-1/2 left-1/2 text-center w-full max-w-md px-4 z-20 pointer-events-none"
         >
-          <p className="text-muted text-sm uppercase tracking-widest mb-2">One platform</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-            Everything you need<br />to grow
+          <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 mb-6 shadow-sm">
+            <span>COMPREHENSIVE SERVICES</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#0B0B1A] leading-tight">
+            Everything you need to <br />grow in Indonesia
           </h2>
         </motion.div>
 
-        {/* 7 service cards */}
-        {cards.map((card, i) => (
-          <HeroCard
-            key={card.slug}
-            card={card}
-            index={i}
-            scrollYProgress={scrollYProgress}
-            isAnimating={isAnimating}
-          />
-        ))}
+        {/* Cards — only rendered client-side after window is measured */}
+        {width > 0 && (
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full container mx-auto px-4 h-full pointer-events-none">
+            {cards.slice(0, TOTAL).map((card, i) => (
+              <ServiceCard
+                key={card.slug}
+                index={i}
+                total={TOTAL}
+                card={card}
+                progress={scrollYProgress}
+                color={SERVICE_COLORS[i] ?? SERVICE_COLORS[0]}
+                imageId={SERVICE_IMAGES[i] ?? SERVICE_IMAGES[0]}
+                containerWidth={containerWidth}
+                windowHeight={height}
+              />
+            ))}
+          </div>
+        )}
+
       </div>
-    </div>
-  )
-}
-
-function HeroCard({
-  card,
-  index,
-  scrollYProgress,
-  isAnimating,
-}: {
-  card: HeroCard
-  index: number
-  scrollYProgress: MotionValue<number>
-  isAnimating: MotionValue<boolean>
-}) {
-  const target = getCirclePosition(index)
-
-  // Scene 1 start: cards in a horizontal strip at the bottom edge of the viewport.
-  // All values are plain numbers (vw units) — required by useSpring.
-  // startY = 45vw places cards below the center on typical 16:9 screens (~bottom edge).
-  const startX = (index - 3) * 13  // vw, numeric
-  const startY = 45                 // vw, places cards at bottom edge on 16:9
-
-  const rawX = useTransform(scrollYProgress, [0.3, 0.95], [startX, target.x])
-  const rawY = useTransform(scrollYProgress, [0.3, 0.95], [startY, target.y])
-  const rawRotate = useTransform(scrollYProgress, [0.3, 0.95], [0, target.rotate])
-
-  // Spring wrapping — only works with numeric MotionValues
-  const x = useSpring(rawX, SPRING_CONFIG)
-  const y = useSpring(rawY, SPRING_CONFIG)
-  const rotate = useSpring(rawRotate, SPRING_CONFIG)
-
-  // Sync isAnimating MotionValue → React state so we can conditionally set whileHover.
-  // MotionValue cannot be passed to whileHover directly — it must be a plain object or undefined.
-  const [animating, setAnimating] = useState(false)
-  useMotionValueEvent(isAnimating, 'change', setAnimating)
-
-  // Resolve icon component from Lucide — fall back to Star
-  const IconComponent =
-    (LucideIcons as Record<string, any>)[card.icon] ?? Star
-
-  return (
-    <motion.div
-      style={{ x, y, rotate, position: 'absolute' }}
-    >
-      <motion.div
-        whileHover={animating ? undefined : { scale: 1.05 }}
-        transition={{ duration: 0.2 }}
-      >
-        <Link
-          href={`/${card.slug}`}
-          className="block w-[11vw] min-w-[130px] max-w-[180px] aspect-square rounded-card shadow-2xl overflow-hidden relative group"
-        >
-          {/* Background photo or gradient */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: card.imageUrl
-                ? `url(${card.imageUrl}) center/cover`
-                : `linear-gradient(135deg, ${card.colorAccent ?? '#1e3a5f'}, #0a1628)`,
-            }}
-          />
-          {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-          {/* Icon — top-left gold circle */}
-          <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
-            <IconComponent className="w-4 h-4 text-accent" aria-hidden="true" />
-          </div>
-
-          {/* Category name — bottom-left */}
-          <div className="absolute bottom-0 left-0 right-0 p-3">
-            <span className="text-white font-bold text-xs leading-tight block">
-              {card.name}
-            </span>
-          </div>
-
-          {/* Gold border hover glow — only visible when not animating */}
-          <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent rounded-card transition-colors duration-300" />
-        </Link>
-      </motion.div>
-    </motion.div>
+    </section>
   )
 }

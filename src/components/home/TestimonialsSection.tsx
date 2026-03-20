@@ -1,55 +1,54 @@
-import { AnimatedSection } from '@/components/ui/AnimatedSection'
+import Image from 'next/image'
 
 const TESTIMONIALS = [
   {
-    quote: 'Ilot handled our entire PMA setup while we focused on building the business. Seamless.',
-    name: 'James T.',
-    role: 'CEO, Singapore-based startup',
-    stars: 5,
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop',
+    quote: 'Setting up a PT PMA and securing my Investor KITAS felt daunting from abroad. ILOT cut through the Indonesian bureaucracy with incredible speed. Their professional handling meant my company was operational weeks ahead of schedule.',
+    name: 'Marcus V.',
+    role: 'Tech Entrepreneur, Germany',
   },
   {
-    quote: 'Got my Investor KITAS in 8 weeks with zero stress. The team knew exactly what to do at every step.',
-    name: 'Marie L.',
-    role: 'French Investor, Bali',
-    stars: 5,
+    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop',
+    quote: "When investing in Bali real estate, you hear horror stories. ILOT's property due diligence and land verification gave me absolute security. Their legal advice is bulletproof. I wouldn't buy a square meter without them.",
+    name: 'Sarah Jenkins',
+    role: 'Real Estate Investor, Australia',
   },
   {
-    quote: 'The land due diligence report they provided saved me from a very costly mistake. Worth every cent.',
-    name: 'David K.',
-    role: 'Property Buyer, Jakarta',
-    stars: 5,
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop',
+    quote: "Relocating my life and remote work setup to Jakarta was entirely stress-free. ILOT managed everything seamlessly in the background. It's the ultimate concierge legal service for expats.",
+    name: 'David C.',
+    role: 'Remote Executive, UK',
   },
 ]
 
 export function TestimonialsSection() {
   return (
-    <section className="section-padding bg-surface">
-      <div className="container-site">
-        <AnimatedSection className="mb-12">
-          <p className="text-xs uppercase tracking-widest text-muted font-semibold mb-3">Testimonials</p>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-            What our clients say.
+    <section className="py-32 bg-[#F8F9FA]">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-16 text-left">
+          <div className="inline-flex items-center space-x-2 text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-6">
+            <span>Testimonials</span>
+          </div>
+          <h2 className="text-5xl md:text-6xl font-medium text-[#0B0B1A] tracking-tight leading-[1.1]">
+            Don&apos;t take our word for it!<br />
+            Hear it from our partners.
           </h2>
-        </AnimatedSection>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map(({ quote, name, role, stars }, i) => (
-            <AnimatedSection
-              key={name}
-              delay={i * 0.1}
-              className="bg-background rounded-card p-8 shadow-sm"
-            >
-              <div className="flex gap-1 mb-4">
-                {Array.from({ length: stars }).map((_, j) => (
-                  <span key={j} className="text-accent text-lg">★</span>
-                ))}
+          {TESTIMONIALS.map(({ photo, quote, name, role }) => (
+            <div key={name} className="bg-white p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col h-full">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden mb-8">
+                <Image src={photo} alt={name} fill className="object-cover" sizes="48px" />
               </div>
-              <p className="text-foreground text-base leading-relaxed mb-6">&ldquo;{quote}&rdquo;</p>
-              <div>
-                <div className="font-bold text-foreground text-sm">{name}</div>
-                <div className="text-muted text-xs">{role}</div>
+              <p className="text-[#0B0B1A] text-[15px] leading-relaxed mb-12 flex-grow">
+                &ldquo;{quote}&rdquo;
+              </p>
+              <div className="mt-auto">
+                <h4 className="font-[Caveat] text-3xl text-[#0B0B1A] mb-1">{name}</h4>
+                <p className="text-xs text-gray-500">{role}</p>
               </div>
-            </AnimatedSection>
+            </div>
           ))}
         </div>
       </div>
