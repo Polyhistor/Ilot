@@ -9,38 +9,48 @@ interface ServiceCardProps {
 
 export function ServiceCard({ service, categorySlug }: ServiceCardProps) {
   return (
-    <div className="bg-background border border-surface rounded-card p-6 shadow-sm hover:shadow-md transition-shadow">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <Link
-          href={`/${categorySlug}/${service.slug}`}
-          className="text-lg font-bold text-foreground hover:text-accent transition-colors leading-snug"
-        >
-          {service.name}
-        </Link>
-        {service.target_client && (
-          <span className="text-xs bg-surface text-muted px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0">
-            {service.target_client}
-          </span>
-        )}
-      </div>
+    <div className="bg-background border border-surface rounded-card p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+      {/* Badge */}
+      {service.target_client && (
+        <span className="inline-flex items-center bg-white border border-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm self-start mb-4">
+          {service.target_client}
+        </span>
+      )}
 
-      {/* Timeline */}
-      {service.estimated_timeline && (
-        <p className="text-sm text-muted mb-4">
-          <span className="font-semibold text-foreground">Timeline:</span>{' '}
-          {service.estimated_timeline}
+      {/* Title */}
+      <Link
+        href={`/${categorySlug}/${service.slug}`}
+        className="text-lg font-bold text-foreground hover:text-accent transition-colors leading-snug mb-3"
+      >
+        {service.name}
+      </Link>
+
+      {/* Description */}
+      {service.description && (
+        <p className="text-sm text-muted leading-relaxed mb-4 line-clamp-3">
+          {service.description}
         </p>
       )}
 
-      {/* CTA */}
-      <WhatsAppCTA
-        serviceName={service.name}
-        customMessage={service.whatsapp_message ?? undefined}
-        variant="ghost"
-        size="sm"
-        label="Enquire"
-      />
+      {/* Spacer to push footer down */}
+      <div className="mt-auto pt-4 border-t border-surface flex items-center justify-between">
+        {/* Timeline */}
+        {service.estimated_timeline && (
+          <p className="text-xs text-muted">
+            <span className="font-semibold text-foreground">Timeline:</span>{' '}
+            {service.estimated_timeline}
+          </p>
+        )}
+
+        {/* CTA */}
+        <WhatsAppCTA
+          serviceName={service.name}
+          customMessage={service.whatsapp_message ?? undefined}
+          variant="ghost"
+          size="sm"
+          label="Enquire"
+        />
+      </div>
     </div>
   )
 }

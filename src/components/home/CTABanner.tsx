@@ -30,7 +30,7 @@ export function CTABanner() {
 
       {/* Marquee Text */}
       <div className="relative flex overflow-hidden whitespace-nowrap pointer-events-none select-none mt-16 w-full -mb-12 md:-mb-24">
-        <div className="animate-scroll-left flex items-center w-max">
+        <div className="flex items-center w-max" style={{ animation: 'marquee 45s linear infinite' }}>
           <div className="flex items-center px-4">
             <span className="text-8xl md:text-[11rem] font-bold text-gray-200 tracking-tighter px-4">
               Secure. Invest. Grow. Succeed.

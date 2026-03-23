@@ -1,0 +1,177 @@
+'use client'
+
+import { useState, useMemo, useEffect, useRef, createContext, useContext } from 'react'
+import { ServiceCard } from './ServiceCard'
+import { ServiceSearch } from './ServiceSearch'
+import type { SubCategoryWithServices } from '@/lib/db/types'
+
+// ── Shared search context ──────────────────────────────────────
+interface SearchCtx {
+  query: string
+  setQuery: (q: string) => void
+  totalResults: number
+  inputRef: React.RefObject<HTMLInputElement | null>
+}
+
+const SearchContext = createContext<SearchCtx>({
+  query: '',
+  setQuery: () => {},
+  totalResults: 0,
+  inputRef: { current: null },
+})
+
+export function useServiceSearch() {
+  return useContext(SearchContext)
+}
+
+// ── Provider wrapping hero + content ───────────────────────────
+interface CategoryServicesProviderProps {
+  subCategories: SubCategoryWithServices[]
+  children: React.ReactNode
+}
+
+export function CategoryServicesProvider({ subCategories, children }: CategoryServicesProviderProps) {
+  const [query, setQuery] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const totalResults = useMemo(() => {
+    const q = query.toLowerCase().trim()
+    if (!q) return subCategories.reduce((sum, sc) => sum + sc.services.length, 0)
+    return subCategories.reduce((sum, sc) => {
+      if (sc.name.toLowerCase().includes(q)) return sum + sc.services.length
+      return sum + sc.services.filter(
+        (s) =>
+          s.name.toLowerCase().includes(q) ||
+          s.description?.toLowerCase().includes(q) ||
+          s.target_client?.toLowerCase().includes(q) ||
+          s.key_deliverables?.toLowerCase().includes(q)
+      ).length
+    }, 0)
+  }, [query, subCategories])
+
+  return (
+    <SearchContext.Provider value={{ query, setQuery, totalResults, inputRef }}>
+      {children}
+    </SearchContext.Provider>
+  )
+}
+
+// ── Service list (consumes search context) ─────────────────────
+interface CategoryServicesProps {
+  subCategories: SubCategoryWithServices[]
+  categorySlug: string
+  accentColor?: string
+  tintColor?: string
+}
+
+export function CategoryServices({ subCategories, categorySlug, accentColor, tintColor }: CategoryServicesProps) {
+  const { query } = useServiceSearch()
+
+  const filtered = useMemo(() => {
+    const q = query.toLowerCase().trim()
+    if (!q) return subCategories
+
+    return subCategories
+      .map((sc) => {
+        if (sc.name.toLowerCase().includes(q)) return sc
+        const matchingServices = sc.services.filter(
+          (s) =>
+            s.name.toLowerCase().includes(q) ||
+            s.description?.toLowerCase().includes(q) ||
+            s.target_client?.toLowerCase().includes(q) ||
+            s.key_deliverables?.toLowerCase().includes(q)
+        )
+        return { ...sc, services: matchingServices }
+      })
+      .filter((sc) => sc.services.length > 0)
+  }, [query, subCategories])
+
+  const sidebarItems = filtered.map((sc) => ({ id: sc.slug, name: sc.name }))
+
+  // Intersection observer for sidebar active state
+  const [activeId, setActiveId] = useState<string>(subCategories[0]?.slug ?? '')
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.find((e) => e.isIntersecting)
+        if (visible) setActiveId(visible.target.id)
+      },
+      { rootMargin: '-20% 0px -70% 0px' }
+    )
+    filtered.forEach(({ slug }) => {
+      const el = document.getElementById(slug)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [filtered])
+
+  return (
+    <div>
+      {/* Search — scrolls with page */}
+      <div className="hidden md:block mb-6 max-w-[220px]">
+        <ServiceSearch />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-12">
+        {/* Sidebar — sticky nav only */}
+        <nav className="hidden md:block sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 scrollbar-thin">
+          <ul className="space-y-1">
+            {sidebarItems.map(({ id, name }) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  className={`block text-sm px-3 py-2 rounded-lg transition-all ${
+                    activeId === id
+                      ? 'font-semibold'
+                      : 'text-muted hover:text-foreground hover:bg-surface'
+                  }`}
+                  style={activeId === id ? {
+                    backgroundColor: tintColor ?? 'rgba(245,178,26,0.1)',
+                    color: accentColor ?? '#F5B21A',
+                  } : undefined}
+                >
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Services grouped by sub-category */}
+        <div className="space-y-16">
+          {filtered.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-muted text-lg">No services match &ldquo;{query}&rdquo;</p>
+            </div>
+          ) : (
+            filtered.map((sc, idx) => (
+              <section key={sc.id} id={sc.slug}>
+                {idx > 0 && (
+                  <div className="mb-16 flex items-center gap-4">
+                    <div className="flex-1 h-px bg-gray-200" />
+                    <span className="text-xs font-medium text-gray-400 uppercase tracking-widest shrink-0">
+                      {sc.name}
+                    </span>
+                    <div className="flex-1 h-px bg-gray-200" />
+                  </div>
+                )}
+                <h2 className="text-2xl font-bold text-foreground mb-6">
+                  {sc.name}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {sc.services.map((service) => (
+                    <ServiceCard
+                      key={service.slug}
+                      service={service}
+                      categorySlug={categorySlug}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

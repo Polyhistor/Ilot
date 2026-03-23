@@ -47,6 +47,39 @@ export async function getCategoryBySlug(slug: string): Promise<CategoryWithSubCa
   return { ...category, sub_categories: subCatsWithServices }
 }
 
+export async function getCategoriesWithNav(): Promise<CategoryWithSubCategories[]> {
+  const supabase = createServerClient()
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .eq('is_active', true)
+    .order('sort_order')
+
+  if (!categories?.length) return []
+
+  const { data: subCategories } = await supabase
+    .from('sub_categories')
+    .select('*')
+    .eq('is_active', true)
+    .order('sort_order')
+
+  const { data: services } = await supabase
+    .from('services')
+    .select('id, slug, name, sub_category_id, category_id, sort_order, is_active')
+    .eq('is_active', true)
+    .order('sort_order')
+
+  return categories.map((cat) => {
+    const catSubs = (subCategories ?? [])
+      .filter((sc) => sc.category_id === cat.id)
+      .map((sc) => ({
+        ...sc,
+        services: (services ?? []).filter((s) => s.sub_category_id === sc.id) as any[],
+      }))
+    return { ...cat, sub_categories: catSubs }
+  })
+}
+
 export async function getAllCategorySlugs(): Promise<string[]> {
   const supabase = createServerClient()
   const { data } = await supabase

@@ -11,7 +11,7 @@ const SERVICES = [
 ]
 
 const LEGAL_LINKS = [
-  { href: '/legal', label: 'Terms & Conditions' },
+  { href: '/terms', label: 'Terms & Conditions' },
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/cookies', label: 'Cookies Policy' },
 ]

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { ServiceCard } from './ServiceCard'
 import type { Service } from '@/lib/db/types'
 
 interface RelatedServicesProps {
@@ -10,21 +10,12 @@ export function RelatedServices({ services, categorySlug }: RelatedServicesProps
   if (services.length === 0) return null
 
   return (
-    <section className="section-padding bg-background">
-      <div className="container-site">
-        <h2 className="text-2xl font-bold mb-6">Related Services</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section className="py-20 bg-[#F8F9FA]">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-[#0B0B1A] mb-8">Related Services</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {services.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/${categorySlug}/${s.slug}`}
-              className="block bg-surface rounded-card p-5 hover:shadow-md transition-shadow"
-            >
-              <p className="font-semibold text-foreground text-sm leading-snug mb-2">{s.name}</p>
-              {s.estimated_timeline && (
-                <p className="text-xs text-muted">{s.estimated_timeline}</p>
-              )}
-            </Link>
+            <ServiceCard key={s.slug} service={s} categorySlug={categorySlug} />
           ))}
         </div>
       </div>

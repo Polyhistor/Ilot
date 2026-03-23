@@ -1,14 +1,25 @@
 import Link from 'next/link'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
+import { getCategoriesWithNav } from '@/lib/db/categories'
+import { ServicesDropdown } from './ServicesDropdown'
 
-const NAV_LINKS = [
-  { href: '/visa', label: 'Visa' },
-  { href: '/legal', label: 'Legal' },
-  { href: '/company-setup', label: 'Company Setup' },
-  { href: '/contact', label: 'Contact' },
-]
+export async function Navbar() {
+  const categories = await getCategoriesWithNav()
 
-export function Navbar() {
+  // Shape data for the dropdown (only pass what it needs)
+  const navCategories = categories.map((cat) => ({
+    slug: cat.slug,
+    name: cat.name,
+    sub_categories: cat.sub_categories.map((sc) => ({
+      slug: sc.slug,
+      name: sc.name,
+      services: sc.services.map((s) => ({
+        slug: s.slug,
+        name: s.name,
+      })),
+    })),
+  }))
+
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-surface">
       <nav className="container-site flex items-center justify-between h-16 px-6 md:px-12">
@@ -19,16 +30,18 @@ export function Navbar() {
 
         {/* Links — hidden on mobile */}
         <ul className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map(({ href, label }) => (
-            <li key={href}>
-              <Link
-                href={href}
-                className="text-sm font-medium text-muted hover:text-foreground transition-colors"
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
+          <li>
+            <ServicesDropdown categories={navCategories} />
+          </li>
+
+          <li>
+            <Link
+              href="/contact"
+              className="text-sm font-medium text-muted hover:text-foreground transition-colors"
+            >
+              Contact
+            </Link>
+          </li>
         </ul>
 
         {/* CTA */}

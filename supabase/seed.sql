@@ -59,23 +59,33 @@ select visa_cat.id, s.slug, s.name, s.sort_order from visa_cat,
 on conflict (category_id, slug) do nothing;
 
 -- ============================================================
+-- Sub-categories — Company Setup
+-- ============================================================
+with cs_cat as (select id from public.categories where slug = 'company-setup')
+insert into public.sub_categories (category_id, slug, name, sort_order)
+select cs_cat.id, s.slug, s.name, s.sort_order from cs_cat,
+(values
+  ('company-set-up',          'Company Set-Up',              0),
+  ('changes-restructuring',   'Changes & Restructuring',     1),
+  ('yayasan',                 'Yayasan',                     2)
+) as s(slug, name, sort_order)
+on conflict (category_id, slug) do nothing;
+
+-- ============================================================
 -- Sub-categories — Legal
 -- ============================================================
 with legal_cat as (select id from public.categories where slug = 'legal')
 insert into public.sub_categories (category_id, slug, name, sort_order)
 select legal_cat.id, s.slug, s.name, s.sort_order from legal_cat,
 (values
-  ('company-set-up',          'Company Set-Up',              0),
-  ('compliance',              'Compliance',                  1),
-  ('changes-restructuring',   'Changes & Restructuring',     2),
-  ('agreements',              'Agreements',                  3),
-  ('employment-contracts',    'Employment Contracts',        4),
-  ('contract-notary',         'Contract & Notary',           5),
-  ('management-licensing',    'Management & Licensing',      6),
-  ('property-checks',         'Property Information & Checks', 7),
-  ('yayasan',                 'Yayasan',                     8),
-  ('rups',                    'RUPS',                        9),
-  ('jbs',                     'JBS Per Transaction',         10)
+  ('compliance',              'Compliance',                  0),
+  ('agreements',              'Agreements',                  1),
+  ('employment-contracts',    'Employment Contracts',        2),
+  ('contract-notary',         'Contract & Notary',           3),
+  ('management-licensing',    'Management & Licensing',      4),
+  ('property-checks',         'Property Information & Checks', 5),
+  ('rups',                    'RUPS',                        6),
+  ('jbs',                     'JBS Per Transaction',         7)
 ) as s(slug, name, sort_order)
 on conflict (category_id, slug) do nothing;
 
@@ -295,13 +305,13 @@ from sc,
 on conflict (slug) do nothing;
 
 -- ============================================================
--- Services — Legal > Company Set-Up
+-- Services — Company Setup > Company Set-Up
 -- ============================================================
 with sc as (
   select s.id as sub_id, c.id as cat_id
   from public.sub_categories s
   join public.categories c on c.id = s.category_id
-  where c.slug = 'legal' and s.slug = 'company-set-up'
+  where c.slug = 'company-setup' and s.slug = 'company-set-up'
 )
 insert into public.services (category_id, sub_category_id, slug, name, description, target_client, key_deliverables, estimated_timeline, sort_order)
 select sc.cat_id, sc.sub_id, s.slug, s.name, s.description, s.target_client, s.key_deliverables, s.estimated_timeline, s.sort_order
@@ -746,12 +756,12 @@ begin
 end $$;
 
 -- ============================================================
--- Services — Legal > Changes & Restructuring
+-- Services — Company Setup > Changes & Restructuring
 -- ============================================================
 with sc as (
   select s.id as sub_id, c.id as cat_id
   from public.sub_categories s join public.categories c on c.id = s.category_id
-  where c.slug = 'legal' and s.slug = 'changes-restructuring'
+  where c.slug = 'company-setup' and s.slug = 'changes-restructuring'
 )
 insert into public.services (category_id, sub_category_id, slug, name, description, target_client, key_deliverables, estimated_timeline, sort_order)
 select sc.cat_id, sc.sub_id, s.slug, s.name, s.description, s.target_client, s.key_deliverables, s.estimated_timeline, s.sort_order
@@ -803,7 +813,23 @@ from sc, (values
 on conflict (slug) do nothing;
 
 -- ============================================================
--- Services — Legal > Yayasan, RUPS, JBS (stub rows — details TBC by client)
+-- Services — Company Setup > Yayasan (stub — details TBC by client)
+-- ============================================================
+do $$
+declare
+  cat_id uuid;
+begin
+  select id into cat_id from public.categories where slug = 'company-setup';
+
+  insert into public.services (category_id, sub_category_id, slug, name, sort_order)
+  select cat_id, sc.id, 'yayasan-foundation-setup', 'Yayasan (Foundation) Setup', 0
+  from public.sub_categories sc
+  where sc.slug = 'yayasan' and sc.category_id = cat_id
+  on conflict (slug) do nothing;
+end $$;
+
+-- ============================================================
+-- Services — Legal > RUPS, JBS (stub rows — details TBC by client)
 -- ============================================================
 do $$
 declare
@@ -815,9 +841,8 @@ begin
   select cat_id, sc.id, v.svc_slug, v.svc_name, 0
   from public.sub_categories sc
   join (values
-    ('yayasan', 'yayasan-foundation-setup',    'Yayasan (Foundation) Setup'),
-    ('rups',    'rups-general-meeting',         'RUPS (General Meeting of Shareholders)'),
-    ('jbs',     'jbs-per-transaction',          'JBS Per Transaction')
+    ('rups', 'rups-general-meeting',  'RUPS (General Meeting of Shareholders)'),
+    ('jbs',  'jbs-per-transaction',   'JBS Per Transaction')
   ) as v(sub_slug, svc_slug, svc_name) on sc.slug = v.sub_slug
   where sc.category_id = cat_id
   on conflict (slug) do nothing;

@@ -36,7 +36,7 @@ export function ProcessSteps() {
     <section className="py-32 bg-white">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-24 flex flex-col items-center">
-          <div className="inline-flex items-center space-x-2 bg-gray-50 border border-gray-200 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.2em] text-[#0B0B1A] uppercase mb-8">
+          <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 shadow-sm mb-8">
             <span>The Process</span>
           </div>
           <h2 className="text-5xl md:text-6xl font-bold text-[#0B0B1A] mb-6 tracking-tight">

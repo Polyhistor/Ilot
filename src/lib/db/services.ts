@@ -8,7 +8,7 @@ export async function getServiceBySlug(slug: string): Promise<ServiceWithCategor
     .from('services')
     .select(`
       *,
-      category:categories(slug, name),
+      category:categories(slug, name, color_accent),
       sub_category:sub_categories(slug, name)
     `)
     .eq('slug', slug)
@@ -35,6 +35,19 @@ export async function getRelatedServices(
     .limit(limit)
 
   return data ?? []
+}
+
+export async function getFeaturedServices(slugs: string[]): Promise<
+  (Service & { category: { slug: string; name: string } })[]
+> {
+  const supabase = createServerClient()
+  const { data } = await supabase
+    .from('services')
+    .select('*, category:categories(slug, name)')
+    .in('slug', slugs)
+    .eq('is_active', true)
+
+  return (data ?? []) as any[]
 }
 
 export async function getAllServiceSlugs(): Promise<{ category: string; slug: string }[]> {

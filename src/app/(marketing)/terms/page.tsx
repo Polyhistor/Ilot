@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = { title: 'Terms & Conditions' }
 
-export default function LegalPage() {
+export default function TermsPage() {
   return (
     <div className="section-padding">
       <div className="container-site max-w-3xl">

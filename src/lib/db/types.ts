@@ -42,7 +42,7 @@ export interface Service {
 
 // Enriched types used in pages
 export interface ServiceWithCategory extends Service {
-  category: Pick<Category, 'slug' | 'name'>
+  category: Pick<Category, 'slug' | 'name' | 'color_accent'>
   sub_category: Pick<SubCategory, 'slug' | 'name'> | null
 }
 
