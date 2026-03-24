@@ -23,30 +23,30 @@ const TESTIMONIALS = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-32 bg-[#F8F9FA]">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-left">
-          <div className="inline-flex items-center space-x-2 text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-6">
+    <section className="py-12 md:py-32 bg-[#F8F9FA]">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
+        <div className="mb-8 md:mb-16 text-left">
+          <div className="inline-flex items-center space-x-2 text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-3 md:mb-6">
             <span>Testimonials</span>
           </div>
-          <h2 className="text-5xl md:text-6xl font-medium text-[#0B0B1A] tracking-tight leading-[1.1]">
+          <h2 className="text-2xl md:text-6xl font-medium text-[#0B0B1A] tracking-tight leading-[1.1]">
             Don&apos;t take our word for it!<br />
             Hear it from our partners.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {TESTIMONIALS.map(({ photo, quote, name, role }) => (
-            <div key={name} className="bg-white p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col h-full">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden mb-8">
+            <div key={name} className="bg-white p-5 md:p-10 rounded-2xl md:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col h-full">
+              <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden mb-4 md:mb-8">
                 <Image src={photo} alt={name} fill className="object-cover" sizes="48px" />
               </div>
-              <p className="text-[#0B0B1A] text-[15px] leading-relaxed mb-12 flex-grow">
+              <p className="text-[#0B0B1A] text-xs md:text-[15px] leading-relaxed mb-6 md:mb-12 flex-grow">
                 &ldquo;{quote}&rdquo;
               </p>
               <div className="mt-auto">
-                <h4 className="font-[Caveat] text-3xl text-[#0B0B1A] mb-1">{name}</h4>
-                <p className="text-xs text-gray-500">{role}</p>
+                <h4 className="font-[Caveat] text-2xl md:text-3xl text-[#0B0B1A] mb-1">{name}</h4>
+                <p className="text-[10px] md:text-xs text-gray-500">{role}</p>
               </div>
             </div>
           ))}

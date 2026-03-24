@@ -31,6 +31,73 @@ interface FeaturedServicesProps {
 
 const INITIAL_VISIBLE = 4
 
+/* ─── Compact swipeable card for mobile ─── */
+function MobileServiceCard({ service, colors }: { service: FeaturedService; colors: { mid: string } }) {
+  return (
+    <Link
+      href={`/${service.categorySlug}/${service.slug}`}
+      className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col"
+    >
+      {service.target_client && (
+        <span className="block bg-white border border-gray-200 px-2 py-0.5 rounded-full text-[10px] font-medium text-gray-500 self-start mb-2 truncate max-w-full">
+          {service.target_client}
+        </span>
+      )}
+      <h4 className="text-[14px] font-semibold text-foreground leading-snug mb-1.5 line-clamp-2">
+        {service.name}
+      </h4>
+      {service.estimated_timeline && (
+        <div className="text-[11px] mt-auto pt-2">
+          <p className="font-semibold text-foreground">Timeline</p>
+          <p className="text-muted truncate">{service.estimated_timeline}</p>
+        </div>
+      )}
+      <span className="text-[11px] font-medium mt-2" style={{ color: colors.mid }}>
+        Learn more →
+      </span>
+    </Link>
+  )
+}
+
+/* ─── Desktop card (same as ServiceCard) ─── */
+function DesktopServiceCard({ service }: { service: FeaturedService }) {
+  return (
+    <div className="bg-background border border-surface rounded-card p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+      {service.target_client && (
+        <span className="inline-flex items-center bg-white border border-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm self-start mb-4">
+          {service.target_client}
+        </span>
+      )}
+      <Link
+        href={`/${service.categorySlug}/${service.slug}`}
+        className="text-lg font-bold text-foreground hover:text-accent transition-colors leading-snug mb-3"
+      >
+        {service.name}
+      </Link>
+      {service.description && (
+        <p className="text-sm text-muted leading-relaxed mb-4 line-clamp-3">
+          {service.description}
+        </p>
+      )}
+      <div className="mt-auto pt-4 border-t border-surface flex items-center justify-between">
+        {service.estimated_timeline && (
+          <p className="text-xs text-muted">
+            <span className="font-semibold text-foreground">Timeline:</span>{' '}
+            {service.estimated_timeline}
+          </p>
+        )}
+        <WhatsAppCTA
+          serviceName={service.name}
+          customMessage={service.whatsapp_message ?? undefined}
+          variant="ghost"
+          size="sm"
+          label="Enquire"
+        />
+      </div>
+    </div>
+  )
+}
+
 function ServiceGroupSection({ group }: { group: ServiceGroup }) {
   const [expanded, setExpanded] = useState(false)
   const colors = getCategoryColor(group.categorySlug)
@@ -40,67 +107,42 @@ function ServiceGroupSection({ group }: { group: ServiceGroup }) {
   return (
     <div>
       {/* Group header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 md:mb-6 px-5 md:px-0">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-1 h-6 rounded-full" style={{ backgroundColor: colors.accent }} />
-            <h3 className="text-xl font-bold text-[#0B0B1A] tracking-tight">{group.title}</h3>
+          <div className="flex items-center gap-3 mb-1 md:mb-2">
+            <div className="w-1 h-5 md:h-6 rounded-full" style={{ backgroundColor: colors.accent }} />
+            <h3 className="text-base md:text-xl font-bold text-foreground tracking-tight">{group.title}</h3>
           </div>
-          <p className="text-sm text-muted leading-relaxed max-w-2xl pl-4">{group.description}</p>
+          <p className="text-xs md:text-sm text-muted leading-relaxed max-w-2xl pl-4">{group.description}</p>
         </div>
         <Link
           href={`/${group.categorySlug}`}
-          className="text-sm font-medium flex items-center gap-1 shrink-0 transition-colors hover:opacity-80 pl-4 sm:pl-0"
+          className="text-xs md:text-sm font-medium flex items-center gap-1 shrink-0 transition-colors hover:opacity-80 pl-4 sm:pl-0"
           style={{ color: colors.mid }}
         >
           View all <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
 
-      {/* Service cards grid — same markup as ServiceCard component */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {visible.map((service) => (
-          <div key={service.slug} className="bg-background border border-surface rounded-card p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-            {service.target_client && (
-              <span className="inline-flex items-center bg-white border border-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm self-start mb-4">
-                {service.target_client}
-              </span>
-            )}
-            <Link
-              href={`/${service.categorySlug}/${service.slug}`}
-              className="text-lg font-bold text-foreground hover:text-accent transition-colors leading-snug mb-3"
-            >
-              {service.name}
-            </Link>
-            {service.description && (
-              <p className="text-sm text-muted leading-relaxed mb-4 line-clamp-3">
-                {service.description}
-              </p>
-            )}
-            <div className="mt-auto pt-4 border-t border-surface flex items-center justify-between">
-              {service.estimated_timeline && (
-                <p className="text-xs text-muted">
-                  <span className="font-semibold text-foreground">Timeline:</span>{' '}
-                  {service.estimated_timeline}
-                </p>
-              )}
-              <WhatsAppCTA
-                serviceName={service.name}
-                customMessage={service.whatsapp_message ?? undefined}
-                variant="ghost"
-                size="sm"
-                label="Enquire"
-              />
-            </div>
-          </div>
+      {/* Mobile: 2-column grid */}
+      <div className="grid grid-cols-2 gap-3 px-5 pb-4 md:hidden">
+        {group.services.map((service) => (
+          <MobileServiceCard key={service.slug} service={service} colors={colors} />
         ))}
       </div>
 
-      {/* Show more / less */}
+      {/* Desktop: grid with show more */}
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4">
+        {visible.map((service) => (
+          <DesktopServiceCard key={service.slug} service={service} />
+        ))}
+      </div>
+
+      {/* Show more / less — desktop only */}
       {hasMore && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-4 mx-auto flex items-center gap-1.5 text-sm font-medium text-muted hover:text-[#0B0B1A] transition-colors"
+          className="mt-4 mx-auto hidden md:flex items-center gap-1.5 text-sm font-medium text-muted hover:text-foreground transition-colors"
         >
           {expanded ? (
             <>Show less <ChevronUp className="w-4 h-4" /></>
@@ -115,21 +157,21 @@ function ServiceGroupSection({ group }: { group: ServiceGroup }) {
 
 export function FeaturedServices({ groups }: FeaturedServicesProps) {
   return (
-    <section className="py-20 bg-[#F8F9FA]">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
+    <section className="py-12 md:py-20 bg-[#F8F9FA]">
+      <div className="max-w-[1400px] mx-auto md:px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 md:mb-14 px-5 md:px-0">
           <span className="inline-flex items-center bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 shadow-sm mb-4">
             Most requested
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-[#0B0B1A] tracking-tight">
+          <h2 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">
             Popular Services
           </h2>
-          <p className="text-muted mt-3 max-w-xl mx-auto">
+          <p className="text-muted text-sm md:text-base mt-3 max-w-xl mx-auto hidden md:block">
             Explore the services our clients request most — from visa applications to company setup and compliance.
           </p>
         </div>
 
-        <div className="space-y-14">
+        <div className="space-y-8 md:space-y-14 divide-y divide-gray-200 md:divide-y-0 [&>*]:pt-8 md:[&>*]:pt-0 [&>*:first-child]:pt-0">
           {groups.map((group) => (
             <ServiceGroupSection key={group.id} group={group} />
           ))}

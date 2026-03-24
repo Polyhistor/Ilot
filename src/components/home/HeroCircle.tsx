@@ -54,6 +54,7 @@ function useWindowSize() {
   return windowSize
 }
 
+/* ─── Desktop animated card (unchanged) ─── */
 function ServiceCard({
   index,
   total,
@@ -73,7 +74,6 @@ function ServiceCard({
   containerWidth: number
   windowHeight: number
 }) {
-  // Responsive card sizing based on viewport width
   const isXL = containerWidth > 1200
   const is2XL = containerWidth > 1400
   const gap = is2XL ? 28 : isXL ? 24 : 20
@@ -82,11 +82,9 @@ function ServiceCard({
   const cardSpacing = cardWidth + gap
 
   const xInitial = (index - (total - 1) / 2) * cardSpacing
-  // Push cards closer to the bottom of the viewport
   const yOffsetRatio = is2XL ? 0.36 : isXL ? 0.38 : 0.40
   const yInitial = windowHeight * yOffsetRatio - cardWidth / 2
 
-  // Scale circle radius for larger viewports
   const radiusWidthRatio = is2XL ? 0.32 : isXL ? 0.3 : 0.3
   const radiusHeightRatio = is2XL ? 0.42 : isXL ? 0.4 : 0.38
   const radiusFinal = Math.min(containerWidth * radiusWidthRatio, windowHeight * radiusHeightRatio)
@@ -127,13 +125,77 @@ function ServiceCard({
   )
 }
 
-export function HeroCircle({ cards }: HeroCircleProps) {
+/* ─── Mobile 2-column grid ─── */
+function MobileHero({ cards }: { cards: HeroCard[] }) {
+  return (
+    <section className="bg-[#F4F4F0] md:hidden">
+      {/* Hero text */}
+      <div className="px-5 pt-10 pb-6">
+        <div className="inline-flex items-center bg-white border border-gray-200 px-3 py-1 rounded-full text-[11px] font-medium text-gray-600 mb-4 shadow-sm">
+          Trusted legal services, Nationwide
+        </div>
+        <h1 className="text-3xl font-bold text-[#0B0B1A] tracking-tight leading-[1.15] mb-3">
+          Clear Legal Support.<br />
+          Confident Decisions.
+        </h1>
+        <p className="text-sm text-gray-500 leading-relaxed mb-5 max-w-sm">
+          Elite legal, visa, and business solutions for global investors and expatriates in Indonesia.
+        </p>
+        <div className="flex items-center gap-4">
+          <WhatsAppCTA size="sm" label="Free quote" />
+          <Link
+            href="/visa"
+            className="flex items-center gap-1.5 text-sm font-semibold text-[#0B0B1A] border-b border-[#0B0B1A] pb-0.5"
+          >
+            Our services
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      </div>
+
+      {/* Section header */}
+      <div className="px-5 flex items-baseline justify-between mb-4">
+        <h2 className="text-xl font-bold text-[#0B0B1A] tracking-tight">Our Services</h2>
+        <span className="text-xs font-semibold text-muted uppercase tracking-wider">{TOTAL} Pillars</span>
+      </div>
+
+      {/* 2-column grid */}
+      <div className="px-5 grid grid-cols-2 gap-3 pb-8">
+        {cards.slice(0, TOTAL).map((card, i) => {
+          const imageSrc = card.imageUrl ?? `https://images.unsplash.com/photo-${SERVICE_IMAGES[i]}?q=80&w=600&auto=format&fit=crop`
+          const color = SERVICE_COLORS[i] ?? SERVICE_COLORS[0]
+          return (
+            <Link
+              key={card.slug}
+              href={`/${card.slug}`}
+              className={`rounded-2xl overflow-hidden relative group ${i === cards.slice(0, TOTAL).length - 1 && TOTAL % 2 !== 0 ? 'col-span-2 aspect-[2/1]' : 'aspect-square'}`}
+            >
+              <Image
+                src={imageSrc}
+                alt={card.name}
+                fill
+                className="object-cover transition-transform duration-500 group-active:scale-105"
+                sizes="45vw"
+              />
+              <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-75`} />
+              <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                <h3 className="text-white font-bold text-[15px] leading-tight">{card.name}</h3>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+/* ─── Desktop hero with scroll animation ─── */
+function DesktopHero({ cards }: { cards: HeroCard[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { width, height } = useWindowSize()
 
-  // Responsive max-width matching site-wide container pattern (max-w-[1500px])
   const MAX_CARD_ROW_WIDTH = width >= 1920 ? 1600 : width >= 1440 ? 1400 : 1200
-  let containerWidth = Math.min(width, MAX_CARD_ROW_WIDTH) - 32
+  const containerWidth = Math.min(width, MAX_CARD_ROW_WIDTH) - 32
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -149,7 +211,7 @@ export function HeroCircle({ cards }: HeroCircleProps) {
   const centerTextScale = useTransform(centerProgress, [0, 1], [0.85, 1])
 
   return (
-    <section ref={containerRef} className="relative h-[300vh] bg-[#F4F4F0]">
+    <section ref={containerRef} className="relative h-[300vh] bg-[#F4F4F0] hidden md:block">
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
 
         {/* Initial Title */}
@@ -213,5 +275,15 @@ export function HeroCircle({ cards }: HeroCircleProps) {
 
       </div>
     </section>
+  )
+}
+
+/* ─── Main export: renders mobile OR desktop ─── */
+export function HeroCircle({ cards }: HeroCircleProps) {
+  return (
+    <>
+      <MobileHero cards={cards} />
+      <DesktopHero cards={cards} />
+    </>
   )
 }

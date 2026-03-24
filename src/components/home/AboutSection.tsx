@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export function AboutSection() {
   return (
-    <section className="py-24 bg-white text-gray-900">
+    <section className="py-12 md:py-24 bg-white text-gray-900">
       <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-16">
         <div className="md:w-1/3">
           <div className="w-48 h-48 bg-gray-200 rounded-lg overflow-hidden relative">
