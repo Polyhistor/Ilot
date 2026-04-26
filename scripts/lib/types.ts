@@ -36,3 +36,18 @@ export interface ClientDataRow {
   'Estimated Timeline': string
   'Real time work'?: string
 }
+
+export interface SeedSqlSubCategory {
+  slug: string
+  name: string
+  sortOrder: number
+}
+
+export interface SeedSqlCategory {
+  slug: string
+  name: string
+  tagline: string | null
+  iconName: string | null
+  sortOrder: number
+  subCategorySlugs: SeedSqlSubCategory[]
+}
