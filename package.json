@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "import:sanity": "tsx --env-file=.env.local scripts/import-to-sanity.ts",
+    "import:sanity:dry": "tsx --env-file=.env.local scripts/import-to-sanity.ts --dry-run"
   },
   "dependencies": {
     "@sanity/client": "^7.22.0",
