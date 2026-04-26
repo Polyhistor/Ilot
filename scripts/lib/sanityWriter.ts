@@ -10,7 +10,8 @@ export interface WriteOptions {
 const categoryId = (slug: string) => `category-${slug}`
 const subCategoryId = (categorySlug: string, subSlug: string) =>
   `subCategory-${categorySlug}-${subSlug}`
-const serviceId = (slug: string) => `service-${slug}`
+const serviceId = (categorySlug: string, subCategorySlug: string, slug: string) =>
+  `service-${categorySlug}-${subCategorySlug}-${slug}`
 
 export async function upsertCategories(
   parsed: ParsedCategory[],
@@ -75,7 +76,7 @@ export async function upsertCategories(
     for (const sub of cat.subCategories) {
       for (const svc of sub.services) {
         const doc = {
-          _id: serviceId(svc.slug),
+          _id: serviceId(cat.slug, sub.slug, svc.slug),
           _type: 'service',
           slug: { _type: 'slug', current: svc.slug },
           name: svc.name,
@@ -92,7 +93,7 @@ export async function upsertCategories(
           sortOrder: svc.sortOrder,
           isActive: true,
         }
-        log(`    service: ${svc.slug}`)
+        log(`    service: ${cat.slug}/${sub.slug}/${svc.slug}`)
         if (!dryRun) await client.createOrReplace(doc)
       }
     }
