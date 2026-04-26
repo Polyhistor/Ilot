@@ -1,22 +1,24 @@
-import { createServerClient } from '@/lib/supabase/server'
+import { sanityClient } from '@/sanity/lib/client'
+import {
+  serviceBySlugQuery,
+  allServiceSlugsQuery,
+  servicesByCategoryQuery,
+  relatedServicesQuery,
+  featuredServicesQuery,
+} from '@/sanity/lib/queries'
 import type { Service, ServiceWithCategory } from './types'
 
 export async function getServiceBySlug(slug: string): Promise<ServiceWithCategory | null> {
-  const supabase = createServerClient()
-
-  const { data, error } = await supabase
-    .from('services')
-    .select(`
-      *,
-      category:categories(slug, name, color_accent),
-      sub_category:sub_categories(slug, name)
-    `)
-    .eq('slug', slug)
-    .eq('is_active', true)
-    .single()
-
-  if (error || !data) return null
-  return data as ServiceWithCategory
+  try {
+    const data = await sanityClient.fetch<ServiceWithCategory | null>(
+      serviceBySlugQuery,
+      { slug },
+      { next: { revalidate: 60, tags: ['service', `service:${slug}`] } }
+    )
+    return data ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getRelatedServices(
@@ -24,41 +26,42 @@ export async function getRelatedServices(
   excludeSlug: string,
   limit = 4
 ): Promise<Service[]> {
-  const supabase = createServerClient()
-  const { data } = await supabase
-    .from('services')
-    .select('*')
-    .eq('sub_category_id', subCategoryId)
-    .eq('is_active', true)
-    .neq('slug', excludeSlug)
-    .order('sort_order')
-    .limit(limit)
-
-  return data ?? []
+  try {
+    const data = await sanityClient.fetch<Service[]>(
+      relatedServicesQuery,
+      { subCategoryId, excludeSlug, limit },
+      { next: { revalidate: 60, tags: ['service'] } }
+    )
+    return data ?? []
+  } catch {
+    return []
+  }
 }
 
 export async function getFeaturedServices(slugs: string[]): Promise<
   (Service & { category: { slug: string; name: string } })[]
 > {
-  const supabase = createServerClient()
-  const { data } = await supabase
-    .from('services')
-    .select('*, category:categories(slug, name)')
-    .in('slug', slugs)
-    .eq('is_active', true)
-
-  return (data ?? []) as any[]
+  try {
+    const data = await sanityClient.fetch<(Service & { category: { slug: string; name: string } })[]>(
+      featuredServicesQuery,
+      { slugs },
+      { next: { revalidate: 60, tags: ['service'] } }
+    )
+    return data ?? []
+  } catch {
+    return []
+  }
 }
 
 export async function getAllServiceSlugs(): Promise<{ category: string; slug: string }[]> {
-  const supabase = createServerClient()
-  const { data } = await supabase
-    .from('services')
-    .select('slug, category:categories(slug)')
-    .eq('is_active', true)
-
-  return (data ?? []).map((s: any) => ({
-    category: s.category.slug,
-    slug: s.slug,
-  }))
+  try {
+    const data = await sanityClient.fetch<{ category: string; slug: string }[]>(
+      allServiceSlugsQuery,
+      {},
+      { next: { revalidate: 60, tags: ['service'] } }
+    )
+    return data ?? []
+  } catch {
+    return []
+  }
 }
