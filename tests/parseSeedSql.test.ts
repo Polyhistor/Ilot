@@ -1,22 +1,20 @@
 import { describe, it, expect } from 'vitest'
+import fs from 'node:fs'
+import path from 'node:path'
 import { parseSeedSqlCategories } from '@scripts/lib/parseSeedSql'
 
 const seedSql = `
 -- Comment
-INSERT INTO public.categories (slug, name, tagline, icon_name, sort_order) VALUES
+insert into public.categories (slug, name, tagline, icon_name, sort_order) values
   ('visa', 'Visa & Immigration', 'Your gateway to legal residency in Indonesia.', 'Plane', 0),
-  ('legal', 'Legal & Contracts', 'Expert legal frameworks for confident business.', 'Scale', 1),
-  ('insurance', 'Insurance', 'Protect what you''ve built.', 'Shield', 3);
-
-INSERT INTO public.sub_categories (category_id, slug, name, sort_order) VALUES
-  ((SELECT id FROM public.categories WHERE slug='visa'), 'investor-kitas', 'Investor KITAS', 0),
-  ((SELECT id FROM public.categories WHERE slug='visa'), 'visit-visas', 'Visit Visas', 3);
+  ('insurance', 'Insurance', 'Protect what you''ve built.', 'Shield', 3)
+on conflict (slug) do nothing;
 `
 
 describe('parseSeedSqlCategories', () => {
   it('extracts categories with metadata', () => {
     const result = parseSeedSqlCategories(seedSql)
-    expect(result).toHaveLength(3)
+    expect(result).toHaveLength(2)
     const visa = result.find((c) => c.slug === 'visa')!
     expect(visa.name).toBe('Visa & Immigration')
     expect(visa.tagline).toBe('Your gateway to legal residency in Indonesia.')
@@ -29,15 +27,40 @@ describe('parseSeedSqlCategories', () => {
     expect(insurance.tagline).toBe("Protect what you've built.")
   })
 
-  it('groups sub-categories under their parent', () => {
-    const visa = parseSeedSqlCategories(seedSql).find((c) => c.slug === 'visa')!
-    expect(visa.subCategorySlugs).toEqual([
-      { slug: 'investor-kitas', name: 'Investor KITAS', sortOrder: 0 },
-      { slug: 'visit-visas', name: 'Visit Visas', sortOrder: 3 },
-    ])
+  it('always returns empty subCategorySlugs (sub-cats come from client data)', () => {
+    const result = parseSeedSqlCategories(seedSql)
+    for (const cat of result) {
+      expect(cat.subCategorySlugs).toEqual([])
+    }
   })
 
   it('returns empty array when no INSERT found', () => {
     expect(parseSeedSqlCategories('-- empty')).toEqual([])
+  })
+
+  it('parses real supabase/seed.sql categories block', () => {
+    const seedFile = path.resolve(__dirname, '../supabase/seed.sql')
+    const sql = fs.readFileSync(seedFile, 'utf-8')
+    const result = parseSeedSqlCategories(sql)
+
+    expect(result).toHaveLength(7)
+
+    const slugs = result.map((c) => c.slug)
+    expect(slugs).toEqual(
+      expect.arrayContaining([
+        'visa',
+        'legal',
+        'company-setup',
+        'insurance',
+        'property',
+        'hr-payroll',
+        'accounting-tax',
+      ])
+    )
+
+    for (const cat of result) {
+      expect(cat.name).toBeTruthy()
+      expect(cat.subCategorySlugs).toEqual([])
+    }
   })
 })

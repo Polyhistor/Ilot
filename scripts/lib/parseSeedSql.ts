@@ -1,10 +1,12 @@
-import type { SeedSqlCategory, SeedSqlSubCategory } from './types'
+import type { SeedSqlCategory } from './types'
 
 /**
  * Minimal SQL VALUES-tuple extractor for the specific format used in seed.sql.
  * Only handles single-quoted string literals (with '' as escaped quote) and
  * unquoted numeric literals. Sufficient for our hand-written seed file —
  * not a general SQL parser.
+ *
+ * Categories only. Sub-categories come from the client data file.
  */
 function extractValuesTuples(insertBlock: string): string[][] {
   const tuples: string[][] = []
@@ -51,9 +53,11 @@ function extractValuesTuples(insertBlock: string): string[][] {
   return tuples
 }
 
-function findInsertBlock(sql: string, tableName: string): string | null {
+function findCategoriesBlock(sql: string): string | null {
+  // Stop at either `;` or `on conflict` — whichever comes first — so we don't
+  // slurp the `(slug)` from the `on conflict (slug) do nothing` clause.
   const re = new RegExp(
-    `INSERT\\s+INTO\\s+(?:public\\.)?${tableName}\\s*\\([^)]*\\)\\s*VALUES\\s*([\\s\\S]*?);`,
+    `insert\\s+into\\s+(?:public\\.)?categories\\s*\\([^)]*\\)\\s*values\\s*([\\s\\S]*?)(?:;|on\\s+conflict)`,
     'i'
   )
   const m = sql.match(re)
@@ -61,7 +65,7 @@ function findInsertBlock(sql: string, tableName: string): string | null {
 }
 
 export function parseSeedSqlCategories(sql: string): SeedSqlCategory[] {
-  const catBlock = findInsertBlock(sql, 'categories')
+  const catBlock = findCategoriesBlock(sql)
   if (!catBlock) return []
   const catTuples = extractValuesTuples(catBlock)
 
@@ -73,27 +77,6 @@ export function parseSeedSqlCategories(sql: string): SeedSqlCategory[] {
     sortOrder: Number(t[4] ?? 0),
     subCategorySlugs: [],
   }))
-
-  const subBlock = findInsertBlock(sql, 'sub_categories')
-  if (subBlock) {
-    // Sub-category rows have the shape:
-    //   ((SELECT id FROM categories WHERE slug='X'), 'sub-slug', 'Name', N)
-    // The nested SELECT confuses the generic tuple extractor, so we use a
-    // targeted regex that captures the parent slug + the four trailing fields.
-    const rowRe =
-      /WHERE\s+slug\s*=\s*'([^']+)'\s*\)\s*,\s*'([^']+)'\s*,\s*'((?:[^']|'')*)'\s*,\s*(\d+)/g
-    let m: RegExpExecArray | null
-    while ((m = rowRe.exec(subBlock)) !== null) {
-      const parentSlug = m[1]
-      const sub: SeedSqlSubCategory = {
-        slug: m[2],
-        name: m[3].replace(/''/g, "'"),
-        sortOrder: Number(m[4]),
-      }
-      const parent = categories.find((c) => c.slug === parentSlug)
-      if (parent) parent.subCategorySlugs.push(sub)
-    }
-  }
 
   return categories
 }
