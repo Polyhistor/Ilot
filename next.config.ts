@@ -31,6 +31,28 @@ const nextConfig: NextConfig = {
         }
       )
     )
+
+    // Sanity bundles are pre-compiled with React Compiler and do
+    // `import { c } from 'react/compiler-runtime'`. That entry is a CJS
+    // conditional require so webpack can't statically enumerate `c`,
+    // and it resolves to undefined → "is not a function" at runtime
+    // (e.g. structure tool crashing when opening a document form).
+    // Redirect to a shim that explicitly re-exports `c`. Skip the shim
+    // file itself to avoid infinite recursion.
+    config.plugins.push(
+      new NormalModuleReplacementPlugin(
+        /^react\/compiler-runtime$/,
+        (resource: { context?: string; request: string }) => {
+          const isShimItself =
+            resource.context && resource.context.includes(`src${sep}lib`)
+          if (!isShimItself) {
+            resource.request = path.resolve(
+              './src/lib/react-compiler-runtime-shim.mjs'
+            )
+          }
+        }
+      )
+    )
     return config
   },
   images: {
