@@ -59,6 +59,17 @@ export const structure: StructureResolver = (S) =>
             )
         ),
       S.divider(),
+      S.listItem()
+        .title('Blog Posts')
+        .child(
+          S.documentTypeList('post')
+            .title('Blog Posts')
+            .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
+        ),
+      S.listItem()
+        .title('Authors')
+        .child(S.documentTypeList('author').title('Authors')),
+      S.divider(),
       S.documentTypeListItem('subCategory').title('All Sub-Categories'),
       S.documentTypeListItem('service').title('All Services'),
     ])
