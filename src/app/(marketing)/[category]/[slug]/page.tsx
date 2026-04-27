@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getServiceBySlug, getRelatedServices, getAllServiceSlugs } from '@/lib/db/services'
 import { ServiceDetail } from '@/components/services/ServiceDetail'
 import { RelatedServices } from '@/components/services/RelatedServices'
+import { UpdatesBanner } from '@/components/updates/UpdatesBanner'
 import { CTABanner } from '@/components/home/CTABanner'
 
 export const revalidate = 3600
@@ -44,7 +45,6 @@ export default async function ServicePage({ params }: Props) {
     ? await getRelatedServices(service.sub_category_id, service.slug)
     : []
 
-  // Schema.org JSON-LD
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -64,6 +64,7 @@ export default async function ServicePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ServiceDetail service={service} />
+      <UpdatesBanner updates={service.recent_updates} />
       <RelatedServices services={related} categorySlug={service.category.slug} />
       <CTABanner />
     </>
