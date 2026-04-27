@@ -45,5 +45,7 @@ export const useState = _React.useState
 export const useSyncExternalStore = _React.useSyncExternalStore
 export const useTransition = _React.useTransition
 export const version = _React.version
+export const __COMPILER_RUNTIME = _React.__COMPILER_RUNTIME
+export const __CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = _React.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE
 
 export default _React
