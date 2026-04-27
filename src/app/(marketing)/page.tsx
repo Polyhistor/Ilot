@@ -1,5 +1,6 @@
 import { getCategories } from '@/lib/db/categories'
 import { getFeaturedServices } from '@/lib/db/services'
+import { getPosts } from '@/lib/db/posts'
 import { HeroCircle } from '@/components/home/HeroCircle'
 import { PartnerBar } from '@/components/home/PartnerBar'
 import { AboutSection } from '@/components/home/AboutSection'
@@ -7,9 +8,11 @@ import { FeaturedServices } from '@/components/home/FeaturedServices'
 import { WhyUsBento } from '@/components/home/WhyUsBento'
 import { ProcessSteps } from '@/components/home/ProcessSteps'
 import { TestimonialsSection } from '@/components/home/TestimonialsSection'
+import { LatestInsights } from '@/components/home/LatestInsights'
 import { CTABanner } from '@/components/home/CTABanner'
 
-export const revalidate = false // SSG — static forever
+// ISR: revalidate hourly so newly published posts surface on the home page.
+export const revalidate = 3600
 
 // Featured services config: groups → slugs from the database
 const FEATURED_GROUPS = [
@@ -78,10 +81,13 @@ const FEATURED_GROUPS = [
 ]
 
 export default async function HomePage() {
-  const [categories, featuredRaw] = await Promise.all([
+  const [categories, featuredRaw, allPosts] = await Promise.all([
     getCategories(),
     getFeaturedServices(FEATURED_GROUPS.flatMap((g) => g.slugs)),
+    getPosts(),
   ])
+
+  const latestPosts = allPosts.slice(0, 3)
 
   const cards = categories.map((cat) => ({
     slug: cat.slug,
@@ -127,6 +133,7 @@ export default async function HomePage() {
       <WhyUsBento />
       <ProcessSteps />
       <TestimonialsSection />
+      <LatestInsights posts={latestPosts} />
       <CTABanner />
     </>
   )
