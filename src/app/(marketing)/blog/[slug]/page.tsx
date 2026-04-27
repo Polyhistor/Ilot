@@ -6,6 +6,7 @@ import { getPostBySlug, getAllPostSlugs } from '@/lib/db/posts'
 import { PostBody } from '@/components/blog/PostBody'
 import { AuthorByline } from '@/components/blog/AuthorByline'
 import { RelatedServices } from '@/components/blog/RelatedServices'
+import { ShareButton } from '@/components/blog/ShareButton'
 import { estimateReadingTime } from '@/lib/reading-time'
 
 export const revalidate = 60
@@ -89,20 +90,6 @@ export default async function PostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="min-h-screen bg-background">
-        {/* Cover image */}
-        {post.cover_image_url && (
-          <div className="relative w-full aspect-[21/9] overflow-hidden bg-foreground/5">
-            <Image
-              src={post.cover_image_url}
-              alt={post.cover_image_alt ?? post.title}
-              fill
-              priority
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
-        )}
-
         <div className="container-site section-padding">
           <div className="max-w-4xl mx-auto">
 
@@ -133,8 +120,27 @@ export default async function PostPage({ params }: Props) {
                 <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
                 <span>·</span>
                 <span>{readingTime} min read</span>
+                <span>·</span>
+                <ShareButton
+                  title={post.title}
+                  url={`${siteUrl}/blog/${post.slug}`}
+                />
               </div>
             </div>
+
+            {/* Cover image — constrained, editorial */}
+            {post.cover_image_url && (
+              <div className="relative w-full aspect-[16/9] overflow-hidden rounded-2xl bg-foreground/5 mb-10">
+                <Image
+                  src={post.cover_image_url}
+                  alt={post.cover_image_alt ?? post.title}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 896px"
+                />
+              </div>
+            )}
 
             {/* Two-column layout: body + sidebar */}
             <div className="grid lg:grid-cols-[1fr_320px] gap-12 items-start">
