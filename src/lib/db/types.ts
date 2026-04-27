@@ -53,3 +53,42 @@ export interface SubCategoryWithServices extends SubCategory {
 export interface CategoryWithSubCategories extends Category {
   sub_categories: SubCategoryWithServices[]
 }
+
+export interface Author {
+  id: string
+  name: string
+  role: string | null
+  photo_url: string | null
+  bio: string | null
+  linkedin_url: string | null
+}
+
+export interface Post {
+  id: string
+  slug: string
+  title: string
+  excerpt: string | null
+  cover_image_url: string | null
+  cover_image_alt: string | null
+  category_slug: string
+  category_name: string
+  category_accent: string | null
+  author: Author | null
+  published_at: string
+  featured: boolean
+  is_active: boolean
+  updated_at: string
+}
+
+export interface PostWithDetails extends Post {
+  body_en: unknown[] | null   // Portable Text blocks — EN
+  body_id: unknown[] | null   // Portable Text blocks — ID
+  meta_title: string | null
+  meta_description: string | null
+  related_services: Array<{
+    slug: string
+    name: string
+    description: string | null
+    category_slug: string
+  }>
+}
