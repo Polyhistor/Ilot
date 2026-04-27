@@ -77,7 +77,22 @@ const SERVICE_WITH_CATEGORY_PROJECTION = groq`
       "name": coalesce(subCategory->name.en, "")
     },
     null
-  )
+  ),
+  "last_verified_at": lastVerifiedAt,
+  "recent_updates": *[
+    _type == "update" &&
+    isActive == true &&
+    ^._id in affectedServices[]._ref
+  ] | order(publishedAt desc) [0..2] {
+    "id": _id,
+    "slug": slug.current,
+    "title": coalesce(title.en, ""),
+    "summary": coalesce(summary.en, null),
+    "severity": coalesce(severity, "info"),
+    "effective_date": effectiveDate,
+    "published_at": publishedAt,
+    "source_url": sourceUrl
+  }
 `
 
 export const categoriesQuery = groq`
@@ -250,4 +265,42 @@ export const latestPostsByCategoryQuery = groq`
   ] | order(publishedAt desc) [0..$limit] {
     ${POST_PROJECTION}
   }
+`
+
+// ─── Update queries ────────────────────────────────────────────────────────
+
+const UPDATE_PROJECTION = groq`
+  "id": _id,
+  "slug": slug.current,
+  "title": coalesce(title.en, ""),
+  "summary": coalesce(summary.en, null),
+  "severity": coalesce(severity, "info"),
+  "effective_date": effectiveDate,
+  "published_at": publishedAt,
+  "source_url": sourceUrl,
+  "affected_services": affectedServices[]->{
+    "slug": slug.current,
+    "name": coalesce(name.en, ""),
+    "category_slug": category->slug.current
+  },
+  "is_active": coalesce(isActive, true),
+  "updated_at": _updatedAt
+`
+
+export const updatesQuery = groq`
+  *[_type == "update" && isActive == true] | order(publishedAt desc) {
+    ${UPDATE_PROJECTION}
+  }
+`
+
+export const updateBySlugQuery = groq`
+  *[_type == "update" && slug.current == $slug && isActive == true][0] {
+    ${UPDATE_PROJECTION},
+    "body_en": body.en,
+    "body_id": body.id
+  }
+`
+
+export const allUpdateSlugsQuery = groq`
+  *[_type == "update" && isActive == true].slug.current
 `

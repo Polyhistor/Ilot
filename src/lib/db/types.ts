@@ -44,6 +44,8 @@ export interface Service {
 export interface ServiceWithCategory extends Service {
   category: Pick<Category, 'slug' | 'name' | 'color_accent'>
   sub_category: Pick<SubCategory, 'slug' | 'name'> | null
+  last_verified_at: string | null
+  recent_updates: UpdateRef[]
 }
 
 export interface SubCategoryWithServices extends SubCategory {
@@ -91,4 +93,27 @@ export interface PostWithDetails extends Post {
     description: string | null
     category_slug: string
   }>
+}
+
+/** Minimal shape used inside ServiceWithCategory.recent_updates and UpdatesBanner */
+export interface UpdateRef {
+  id: string
+  slug: string
+  title: string
+  summary: string | null
+  severity: 'info' | 'warning' | 'critical'
+  effective_date: string | null
+  published_at: string
+  source_url: string | null
+}
+
+export interface Update extends UpdateRef {
+  affected_services: Array<{ slug: string; name: string; category_slug: string }>
+  is_active: boolean
+  updated_at: string
+}
+
+export interface UpdateWithBody extends Update {
+  body_en: unknown[] | null
+  body_id: unknown[] | null
 }
