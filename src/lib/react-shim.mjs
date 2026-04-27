@@ -32,7 +32,23 @@ export const useContext = _React.useContext
 export const useDebugValue = _React.useDebugValue
 export const useDeferredValue = _React.useDeferredValue
 export const useEffect = _React.useEffect
-export const useEffectEvent = _React.useEffectEvent
+// Next.js 15 bundles its own React canary (e.g. 19.2.0-canary-...) for
+// client chunks, and that canary does NOT export `useEffectEvent` even
+// though the package.json says React 19.2.3. Sanity's bundles call
+// `useEffectEvent` and crash the structure tool with
+// "(0, a.Jt) is not a function" when it's undefined.
+//
+// Polyfill using the official React-recommended pattern: a ref updated
+// in useInsertionEffect (synchronously before commit) plus a stable
+// useCallback that always invokes the latest handler.
+function useEffectEventPolyfill(handler) {
+  const ref = _React.useRef(handler)
+  _React.useInsertionEffect(() => {
+    ref.current = handler
+  })
+  return _React.useCallback((...args) => ref.current(...args), [])
+}
+export const useEffectEvent = _React.useEffectEvent ?? useEffectEventPolyfill
 export const useId = _React.useId
 export const useImperativeHandle = _React.useImperativeHandle
 export const useInsertionEffect = _React.useInsertionEffect
