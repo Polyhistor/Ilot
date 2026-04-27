@@ -13,7 +13,9 @@
     "import:sanity:dry": "tsx --env-file=.env.local scripts/import-to-sanity.ts --dry-run"
   },
   "dependencies": {
+    "@portabletext/react": "^6.0.3",
     "@sanity/client": "^7.22.0",
+    "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.22.0",
     "@supabase/supabase-js": "^2.99.2",
     "framer-motion": "^12.38.0",
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20.19.39",
     "@types/react": "^19",
     "@types/react-dom": "^19",
