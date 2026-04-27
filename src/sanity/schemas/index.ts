@@ -7,6 +7,7 @@ import { subCategory } from './documents/subCategory'
 import { service } from './documents/service'
 import { author } from './documents/author'
 import { post } from './documents/post'
+import { update } from './documents/update'
 
 export const schemaTypes = [
   // objects
@@ -20,4 +21,5 @@ export const schemaTypes = [
   service,
   author,
   post,
+  update,
 ]

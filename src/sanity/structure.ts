@@ -70,6 +70,14 @@ export const structure: StructureResolver = (S) =>
         .title('Authors')
         .child(S.documentTypeList('author').title('Authors')),
       S.divider(),
+      S.listItem()
+        .title('Regulatory Updates')
+        .child(
+          S.documentTypeList('update')
+            .title('Regulatory Updates')
+            .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
+        ),
+      S.divider(),
       S.documentTypeListItem('subCategory').title('All Sub-Categories'),
       S.documentTypeListItem('service').title('All Services'),
     ])
