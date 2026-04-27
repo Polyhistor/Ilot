@@ -43,6 +43,6 @@ export const service = defineType({
     }),
   ],
   preview: {
-    select: { title: 'name.en', subtitle: 'category->name.en' },
+    select: { title: 'name.en' },
   },
 })

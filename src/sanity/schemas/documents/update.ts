@@ -63,7 +63,22 @@ export const update = defineType({
       name: 'affectedServices',
       title: 'Affected Services',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'service' }] }],
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'service' }],
+          options: {
+            // Use a GROQ filter so the picker queries directly instead of
+            // relying on the full-text search index (which lags after bulk import).
+            filter: ({ searchQuery }: { searchQuery: string }) => ({
+              filter: searchQuery
+                ? 'isActive == true && name.en match $q'
+                : 'isActive == true',
+              params: searchQuery ? { q: `*${searchQuery}*` } : {},
+            }),
+          },
+        },
+      ],
       description: 'Services impacted by this regulatory change. Used to surface this update on service detail pages.',
     }),
     defineField({

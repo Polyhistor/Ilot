@@ -88,7 +88,6 @@ export const post = defineType({
   preview: {
     select: {
       title: 'title.en',
-      subtitle: 'category->name.en',
       media: 'coverImage',
     },
   },

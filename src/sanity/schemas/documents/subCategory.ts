@@ -24,6 +24,6 @@ export const subCategory = defineType({
     defineField({ name: 'isActive', title: 'Active', type: 'boolean', initialValue: true }),
   ],
   preview: {
-    select: { title: 'name.en', subtitle: 'category->name.en' },
+    select: { title: 'name.en' },
   },
 })
