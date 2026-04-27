@@ -1,9 +1,12 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { getCategoryBySlug, getAllCategorySlugs } from '@/lib/db/categories'
 import { CategoryServicesProvider, CategoryServices } from '@/components/services/CategoryServices'
 import { getCategoryColor } from '@/lib/category-colors'
+import { getLatestPostsByCategory } from '@/lib/db/posts'
+import { PostCard } from '@/components/blog/PostCard'
 
 export const revalidate = 3600
 
@@ -45,6 +48,7 @@ export default async function CategoryPage({ params }: Props) {
 
   const subCatCount = visibleSubCategories.length
   const colors = getCategoryColor(category.slug)
+  const latestPosts = await getLatestPostsByCategory(slug, 3)
 
   return (
     <CategoryServicesProvider subCategories={visibleSubCategories}>
@@ -101,6 +105,35 @@ export default async function CategoryPage({ params }: Props) {
           />
         </div>
       </section>
+
+      {/* Latest articles section */}
+      {latestPosts.length > 0 && (
+        <section className="section-padding bg-surface">
+          <div className="container-site">
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+                  Latest articles about {category.name}
+                </h2>
+                <p className="text-sm text-muted mt-1">
+                  Guides and insights from the Ilot team
+                </p>
+              </div>
+              <Link
+                href={`/blog?category=${category.slug}`}
+                className="text-sm font-medium text-foreground hover:text-accent transition-colors hidden md:block"
+              >
+                View all →
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {latestPosts.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </CategoryServicesProvider>
   )
 }
