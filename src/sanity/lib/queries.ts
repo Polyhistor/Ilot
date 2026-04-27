@@ -156,3 +156,98 @@ export const featuredServicesQuery = groq`
     }
   }
 `
+
+// ─── Blog queries ─────────────────────────────────────────────────────────
+
+const AUTHOR_PROJECTION = groq`
+  "id": _id,
+  "name": name,
+  "role": role,
+  "photo_url": photo.asset->url,
+  "bio": coalesce(bio.en, null),
+  "linkedin_url": linkedinUrl
+`
+
+const POST_PROJECTION = groq`
+  "id": _id,
+  "slug": slug.current,
+  "title": coalesce(title.en, ""),
+  "excerpt": coalesce(excerpt.en, null),
+  "cover_image_url": coverImage.asset->url,
+  "cover_image_alt": coalesce(coverImage.alt.en, null),
+  "category_slug": category->slug.current,
+  "category_name": coalesce(category->name.en, ""),
+  "category_accent": category->accentColor,
+  "author": select(
+    defined(author) => author->{${AUTHOR_PROJECTION}},
+    null
+  ),
+  "published_at": publishedAt,
+  "featured": coalesce(featured, false),
+  "is_active": coalesce(isActive, true),
+  "updated_at": _updatedAt
+`
+
+export const postsQuery = groq`
+  *[
+    _type == "post" &&
+    isActive == true &&
+    publishedAt <= now()
+  ] | order(publishedAt desc) {
+    ${POST_PROJECTION}
+  }
+`
+
+export const featuredPostQuery = groq`
+  *[
+    _type == "post" &&
+    isActive == true &&
+    publishedAt <= now() &&
+    featured == true
+  ] | order(publishedAt desc) [0] {
+    ${POST_PROJECTION}
+  }
+`
+
+export const postBySlugQuery = groq`
+  *[
+    _type == "post" &&
+    slug.current == $slug &&
+    isActive == true
+  ] [0] {
+    ${POST_PROJECTION},
+    "body_en": body.en,
+    "body_id": body.id,
+    "meta_title": coalesce(seo.metaTitle.en, null),
+    "meta_description": coalesce(seo.metaDescription.en, null),
+    "related_services": *[
+      _type == "service" &&
+      category._ref == ^.category._ref &&
+      isActive == true
+    ] | order(sortOrder asc) [0..2] {
+      "slug": slug.current,
+      "name": coalesce(name.en, ""),
+      "description": coalesce(description.en, null),
+      "category_slug": category->slug.current
+    }
+  }
+`
+
+export const allPostSlugsQuery = groq`
+  *[
+    _type == "post" &&
+    isActive == true &&
+    publishedAt <= now()
+  ].slug.current
+`
+
+export const latestPostsByCategoryQuery = groq`
+  *[
+    _type == "post" &&
+    isActive == true &&
+    publishedAt <= now() &&
+    category->slug.current == $categorySlug
+  ] | order(publishedAt desc) [0..$limit] {
+    ${POST_PROJECTION}
+  }
+`
