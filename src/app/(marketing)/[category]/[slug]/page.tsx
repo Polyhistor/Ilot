@@ -6,7 +6,7 @@ import { RelatedServices } from '@/components/services/RelatedServices'
 import { UpdatesBanner } from '@/components/updates/UpdatesBanner'
 import { CTABanner } from '@/components/home/CTABanner'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 interface Props {
   params: Promise<{ category: string; slug: string }>

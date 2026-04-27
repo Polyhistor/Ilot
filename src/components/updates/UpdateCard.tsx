@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { AlertTriangle, Info, AlertOctagon, ArrowRight } from 'lucide-react'
-import type { Update } from '@/lib/db/types'
+import type { Update, UpdateRef } from '@/lib/db/types'
 
 const SEVERITY_CONFIG = {
   info: {
@@ -32,7 +32,7 @@ function formatDate(dateStr: string): string {
 }
 
 interface Props {
-  update: Update
+  update: UpdateRef
 }
 
 export function UpdateCard({ update }: Props) {
