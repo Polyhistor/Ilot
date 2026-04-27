@@ -35,6 +35,12 @@ export const service = defineType({
     defineField({ name: 'seo', title: 'SEO', type: 'seoFields' }),
     defineField({ name: 'sortOrder', title: 'Sort Order', type: 'number', initialValue: 0 }),
     defineField({ name: 'isActive', title: 'Active', type: 'boolean', initialValue: true }),
+    defineField({
+      name: 'lastVerifiedAt',
+      title: 'Last Verified At',
+      type: 'datetime',
+      description: 'Date when the information for this service was last confirmed current by the Ilot team.',
+    }),
   ],
   preview: {
     select: { title: 'name.en', subtitle: 'category->name.en' },
