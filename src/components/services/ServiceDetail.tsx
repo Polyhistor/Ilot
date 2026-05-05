@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
-import { Clock, Users, Package, Info } from 'lucide-react'
+import { Clock, Timer, Users, Package, Info } from 'lucide-react'
 import { getCategoryColor } from '@/lib/category-colors'
 import type { ServiceWithCategory } from '@/lib/db/types'
 
@@ -95,6 +95,15 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted mb-1">Timeline</p>
                     <p className="text-[15px] text-[#0B0B1A] font-semibold leading-snug">{service.estimated_timeline}</p>
+                  </div>
+                </div>
+              )}
+              {service.real_time_work && (
+                <div className="flex items-start gap-3">
+                  <Timer className="w-5 h-5 mt-1 shrink-0" style={{ color: colors.mid }} strokeWidth={1.5} />
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted mb-1">Real-Time Work</p>
+                    <p className="text-[15px] text-[#0B0B1A] font-semibold leading-snug">{service.real_time_work}</p>
                   </div>
                 </div>
               )}
