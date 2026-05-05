@@ -90,6 +90,7 @@ export async function upsertCategories(
           keyDeliverables: svc.keyDeliverables,
           estimatedTimeline: svc.estimatedTimeline,
           realTimeWork: svc.realTimeWork,
+          note: svc.note,
           sortOrder: svc.sortOrder,
           isActive: true,
         }

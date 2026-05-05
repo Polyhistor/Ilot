@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
-import { Clock, Users, Package } from 'lucide-react'
+import { Clock, Users, Package, Info } from 'lucide-react'
 import { getCategoryColor } from '@/lib/category-colors'
 import type { ServiceWithCategory } from '@/lib/db/types'
 
@@ -72,7 +72,7 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
       {/* Content section */}
       <section className="pt-12 pb-20 bg-white">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-8">
             <div className="max-w-2xl">
               {service.description && (
                 <p className="text-lg text-gray-500 leading-relaxed max-w-xl">
@@ -133,6 +133,13 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
               </div>
             </div>
           </div>
+
+          {service.note && (
+            <div className="flex items-start gap-3 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4">
+              <Info className="w-4 h-4 mt-0.5 shrink-0 text-gray-400" strokeWidth={1.5} />
+              <p className="text-sm text-gray-500 leading-relaxed">{service.note}</p>
+            </div>
+          )}
         </div>
       </section>
     </article>

@@ -17,6 +17,7 @@ export function ServiceSearch() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search services..."
           className="w-full pl-11 pr-11 py-3 text-sm rounded-xl bg-[#F4F4F0] text-[#0B0B1A] placeholder:text-gray-400 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-colors"
+          suppressHydrationWarning
         />
         {query && (
           <button

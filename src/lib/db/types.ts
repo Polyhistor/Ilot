@@ -31,6 +31,7 @@ export interface Service {
   key_deliverables: string | null
   estimated_timeline: string | null
   real_time_work: string | null
+  note: string | null
   whatsapp_message: string | null
   meta_title: string | null
   meta_description: string | null

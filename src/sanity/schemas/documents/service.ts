@@ -33,6 +33,7 @@ export const service = defineType({
     defineField({ name: 'realTimeWork', title: 'Real-Time Work', type: 'localizedString' }),
     defineField({ name: 'whatsappMessage', title: 'WhatsApp Pre-filled Message', type: 'localizedText' }),
     defineField({ name: 'seo', title: 'SEO', type: 'seoFields' }),
+    defineField({ name: 'note', title: 'Note', type: 'localizedText' }),
     defineField({ name: 'sortOrder', title: 'Sort Order', type: 'number', initialValue: 0 }),
     defineField({ name: 'isActive', title: 'Active', type: 'boolean', initialValue: true }),
     defineField({

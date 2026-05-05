@@ -6,6 +6,7 @@ export interface ParsedService {
   keyDeliverables: { en: string } | null
   estimatedTimeline: { en: string } | null
   realTimeWork: { en: string } | null
+  note: { en: string } | null
   sortOrder: number
 }
 
@@ -26,15 +27,24 @@ export interface ParsedCategory {
   subCategories: ParsedSubCategory[]
 }
 
+/** Shape of each row in docs/seed-data-raw.json (new unified snake_case format) */
 export interface ClientDataRow {
-  Category: string
-  'Sub-Category': string
-  'Service Name': string
-  Description: string
-  'Target Client': string
-  'Key Deliverables / Outcome': string
-  'Estimated Timeline': string
-  'Real time work'?: string
+  category_name: string
+  category_slug: string
+  category_tagline: string
+  category_sort_order: number | string
+  sub_category_name: string
+  sub_category_slug: string
+  sub_category_sort_order: number | string
+  service_name: string
+  service_slug: string
+  service_sort_order: number | string
+  description: string
+  target_client: string
+  key_deliverables: string
+  estimated_timeline: string
+  real_time_work: string
+  note: string
 }
 
 export interface SeedSqlSubCategory {
