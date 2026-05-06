@@ -1,6 +1,6 @@
 # Ilot — Full Project Specification
 
-> **Version:** 1.0 · **Date:** 2026-03-18 · **Status:** Approved
+> **Version:** 1.0 · **Date:** 2026-03-18 · **Status:** ✅ Shipped (original Supabase spec — Sanity is now the source of truth)
 
 ---
 

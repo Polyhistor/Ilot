@@ -3,6 +3,7 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add a bilingual blog to the Ilot site — client publishes posts in Sanity Studio, posts are linked to the 7 service categories, and each post page drives conversion via a "Related services" block.
+n**Status:** ✅ Shipped — blog live at /blog with ISR, author pages, category filtering and related services.
 
 **Architecture:** Two new Sanity document types (`post`, `author`) alongside the existing Phase 1 schemas. GROQ queries follow the same snake_case projection pattern established in Phase 1. Three new Next.js routes (`/blog`, `/blog/[slug]`) plus a "latest articles" section injected into existing category pages. All statically generated with ISR 60s.
 

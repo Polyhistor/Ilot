@@ -1,7 +1,7 @@
 # Blog Feature — Phase 2 Design Spec
 
 **Date:** 2026-04-27
-**Status:** Design approved, awaiting implementation plan
+**Status:** ✅ Shipped — fully implemented and live in production
 **Depends on:** Phase 1 (Sanity CMS migration) — complete
 
 ---
