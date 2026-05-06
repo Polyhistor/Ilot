@@ -11,6 +11,16 @@ function maybeLocalized(value: string | undefined): { en: string } | null {
   return { en: trimmed }
 }
 
+/** Returns the manual whatsapp_message if provided, otherwise builds a
+ *  consistent, bot-parseable message from the service name. The format
+ *  is intentionally stable so the WhatsApp bot can reliably identify
+ *  the service from the bold-formatted name. */
+function whatsappMessage(serviceName: string, override?: string): { en: string } {
+  const custom = override?.trim()
+  if (custom) return { en: custom }
+  return { en: `Hi Ilot 👋 I'd like to learn more about your *${serviceName}* service. Can you help me?` }
+}
+
 export function parseClientData(rows: ClientDataRow[]): ParsedCategory[] {
   const categories = new Map<string, ParsedCategory>()
 
@@ -66,6 +76,7 @@ export function parseClientData(rows: ClientDataRow[]): ParsedCategory[] {
       estimatedTimeline: maybeLocalized(row.estimated_timeline),
       realTimeWork: maybeLocalized(row.real_time_work),
       note: maybeLocalized(row.note),
+      whatsappMessage: whatsappMessage(serviceName, row.whatsapp_message),
       sortOrder: typeof row.service_sort_order === 'number'
         ? row.service_sort_order
         : parseInt(String(row.service_sort_order), 10) || subCategory.services.length,

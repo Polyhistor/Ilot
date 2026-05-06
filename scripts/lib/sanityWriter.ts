@@ -98,6 +98,7 @@ export async function upsertCategories(
           ...(svc.estimatedTimeline  ? { estimatedTimeline: svc.estimatedTimeline }   : {}),
           ...(svc.realTimeWork       ? { realTimeWork: svc.realTimeWork }             : {}),
           ...(svc.note               ? { note: svc.note }                             : {}),
+          whatsappMessage: svc.whatsappMessage,
           sortOrder: svc.sortOrder,
           isActive: true,
         }

@@ -7,6 +7,7 @@ export interface ParsedService {
   estimatedTimeline: { en: string } | null
   realTimeWork: { en: string } | null
   note: { en: string } | null
+  whatsappMessage: { en: string }   // always present — generated if not manually set
   sortOrder: number
 }
 
@@ -45,6 +46,7 @@ export interface ClientDataRow {
   estimated_timeline: string
   real_time_work: string
   note: string
+  whatsapp_message?: string   // optional — auto-generated from service name if blank
 }
 
 export interface SeedSqlSubCategory {
