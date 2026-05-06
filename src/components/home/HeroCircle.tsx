@@ -322,11 +322,11 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
             <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 mb-5 shadow-sm">
               <span>Trusted legal services, Nationwide</span>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#0B0B1A] tracking-tight leading-[1.1] mb-4">
+            <h1 className="font-bold text-[#0B0B1A] tracking-tight leading-[1.1] mb-4" style={{ fontSize: 'clamp(2.75rem, 4.5vw, 5.5rem)' }}>
               Clear Legal Support.<br />
               Confident Decisions.
             </h1>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl leading-relaxed mx-auto">
+            <p className="text-gray-600 mb-6 max-w-2xl leading-relaxed mx-auto" style={{ fontSize: 'clamp(1rem, 1.25vw, 1.25rem)' }}>
               Elite legal, visa, and business solutions for global investors and expatriates.
               Secure your residency and protect your assets with one-touch efficiency.
             </p>
@@ -358,7 +358,7 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
           <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 mb-6 shadow-sm">
             <span>COMPREHENSIVE SERVICES</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0B0B1A] leading-tight">
+          <h2 className="font-bold text-[#0B0B1A] leading-tight" style={{ fontSize: 'clamp(2rem, 3.5vw, 4rem)' }}>
             Everything you need to <br />grow in Indonesia
           </h2>
         </motion.div>
