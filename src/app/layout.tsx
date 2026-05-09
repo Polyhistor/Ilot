@@ -6,6 +6,14 @@ import { WhatsAppFloat } from '@/components/ui/WhatsAppFloat'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const caveat = Caveat({ subsets: ['latin'], variable: '--font-caveat' })
 
+// Defensive: `??` only falls back on null/undefined, not on empty strings.
+// If NEXT_PUBLIC_SITE_URL is "" (set in the host env with no value, which is
+// what Coolify does when you leave the Value field blank), `new URL("")`
+// throws ERR_INVALID_URL and crashes the "Collecting page data" step of
+// `next build`. `.trim() || fallback` covers both `undefined` and `""`.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://ilot.id'
+
 export const metadata: Metadata = {
   title: {
     default: 'Ilot — Clear Legal Support. Confident Decisions.',
@@ -13,7 +21,7 @@ export const metadata: Metadata = {
   },
   description:
     'Premium legal, visa, and corporate structuring solutions for global investors and expatriates in Indonesia.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilot.id'),
+  metadataBase: new URL(siteUrl),
   openGraph: {
     siteName: 'Ilot',
     locale: 'en_US',
