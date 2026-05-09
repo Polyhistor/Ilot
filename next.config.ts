@@ -6,6 +6,10 @@ import { sep } from 'path'
 const { NormalModuleReplacementPlugin } = require('webpack')
 
 const nextConfig: NextConfig = {
+  // Emit a self-contained server bundle at `.next/standalone` so the
+  // production Docker image only needs Node + that folder (no full
+  // node_modules). Required by the Dockerfile in the repo root (Coolify).
+  output: 'standalone',
   eslint: { ignoreDuringBuilds: true },
   webpack: (config) => {
     // Sanity's ESM chunks do `import { useEffectEvent } from 'react'`.

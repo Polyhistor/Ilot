@@ -1,0 +1,46 @@
+# Git / IDE
+.git
+.gitignore
+.vscode
+.idea
+.claude
+.superpowers
+
+# Node / build artefacts (the image rebuilds these inside the container)
+node_modules
+.next
+out
+dist
+coverage
+*.tsbuildinfo
+next-env.d.ts
+
+# Env files — NEVER bake these into the image.
+# Coolify injects env vars at build/runtime via its UI.
+.env
+.env.*
+!.env.example
+
+# Host-only tooling & legacy
+supabase
+scripts/migrate-supabase-to-sanity.mjs
+
+# Docs, fixtures, tests — not needed in the runtime image
+docs
+tests
+*.md
+!README.md
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Vercel leftovers
+.vercel
