@@ -136,7 +136,7 @@ Click the big **Deploy** button (top-right in the Coolify UI).
 
 Watch **Deployments** tab → **Logs**. The first build is slow (~3–5 min)
 because Alpine has to download Node and the deps layer. Subsequent builds
-will reuse the `deps` layer unless `pnpm-lock.yaml` changes.
+will reuse the `deps` layer unless `package-lock.json` changes.
 
 **Expected final log lines:**
 ```

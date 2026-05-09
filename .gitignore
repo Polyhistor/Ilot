@@ -30,6 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# pnpm lockfile — this project uses npm (package-lock.json is the source of
+# truth, .npmrc sets legacy-peer-deps=true for npm). Ignore stray pnpm locks
+# produced by someone running `pnpm install` locally so they don't confuse
+# the Docker build.
+pnpm-lock.yaml
+
 # env files (can opt-in for committing if needed)
 .env*
 

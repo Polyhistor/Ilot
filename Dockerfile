@@ -3,7 +3,8 @@
 # Ilot Legal — production Dockerfile for Coolify
 #
 # Multi-stage build using Next.js 15 `output: 'standalone'` mode:
-#   1) deps     → install node_modules with pnpm (frozen lockfile)
+#   1) deps     → install node_modules with npm ci (package-lock.json is the
+#                 tracked lockfile; .npmrc sets legacy-peer-deps=true)
 #   2) builder  → run `next build` with NEXT_PUBLIC_* baked in from ARGs
 #   3) runner   → minimal Node 20 Alpine image, runs the standalone server
 #
@@ -17,12 +18,11 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy only what's needed to install deps (maximises Docker layer cache)
-COPY package.json pnpm-lock.yaml .npmrc ./
+# Only the three files that determine npm's resolution — maximises layer cache
+COPY package.json package-lock.json .npmrc ./
 
-# pnpm ships with corepack; enable it and install with the frozen lockfile
-RUN corepack enable && corepack prepare pnpm@latest --activate \
- && pnpm install --frozen-lockfile
+# `npm ci` is the reproducible install (fails if package-lock is out of sync)
+RUN npm ci --no-audit --no-fund
 
 
 # ───── builder ─────
@@ -35,7 +35,7 @@ COPY . .
 
 # Next.js bakes NEXT_PUBLIC_* values into the client bundle at build time.
 # Coolify automatically injects every Environment Variable configured in the UI
-# as a Docker build ARG, so you just need to declare them here.
+# as a Docker build ARG, so we just need to declare them here.
 ARG NEXT_PUBLIC_SITE_URL
 ARG NEXT_PUBLIC_WA_NUMBER
 ARG NEXT_PUBLIC_SANITY_PROJECT_ID
@@ -49,7 +49,7 @@ ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
     NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=production
 
-RUN corepack enable && pnpm build
+RUN npm run build
 
 
 # ───── runner ─────
