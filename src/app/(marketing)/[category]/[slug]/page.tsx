@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = await getServiceBySlug(slug)
   if (!service) return {}
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilot.id'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilotlegal.com'
 
   return {
     title: service.meta_title ?? service.name,
@@ -53,7 +53,7 @@ export default async function ServicePage({ params }: Props) {
     provider: {
       '@type': 'Organization',
       name: 'Ilot',
-      url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilot.id',
+      url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilotlegal.com',
     },
   }
 

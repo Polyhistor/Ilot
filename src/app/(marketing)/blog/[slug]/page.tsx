@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug)
   if (!post) return {}
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilot.id'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilotlegal.com'
 
   return {
     title: post.meta_title ?? post.title,
@@ -57,7 +57,7 @@ export default async function PostPage({ params }: Props) {
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilot.id'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilotlegal.com'
   const readingTime = estimateReadingTime(post.body_en as Parameters<typeof estimateReadingTime>[0])
 
   const jsonLd = {

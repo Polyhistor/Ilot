@@ -12,7 +12,7 @@ const caveat = Caveat({ subsets: ['latin'], variable: '--font-caveat' })
 // throws ERR_INVALID_URL and crashes the "Collecting page data" step of
 // `next build`. `.trim() || fallback` covers both `undefined` and `""`.
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://ilot.id'
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || 'https://ilotlegal.com'
 
 export const metadata: Metadata = {
   title: {

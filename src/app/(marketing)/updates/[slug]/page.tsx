@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const update = await getUpdateBySlug(slug)
   if (!update) return {}
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilot.id'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ilotlegal.com'
 
   return {
     title: update.title,

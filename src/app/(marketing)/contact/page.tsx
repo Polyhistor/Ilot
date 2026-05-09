@@ -17,8 +17,8 @@ export default function ContactPage() {
         <WhatsAppCTA size="lg" label="Start on WhatsApp" className="mb-8 block w-fit" />
         <p className="text-muted text-sm">
           Prefer email? Reach us at{' '}
-          <a href="mailto:hello@ilot.id" className="text-accent underline">
-            hello@ilot.id
+          <a href="mailto:hello@ilotlegal.com" className="text-accent underline">
+            hello@ilotlegal.com
           </a>
         </p>
       </div>
