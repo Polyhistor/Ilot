@@ -1,7 +1,7 @@
 # Sanity CMS Migration — Phase 1: Categories, Sub-Categories, Services
 
 **Date:** 2026-04-26
-**Status:** Design approved, awaiting implementation plan
+**Status:** ✅ Shipped — fully implemented and live in production
 **Phase 2 (Blog):** Separate spec, to be written after Phase 1 ships
 
 ---
