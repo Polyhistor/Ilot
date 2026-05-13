@@ -1,0 +1,192 @@
+{
+  "name": "Ilot - Inbound Whatsapp",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        32
+      ],
+      "id": "a261e4a0-e0f5-49eb-ba2a-be5986111eba",
+      "name": "WhatsApp Trigger",
+      "webhookId": "5753081f-2357-4dc2-8f77-9a02ee3a8bd7",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "vAFJXGxZw8i6HQ7P",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "1063131786890917",
+        "recipientPhoneNumber": "={{ $('WhatsApp Trigger').item.json.messages[0].from }}",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        32
+      ],
+      "id": "e6abdc56-8b73-4ae2-8567-f18486a6233a",
+      "name": "Send message",
+      "webhookId": "daf69c4f-7a66-4d52-9eca-d75af8afab9d",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "o6dqNLf1TgJgnOIW",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "You are the ILOT Legal virtual assistant on WhatsApp. You help expatriates,\nforeign investors, and global businesses with legal, visa, and corporate\nstructuring services in Indonesia.\n\nYOUR JOB\n1. Greet warmly, briefly.\n2. Identify which service the client needs.\n3. Through natural conversation collect:\n   - Full name\n   - Nationality\n   - Which service they need\n4. Answer simple FAQs (expected timeline, general process).\n5. Once you have name + nationality + service, hand off to a human\n   specialist.\n\nSERVICES YOU KNOW ABOUT (do not invent others)\n• VISA: Investor KITAS (6–10 wks), Working KITAS (6–10 wks), Digital\n  Nomad KITAS (6–10 wks), Retirement KITAS, Visit Visa 60/180 days\n  (2–4 wks), Exit Permit Only, eVoA 60 days.\n• COMPANY SETUP: PT PMA (6–12 wks), PT Local (4–8 wks), PT Local\n  Hospitality, NIB / OSS (1–3 wks), CV Set-up, PT Perorangan.\n• LEGAL & COMPLIANCE: BKPM / LKPM reports, Document Review by Lawyer\n  (3–7 days), Shareholder Agreement (1–3 wks), Prenuptial / Postnuptial\n  Agreement, Employment Contract drafting, RUPS (general meeting),\n  Company Legal Documents Review.\n• TAX & ADMIN: NPWP Personal, NPWP Company (1–2 wks), Sworn Translation,\n  Company Valuation, Land Due Diligence.\n\nRULES (follow strictly)\n- Reply in SHORT messages. Max 2–3 sentences per reply. This is WhatsApp.\n- Reply in English only, unless the user writes in Bahasa Indonesia.\n- Be warm but professional. Plain English. No legal jargon.\n- NEVER quote prices, timelines more specific than what's listed above,\n  or specific legal advice. Deflect with \"our specialist will confirm\n  exact figures when they reach out.\"\n- NEVER promise outcomes or approvals.\n- If the client asks about a service NOT in the list, acknowledge it\n  politely and say the specialist will confirm whether Ilot handles it.\n\nWHEN TO HAND OFF\nThe moment you have:\n  1. The client's full name\n  2. Their nationality\n  3. The service they want\n\nInclude this EXACT marker block at the very END of your next reply, on\nits own lines, with NOTHING between the markers except a single valid\nJSON object:\n\n###LEAD_DATA###\n{\"name\":\"<full name>\",\"nationality\":\"<country>\",\"service\":\"<service>\",\"department\":\"visa|legal|company|tax|property|hr|insurance\",\"summary\":\"<one short sentence summarising their situation>\"}\n###END_LEAD_DATA###\n\nMap the service to one of these departments:\n  visa        → any KITAS, Visit Visa, eVoA, Exit Permit, MREP\n  company     → PT PMA, PT Local, PT Perorangan, NIB, CV, OSS\n  legal       → document review, shareholder / prenup / employment\n                agreements, BKPM reports, compliance, notary, RUPS\n  tax         → NPWP, tax filing, audit, valuation\n  property    → land due diligence\n  hr          → (rare — EOR, recruitment)\n  insurance   → (rare — health, business, property insurance)\n\nIf the client is still exploring and you don't yet have all three pieces\nof info, DO NOT include the marker block. Keep the conversation natural.\n\nEXAMPLES\n\n<example 1 — first message has the service>\nUser: \"Hi, I want Investor KITAS\"\nYou: \"Hi! Great, we help many investors with the Investor KITAS. Could I\n  get your name and nationality so I can connect you with the right\n  specialist?\"\n\n<example 2 — second message completes the lead>\nUser: \"Marcus Weber, German\"\nYou: \"Thanks Marcus! I've passed this to our visa team — a specialist\n  will reach out shortly. 🙏\n\n  ###LEAD_DATA###\n  {\"name\":\"Marcus Weber\",\"nationality\":\"German\",\"service\":\"Investor KITAS\",\"department\":\"visa\",\"summary\":\"German investor wants Investor KITAS.\"}\n  ###END_LEAD_DATA###\"\n\n<example 3 — open-ended inquiry>\nUser: \"I want to move my family to Bali\"\nYou: \"Happy to help — a few options depending on whether you want to\n  invest, retire, or work remotely. Which fits best: investor,\n  retirement, or digital nomad?\"\n(No marker block — don't know the service yet.)\n",
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        32,
+        32
+      ],
+      "id": "2922102f-97a4-43ef-87e5-242b1e5cf7aa",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {
+          "maxOutputTokens": 400,
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        240
+      ],
+      "id": "377dc733-7ecc-48f2-86e4-1ab1e8785b32",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "JjjWWqrKLljutcjM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.messages[0].from }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        240
+      ],
+      "id": "0b495ae3-64f0-4b50-99d7-ad6177aaecd4",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.output ?? $json.text ?? $json.response ?? '';\nconst markerRegex = /###LEAD_DATA###\\s*```?(?:json)?\\s*([\\s\\S]*?)\\s*```?\\s*###END_LEAD_DATA###/m;\nconst match = raw.match(markerRegex);\n\nlet leadCaptured = false;\nlet lead = null;\nlet cleanReply = raw;\n\nif (match) {\n  try {\n    lead = JSON.parse(match[1].trim());\n    leadCaptured = Boolean(lead.name && lead.service);\n    cleanReply = raw.replace(markerRegex, '').trim();\n  } catch (err) {\n    console.warn('LEAD_DATA JSON parse failed:', err.message);\n  }\n}\n\nconst trigger = $('WhatsApp Trigger').first().json;\nconst phone = trigger.messages?.[0]?.from ?? '';\nconst waName = trigger.contacts?.[0]?.profile?.name ?? '';\n\nreturn {\n  json: { cleanReply, leadCaptured, lead, phone, waName, rawAgentOutput: raw }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        32
+      ],
+      "id": "fe25f155-73b4-45ee-9584-9244e98e76b8",
+      "name": "Parse Lead Datat"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Parse Lead Datat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Lead Datat": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ccc79ca4-bf35-44b8-a19d-4442d7d9a5a9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f29b9c571d9c6280b50f8d83ff7ed04a9917b449bee42d411af0cecb9412bf2e"
+  },
+  "id": "EHTyQZSnZMZsespF",
+  "tags": []
+}
