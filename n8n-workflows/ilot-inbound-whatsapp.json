@@ -28,15 +28,15 @@
       "parameters": {
         "operation": "send",
         "phoneNumberId": "1063131786890917",
-        "recipientPhoneNumber": "={{ $('WhatsApp Trigger').item.json.messages[0].from }}",
-        "textBody": "={{ $json.output }}",
+        "recipientPhoneNumber": "={{ $('Parse Lead Datat').item.json.phone }}\n",
+        "textBody": "={{ $('Parse Lead Datat').item.json.cleanReply }}\n",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1.1,
       "position": [
-        592,
-        32
+        1120,
+        192
       ],
       "id": "e6abdc56-8b73-4ae2-8567-f18486a6233a",
       "name": "Send message",
@@ -106,7 +106,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const raw = $json.output ?? $json.text ?? $json.response ?? '';\nconst markerRegex = /###LEAD_DATA###\\s*```?(?:json)?\\s*([\\s\\S]*?)\\s*```?\\s*###END_LEAD_DATA###/m;\nconst match = raw.match(markerRegex);\n\nlet leadCaptured = false;\nlet lead = null;\nlet cleanReply = raw;\n\nif (match) {\n  try {\n    lead = JSON.parse(match[1].trim());\n    leadCaptured = Boolean(lead.name && lead.service);\n    cleanReply = raw.replace(markerRegex, '').trim();\n  } catch (err) {\n    console.warn('LEAD_DATA JSON parse failed:', err.message);\n  }\n}\n\nconst trigger = $('WhatsApp Trigger').first().json;\nconst phone = trigger.messages?.[0]?.from ?? '';\nconst waName = trigger.contacts?.[0]?.profile?.name ?? '';\n\nreturn {\n  json: { cleanReply, leadCaptured, lead, phone, waName, rawAgentOutput: raw }\n};\n"
+        "jsCode": "// Parse ###LEAD_DATA###...###END_LEAD_DATA### from the AI's reply.\n// Supports both fenced (```json ... ```) and unfenced JSON between markers.\n// Strips the entire block from the user-visible reply.\n\nconst raw = $json.output ?? $json.text ?? $json.response ?? '';\n\n// Match everything between the markers (greedy enough to capture any JSON,\n// optional whitespace, optional ```json fences on either side).\nconst markerRegex = /###LEAD_DATA###([\\s\\S]*?)###END_LEAD_DATA###/m;\nconst match = raw.match(markerRegex);\n\nlet leadCaptured = false;\nlet lead = null;\nlet cleanReply = raw;\n\nif (match) {\n  // Strip ```json / ``` fences if the model included them\n  const inner = match[1]\n    .replace(/^\\s*```(?:json)?\\s*/i, '')\n    .replace(/\\s*```\\s*$/i, '')\n    .trim();\n  try {\n    lead = JSON.parse(inner);\n    leadCaptured = Boolean(lead.name && lead.service);\n    cleanReply = raw.replace(markerRegex, '').trim();\n  } catch (err) {\n    console.warn('LEAD_DATA JSON parse failed:', err.message, 'Inner:', inner);\n  }\n}\n\nconst trigger = $('WhatsApp Trigger').first().json;\nconst phone = trigger.messages?.[0]?.from ?? '';\nconst waName = trigger.contacts?.[0]?.profile?.name ?? '';\n\nreturn {\n  json: { cleanReply, leadCaptured, lead, phone, waName, rawAgentOutput: raw }\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -116,6 +116,99 @@
       ],
       "id": "fe25f155-73b4-45ee-9584-9244e98e76b8",
       "name": "Parse Lead Datat"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9f3f0271-6b8d-4241-b8f6-b8baf0e3df5b",
+              "leftValue": "={{ $json.leadCaptured }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        592,
+        32
+      ],
+      "id": "fedce4d7-3f79-4f08-b450-94979ea4de94",
+      "name": "Lead Captured ?"
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "create",
+        "workspaceId": "wwhn1cbz",
+        "projectId": "pkm6hqm4mh9vj0s",
+        "table": "m1q8u8q393tf6ej",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "Phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "fieldName": "=Name",
+              "fieldValue": "={{ $json.lead.name }}"
+            },
+            {
+              "fieldName": "Nationality",
+              "fieldValue": "={{ $json.lead.nationality }}"
+            },
+            {
+              "fieldName": "Service",
+              "fieldValue": "={{ $json.lead.service }}"
+            },
+            {
+              "fieldName": "Department",
+              "fieldValue": "={{ $json.lead.department }}"
+            },
+            {
+              "fieldName": "Summary",
+              "fieldValue": "={{ $json.lead.summary }}"
+            },
+            {
+              "fieldName": "Status",
+              "fieldValue": "NEW_LEAD"
+            },
+            {
+              "fieldName": "Created At",
+              "fieldValue": "={{ new Date().toISOString() }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.nocoDb",
+      "typeVersion": 3,
+      "position": [
+        944,
+        -96
+      ],
+      "id": "20fbba60-42eb-4f43-ba62-d72223e5baf7",
+      "name": "Create lead in NocoDB",
+      "credentials": {
+        "nocoDbApiToken": {
+          "id": "KiRKfHvdvcKwu1AQ",
+          "name": "NocoDB Token account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -168,6 +261,35 @@
       "main": [
         [
           {
+            "node": "Lead Captured ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Captured ?": {
+      "main": [
+        [
+          {
+            "node": "Create lead in NocoDB",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create lead in NocoDB": {
+      "main": [
+        [
+          {
             "node": "Send message",
             "type": "main",
             "index": 0
@@ -182,7 +304,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "ccc79ca4-bf35-44b8-a19d-4442d7d9a5a9",
+  "versionId": "c3a0c2eb-de7d-4c67-940c-9969dc10cb99",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "f29b9c571d9c6280b50f8d83ff7ed04a9917b449bee42d411af0cecb9412bf2e"

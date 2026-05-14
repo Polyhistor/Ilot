@@ -1,6 +1,6 @@
 # ILOT WhatsApp Bot — current build status
 
-> **Last updated:** 14 May 2026
+> **Last updated:** 14 May 2026 (evening — Layer 3 complete)
 > **Single source of truth — read this first.** Older runbooks
 > (`01-system-user-token.md` … `04-nocodb-file-handling.md`) have
 > details, but their scope and order have shifted; trust this doc when
@@ -10,9 +10,9 @@
 
 ## TL;DR
 
-The bot can answer a customer on WhatsApp using Gemini and produces a
-clean, human-friendly reply. It **doesn't yet persist leads** — the next
-session starts with adding the NocoDB Create node and a follow-up Send.
+The bot can answer a customer on WhatsApp using Gemini, parse the lead,
+persist it to NocoDB, and reply cleanly. **Layer 3 is fully done as of
+14 May evening.** Next session starts on Layer 4 (department admin handoff)
 File handling has been **dropped from MVP** (admin will ask client to
 email files instead).
 
