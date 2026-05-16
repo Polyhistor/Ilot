@@ -1,0 +1,121 @@
+{
+  "name": "Ilot - Outbound Status Updates",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ilot-status-update",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-256, 0],
+      "id": "5e1f1a01-8b6e-4d7a-a5e1-0001ilotstatus",
+      "name": "Webhook (status changed)",
+      "webhookId": "ilot-status-update"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Map the new status to a friendly WhatsApp message and decide whether\n// to send anything. Returns { shouldSend, phone, body } per item.\n//\n// NocoDB's webhook body shape (see workflow setup notes):\n//   $json.body = { rowId, phone, name, service, department,\n//                  status, previousStatus }\n\nconst body = $json.body ?? {};\nconst phone        = String(body.phone ?? '').trim();\nconst name         = body.name ?? 'there';\nconst service      = body.service ?? 'your case';\nconst status       = body.status;\nconst prev         = body.previousStatus;\n\n// Skip if status hasn't actually changed (same firing edge from NocoDB)\nif (!status || status === prev) {\n  return { json: { shouldSend: false, reason: 'no status change', phone, status, previousStatus: prev } };\n}\n\n// Skip if we don't have a phone we can send to\nif (!phone) {\n  return { json: { shouldSend: false, reason: 'no phone', status } };\n}\n\n// Status → message map. Keep messages short, WhatsApp-natural.\nconst messages = {\n  NEW_LEAD:    `Hi ${name}, your inquiry about ${service} has been received. We'll be in touch shortly. \uD83D\uDE4F`,\n  CONTACTED:   `Hi ${name}, your inquiry about ${service} has been assigned to a specialist. They will reach out soon.`,\n  IN_PROGRESS: `Hi ${name}, our team is now working on your ${service} case. We'll keep you posted on progress.`,\n  COMPLETED:   `Hi ${name}, great news \u2014 your ${service} case is complete! \uD83C\uDF89 Thank you for choosing Ilot.`,\n  ON_HOLD:     `Hi ${name}, your ${service} case is currently on hold. Your specialist will be in touch with details.`,\n  CANCELLED:   `Hi ${name}, your ${service} case has been cancelled. If this was unintentional, just reply here and we'll sort it.`,\n};\n\nconst messageBody = messages[status];\n\nif (!messageBody) {\n  return { json: { shouldSend: false, reason: 'no message mapped for status', status } };\n}\n\nreturn { json: { shouldSend: true, phone, body: messageBody, status, previousStatus: prev, name, service } };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-32, 0],
+      "id": "1e1f1a02-8b6e-4d7a-a5e1-0002mapstatus",
+      "name": "Map status to message"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "if-should-send",
+              "leftValue": "={{ $json.shouldSend }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [192, 0],
+      "id": "2e1f1a03-8b6e-4d7a-a5e1-0003ifsendok",
+      "name": "Should we send?"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "1063131786890917",
+        "recipientPhoneNumber": "={{ $json.phone }}",
+        "textBody": "={{ $json.body }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [464, -96],
+      "id": "3e1f1a04-8b6e-4d7a-a5e1-0004whatsappsend",
+      "name": "Send status update",
+      "webhookId": "0000ilot-status-update-send",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "o6dqNLf1TgJgnOIW",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, sent: $json.shouldSend ?? false, status: $json.status ?? null } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [704, 0],
+      "id": "4e1f1a05-8b6e-4d7a-a5e1-0005respond",
+      "name": "Respond to NocoDB"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook (status changed)": {
+      "main": [[{ "node": "Map status to message", "type": "main", "index": 0 }]]
+    },
+    "Map status to message": {
+      "main": [[{ "node": "Should we send?", "type": "main", "index": 0 }]]
+    },
+    "Should we send?": {
+      "main": [
+        [{ "node": "Send status update", "type": "main", "index": 0 }],
+        [{ "node": "Respond to NocoDB", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send status update": {
+      "main": [[{ "node": "Respond to NocoDB", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "00000000-0000-0000-0000-ilotstatus001",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "ILOT_STATUS_UPDATES_001",
+  "tags": []
+}

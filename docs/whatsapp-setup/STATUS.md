@@ -212,6 +212,29 @@ ask again. Move directly to asking for name + nationality."*
 
 ---
 
+### Deferred — duplicate-row handling on repeat inquiries
+
+When the same phone re-engages with a different service, the bot
+currently inserts a brand-new row in `Clients`, leading to multiple
+rows for one phone. Tested 14 May — confirmed visually in NocoDB.
+
+**Decision:** keep current behavior for MVP. Acknowledged as a known
+issue. To fix later, swap the single `Create lead in NocoDB` node for
+the lookup-then-branch pattern:
+
+```
+Lead Captured ?(true)
+   └─► Find existing client (Get Many where Phone = current)
+         └─► Client exists?
+               ├─ true ──► Update existing client (preserves Status, Created At)
+               └─ false ─► Create lead in NocoDB
+```
+
+Both branches converge on `Send message`.
+
+This is documented in chat notes from 14 May 2026, runbook detail to
+be written when prioritised.
+
 ## Out-of-MVP (deferred)
 
 - File upload from client → NocoDB Attachment column
