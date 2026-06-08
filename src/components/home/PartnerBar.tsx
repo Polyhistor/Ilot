@@ -3,7 +3,7 @@ const PARTNERS = ['Deloitte.', 'KPMG', 'PwC', 'EY', 'Standard Chartered', 'McKin
 export function PartnerBar() {
   return (
     <section className="border-b border-gray-200 bg-white py-5 md:py-8 text-gray-900 overflow-hidden">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8">
         <div className="md:w-1/4 shrink-0 md:border-r border-gray-200 md:pr-8 text-center md:text-left">
           <p className="font-bold text-lg leading-tight">
             110+ happy clients <br />already on board.

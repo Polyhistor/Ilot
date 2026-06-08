@@ -31,6 +31,26 @@ export const service = defineType({
     defineField({ name: 'keyDeliverables', title: 'Key Deliverables / Outcome', type: 'localizedText' }),
     defineField({ name: 'estimatedTimeline', title: 'Estimated Timeline', type: 'localizedString' }),
     defineField({ name: 'realTimeWork', title: 'Real-Time Work', type: 'localizedString' }),
+    defineField({
+      name: 'price',
+      title: 'Price',
+      type: 'string',
+      description: 'Free-text price as shown on the service detail page. Examples: "Rp22,000,000", "18.000.000 +$600", "Start Rp.55.000.000". Leave empty for "Contact us for pricing".',
+    }),
+    defineField({
+      name: 'requiredDocsUrl',
+      title: 'Required Documents URL',
+      type: 'url',
+      description: 'Google Docs link to the required-documents file. The site renders a "Download PDF" button that uses /export?format=pdf on this URL. The doc must be set to "Anyone with link can view".',
+      validation: (r) =>
+        r.uri({ scheme: ['http', 'https'] }).custom((v: string | undefined) => {
+          if (!v) return true
+          if (!/docs\.google\.com\/document/.test(v)) {
+            return 'Expected a Google Docs URL (docs.google.com/document/...). Other URLs may not export to PDF correctly.'
+          }
+          return true
+        }),
+    }),
     defineField({ name: 'whatsappMessage', title: 'WhatsApp Pre-filled Message', type: 'localizedText' }),
     defineField({ name: 'seo', title: 'SEO', type: 'seoFields' }),
     defineField({ name: 'note', title: 'Note', type: 'localizedText' }),

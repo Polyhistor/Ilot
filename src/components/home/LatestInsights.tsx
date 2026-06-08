@@ -12,13 +12,10 @@ export function LatestInsights({ posts }: Props) {
 
   return (
     <section className="py-12 md:py-32 bg-white">
-      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header — matches TestimonialsSection rhythm */}
         <div className="mb-8 md:mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div className="text-left">
-            <div className="inline-flex items-center space-x-2 text-[10px] font-bold tracking-[0.2em] text-gray-500 uppercase mb-3 md:mb-6">
-              <span>Insights</span>
-            </div>
             <h2 className="text-2xl md:text-6xl font-medium text-[#0B0B1A] tracking-tight leading-[1.1]">
               Guides &amp; perspectives<br />
               from the Ilot team.

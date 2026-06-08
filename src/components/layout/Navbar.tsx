@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
 import { getCategoriesWithNav } from '@/lib/db/categories'
 import { ServicesDropdown } from './ServicesDropdown'
@@ -23,9 +24,16 @@ export async function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-surface">
       <nav className="container-site flex items-center justify-between h-16 px-6 md:px-12">
-        {/* Wordmark */}
-        <Link href="/" className="font-bold text-2xl tracking-tight text-foreground">
-          Ilot
+        {/* Logo */}
+        <Link href="/" className="flex items-center" aria-label="Ilot — home">
+          <Image
+            src="/logos/Ilot-Logo.svg"
+            alt="Ilot"
+            width={120}
+            height={40}
+            priority
+            className="h-9 w-auto"
+          />
         </Link>
 
         {/* Links — hidden on mobile */}

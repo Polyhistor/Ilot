@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 const SERVICES = [
   { href: '/visa', label: 'Visa & Immigration' },
@@ -23,7 +24,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
           <div>
-            <div className="font-bold text-2xl tracking-tight mb-3">Ilot</div>
+            <Image
+              src="/logos/Ilot-Logo-Light.svg"
+              alt="Ilot"
+              width={140}
+              height={47}
+              className="h-11 w-auto mb-3"
+            />
             <p className="text-muted text-sm leading-relaxed">
               Clear Legal Support. Confident Decisions.
             </p>

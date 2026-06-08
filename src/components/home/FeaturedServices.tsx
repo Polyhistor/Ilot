@@ -107,7 +107,7 @@ function ServiceGroupSection({ group }: { group: ServiceGroup }) {
   return (
     <div>
       {/* Group header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 md:mb-6 px-5 md:px-0">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 md:mb-6">
         <div>
           <div className="flex items-center gap-3 mb-1 md:mb-2">
             <div className="w-1 h-5 md:h-6 rounded-full" style={{ backgroundColor: colors.accent }} />
@@ -125,7 +125,7 @@ function ServiceGroupSection({ group }: { group: ServiceGroup }) {
       </div>
 
       {/* Mobile: 2-column grid */}
-      <div className="grid grid-cols-2 gap-3 px-5 pb-4 md:hidden">
+      <div className="grid grid-cols-2 gap-3 pb-4 md:hidden">
         {group.services.map((service) => (
           <MobileServiceCard key={service.slug} service={service} colors={colors} />
         ))}
@@ -158,11 +158,8 @@ function ServiceGroupSection({ group }: { group: ServiceGroup }) {
 export function FeaturedServices({ groups }: FeaturedServicesProps) {
   return (
     <section className="py-12 md:py-20 bg-[#F8F9FA]">
-      <div className="max-w-[1400px] mx-auto md:px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 md:mb-14 px-5 md:px-0">
-          <span className="inline-flex items-center bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 shadow-sm mb-4">
-            Most requested
-          </span>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 md:mb-14">
           <h2 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">
             Popular Services
           </h2>

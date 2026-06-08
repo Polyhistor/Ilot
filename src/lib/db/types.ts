@@ -7,6 +7,7 @@ export interface Category {
   image_url: string | null
   color_accent: string | null
   sort_order: number
+  coming_soon: boolean
   is_active: boolean
   created_at: string
 }
@@ -33,6 +34,8 @@ export interface Service {
   real_time_work: string | null
   note: string | null
   whatsapp_message: string | null
+  price: string | null
+  required_docs_url: string | null
   meta_title: string | null
   meta_description: string | null
   sort_order: number
@@ -43,7 +46,7 @@ export interface Service {
 
 // Enriched types used in pages
 export interface ServiceWithCategory extends Service {
-  category: Pick<Category, 'slug' | 'name' | 'color_accent'>
+  category: Pick<Category, 'slug' | 'name' | 'color_accent' | 'image_url'>
   sub_category: Pick<SubCategory, 'slug' | 'name'> | null
   last_verified_at: string | null
   recent_updates: UpdateRef[]

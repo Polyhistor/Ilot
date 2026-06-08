@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
-import { Clock, Timer, Users, Package, Info } from 'lucide-react'
+import { Clock, Timer, Users, Package, Info, Wallet, FileDown } from 'lucide-react'
 import { getCategoryColor } from '@/lib/category-colors'
+import { toGoogleDocsPdfUrl } from '@/lib/google-docs'
 import type { ServiceWithCategory } from '@/lib/db/types'
 
 interface ServiceDetailProps {
@@ -17,21 +18,22 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
 
   const colors = getCategoryColor(service.category.slug)
 
+  // Google Docs URL → direct PDF export URL. null when no docs URL or input
+  // isn't a Google Docs link; in that case we hide the download button.
+  const pdfUrl = toGoogleDocsPdfUrl(service.required_docs_url)
+
   return (
     <article>
-      {/* Hero banner with image + color overlay */}
+      {/* Hero banner — category coverImage when uploaded, else brand gradient */}
       <section className="relative overflow-hidden">
-        {colors.banner && (
-          <Image
-            src={colors.banner}
-            alt={service.category.name}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
+        {service.category.image_url ? (
+          <>
+            <Image src={service.category.image_url} alt={service.category.name} fill className="object-cover" sizes="100vw" priority />
+            <div className="absolute inset-0" style={{ backgroundColor: colors.accent, opacity: 0.8 }} />
+          </>
+        ) : (
+          <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(135deg, ${colors.accent}, ${colors.mid})` }} />
         )}
-        <div className="absolute inset-0" style={{ backgroundColor: colors.accent, opacity: 0.85 }} />
 
         <div className="relative z-10 pt-14 pb-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="text-sm mb-8 flex items-center gap-2 flex-wrap">
@@ -89,6 +91,19 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
                 borderColor: `${colors.mid}20`,
               }}
             >
+              <div className="flex items-start gap-3">
+                <Wallet className="w-5 h-5 mt-1 shrink-0" style={{ color: colors.mid }} strokeWidth={1.5} />
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted mb-1">Price</p>
+                  {service.price ? (
+                    <p className="text-[15px] text-[#0B0B1A] font-semibold leading-snug">{service.price}</p>
+                  ) : (
+                    <p className="text-[15px] text-[#0B0B1A] font-medium italic leading-snug">
+                      Contact us for pricing
+                    </p>
+                  )}
+                </div>
+              </div>
               {service.estimated_timeline && (
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 mt-1 shrink-0" style={{ color: colors.mid }} strokeWidth={1.5} />
@@ -131,7 +146,7 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
                   </div>
                 </div>
               )}
-              <div className="pt-3 border-t" style={{ borderColor: `${colors.mid}20` }}>
+              <div className="pt-3 border-t flex flex-col gap-3" style={{ borderColor: `${colors.mid}20` }}>
                 <WhatsAppCTA
                   serviceName={service.name}
                   customMessage={service.whatsapp_message ?? undefined}
@@ -139,6 +154,18 @@ export function ServiceDetail({ service }: ServiceDetailProps) {
                   label="Get Started on WhatsApp"
                   className="w-full justify-center"
                 />
+                {pdfUrl && (
+                  <a
+                    href={pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 w-full px-5 py-3 rounded-full text-[14px] font-medium bg-white text-[#0B0B1A] border hover:bg-gray-50 transition-colors"
+                    style={{ borderColor: `${colors.mid}30` }}
+                  >
+                    <FileDown className="w-4 h-4" strokeWidth={1.75} />
+                    Download Required Documents (PDF)
+                  </a>
+                )}
               </div>
             </div>
           </div>

@@ -35,6 +35,13 @@ export const category = defineType({
     defineField({ name: 'tintColor', title: 'Tint Color (hex, optional)', type: 'string' }),
     defineField({ name: 'midColor', title: 'Mid Color (hex, optional)', type: 'string' }),
     defineField({ name: 'sortOrder', title: 'Sort Order', type: 'number', initialValue: 0 }),
+    defineField({
+      name: 'comingSoon',
+      title: 'Coming Soon',
+      type: 'boolean',
+      initialValue: false,
+      description: 'When true, the category page renders a "Launching soon" placeholder instead of the service grid.',
+    }),
     defineField({ name: 'isActive', title: 'Active', type: 'boolean', initialValue: true }),
   ],
   preview: {

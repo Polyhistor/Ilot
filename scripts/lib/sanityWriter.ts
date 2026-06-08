@@ -30,17 +30,20 @@ export async function upsertCategories(
   // Pass 1: categories from parsed (client data)
   for (const cat of parsed) {
     const fb = fallback.find((f) => f.slug === cat.slug)
+    // Prefer parsed tagline (from seed) over fallback; only write when present.
+    const taglineEn = cat.tagline?.en ?? fb?.tagline ?? null
     const doc = {
       _id: categoryId(cat.slug),
       _type: 'category',
       slug: { _type: 'slug', current: cat.slug },
       name: cat.name,
-      ...(fb?.tagline ? { tagline: { en: fb.tagline } } : {}),
+      ...(taglineEn ? { tagline: { en: taglineEn } } : {}),
       ...(fb?.iconName ? { iconName: fb.iconName } : {}),
       sortOrder: cat.sortOrder,
+      comingSoon: cat.comingSoon,
       isActive: true,
     }
-    log(`category: ${cat.slug}`)
+    log(`category: ${cat.slug}${cat.comingSoon ? ' [COMING SOON]' : ''}`)
     if (!dryRun) await client.createOrReplace(doc)
   }
 
@@ -98,6 +101,8 @@ export async function upsertCategories(
           ...(svc.estimatedTimeline  ? { estimatedTimeline: svc.estimatedTimeline }   : {}),
           ...(svc.realTimeWork       ? { realTimeWork: svc.realTimeWork }             : {}),
           ...(svc.note               ? { note: svc.note }                             : {}),
+          ...(svc.price              ? { price: svc.price }                           : {}),
+          ...(svc.requiredDocsUrl    ? { requiredDocsUrl: svc.requiredDocsUrl }       : {}),
           whatsappMessage: svc.whatsappMessage,
           sortOrder: svc.sortOrder,
           isActive: true,

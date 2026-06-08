@@ -6,7 +6,7 @@ insert into public.categories (slug, name, tagline, icon_name, sort_order) value
   ('legal',         'Legal & Contracts',    'Expert legal frameworks for confident business.',         'Scale',       1),
   ('company-setup', 'Company Setup',        'Establish your entity with zero friction.',               'Building2',   2),
   ('insurance',     'Insurance',            'Comprehensive coverage for expats and businesses.',       'Shield',      3),
-  ('property',      'Property Advisory',    'Navigate Indonesian property law with confidence.',       'Home',        4),
+  ('property-advisory', 'Property Advisory', 'Navigate Indonesian property law with confidence.',       'Home',        4),
   ('hr-payroll',    'HR & Payroll',         'Compliant workforce management from day one.',            'Users',       5),
   ('accounting-tax','Accounting & Tax',     'Full financial compliance, zero surprises.',              'Calculator',  6)
 on conflict (slug) do nothing;

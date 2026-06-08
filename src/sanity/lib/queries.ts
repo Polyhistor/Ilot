@@ -15,6 +15,7 @@ const CATEGORY_PROJECTION = groq`
   "image_url": coverImage.asset->url,
   "color_accent": accentColor,
   "sort_order": sortOrder,
+  "coming_soon": coalesce(comingSoon, false),
   "is_active": isActive,
   "created_at": _createdAt
 `
@@ -41,6 +42,8 @@ const SERVICE_PROJECTION = groq`
   "real_time_work": coalesce(realTimeWork.en, null),
   "note": coalesce(note.en, null),
   "whatsapp_message": coalesce(whatsappMessage.en, null),
+  "price": coalesce(price, null),
+  "required_docs_url": coalesce(requiredDocsUrl, null),
   "meta_title": coalesce(seo.metaTitle.en, null),
   "meta_description": coalesce(seo.metaDescription.en, null),
   "sort_order": sortOrder,
@@ -62,6 +65,8 @@ const SERVICE_WITH_CATEGORY_PROJECTION = groq`
   "real_time_work": coalesce(realTimeWork.en, null),
   "note": coalesce(note.en, null),
   "whatsapp_message": coalesce(whatsappMessage.en, null),
+  "price": coalesce(price, null),
+  "required_docs_url": coalesce(requiredDocsUrl, null),
   "meta_title": coalesce(seo.metaTitle.en, null),
   "meta_description": coalesce(seo.metaDescription.en, null),
   "sort_order": sortOrder,
@@ -71,7 +76,8 @@ const SERVICE_WITH_CATEGORY_PROJECTION = groq`
   "category": {
     "slug": category->slug.current,
     "name": coalesce(category->name.en, ""),
-    "color_accent": category->accentColor
+    "color_accent": category->accentColor,
+    "image_url": category->coverImage.asset->url
   },
   "sub_category": select(
     defined(subCategory) => {

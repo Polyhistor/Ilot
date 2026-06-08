@@ -32,9 +32,10 @@ export function parseClientData(rows: ClientDataRow[]): ParsedCategory[] {
     const serviceName = row.service_name?.trim()
     const serviceSlug = row.service_slug?.trim()
 
-    // Skip rows missing required fields
-    if (!categoryName || !categorySlug || !subCategoryName || !subCategorySlug || !serviceName || !serviceSlug) continue
+    // Every row needs at least a category
+    if (!categoryName || !categorySlug) continue
 
+    // Ensure category exists (create on first row referencing it)
     let category = categories.get(categorySlug)
     if (!category) {
       const taglineRaw = row.category_tagline?.trim()
@@ -47,10 +48,21 @@ export function parseClientData(rows: ClientDataRow[]): ParsedCategory[] {
         sortOrder: typeof row.category_sort_order === 'number'
           ? row.category_sort_order
           : parseInt(String(row.category_sort_order), 10) || categories.size,
+        comingSoon: row.category_coming_soon === true,
         subCategories: [],
       }
       categories.set(categorySlug, category)
+    } else if (row.category_coming_soon === true) {
+      // Idempotent: if any row asserts coming-soon, keep it true
+      category.comingSoon = true
     }
+
+    // Coming-soon categories don't have sub-categories or services. The
+    // placeholder row carries empty sub_category/service fields by design.
+    if (category.comingSoon) continue
+
+    // Skip rows that are missing sub-cat or service info (e.g. malformed rows)
+    if (!subCategoryName || !subCategorySlug || !serviceName || !serviceSlug) continue
 
     let subCategory: ParsedSubCategory | undefined = category.subCategories.find(
       (sc) => sc.slug === subCategorySlug
@@ -67,6 +79,8 @@ export function parseClientData(rows: ClientDataRow[]): ParsedCategory[] {
       category.subCategories.push(subCategory)
     }
 
+    const priceRaw = row.price?.trim()
+    const docsUrlRaw = row.required_docs_url?.trim()
     const service: ParsedService = {
       slug: serviceSlug,
       name: { en: serviceName },
@@ -77,6 +91,8 @@ export function parseClientData(rows: ClientDataRow[]): ParsedCategory[] {
       realTimeWork: maybeLocalized(row.real_time_work),
       note: maybeLocalized(row.note),
       whatsappMessage: whatsappMessage(serviceName, row.whatsapp_message),
+      price: priceRaw || null,
+      requiredDocsUrl: docsUrlRaw || null,
       sortOrder: typeof row.service_sort_order === 'number'
         ? row.service_sort_order
         : parseInt(String(row.service_sort_order), 10) || subCategory.services.length,

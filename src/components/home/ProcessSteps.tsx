@@ -34,11 +34,8 @@ const STEPS = [
 export function ProcessSteps() {
   return (
     <section className="py-12 md:py-32 bg-white">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 md:mb-24 flex flex-col items-center">
-          <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 shadow-sm mb-4 md:mb-8">
-            <span>The Process</span>
-          </div>
           <h2 className="text-2xl md:text-6xl font-bold text-[#0B0B1A] mb-3 md:mb-6 tracking-tight">
             A clean path in <span className="italic">four steps.</span>
           </h2>

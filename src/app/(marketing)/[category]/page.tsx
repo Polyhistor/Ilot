@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Hourglass } from 'lucide-react'
 import { getCategoryBySlug, getAllCategorySlugs } from '@/lib/db/categories'
 import { CategoryServicesProvider, CategoryServices } from '@/components/services/CategoryServices'
+import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
 import { getCategoryColor } from '@/lib/category-colors'
 import { getLatestPostsByCategory } from '@/lib/db/posts'
 import { PostCard } from '@/components/blog/PostCard'
@@ -37,6 +39,70 @@ export default async function CategoryPage({ params }: Props) {
   const category = await getCategoryBySlug(slug)
   if (!category) notFound()
 
+  const colors = getCategoryColor(category.slug)
+
+  // Coming-soon categories skip the service grid entirely — render a placeholder
+  // that still keeps the category visible in nav/URL but signals "not yet launched".
+  if (category.coming_soon) {
+    return (
+      <>
+        <section className="relative overflow-hidden">
+          {/* Sanity coverImage when uploaded, else brand gradient */}
+          {category.image_url ? (
+            <>
+              <Image src={category.image_url} alt={category.name} fill className="object-cover" sizes="100vw" priority />
+              <div className="absolute inset-0" style={{ backgroundColor: colors.accent, opacity: 0.8 }} />
+            </>
+          ) : (
+            <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(135deg, ${colors.accent}, ${colors.mid})` }} />
+          )}
+          <div className="relative z-10 pt-14 pb-16 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+            <nav className="text-sm mb-8 flex items-center gap-2">
+              <a href="/" className="text-white/60 hover:text-white transition-colors">Home</a>
+              <span className="text-white/30">›</span>
+              <span className="font-medium text-white">{category.name}</span>
+            </nav>
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white/15 text-white backdrop-blur-sm mb-5">
+              <Hourglass className="w-3.5 h-3.5" strokeWidth={2} />
+              Launching Soon
+            </span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-[1.1] mb-4">
+              {category.name}
+            </h1>
+            {category.tagline && (
+              <p className="text-lg text-white/70 leading-relaxed max-w-2xl">{category.tagline}</p>
+            )}
+          </div>
+        </section>
+
+        <section className="py-20 bg-[#F8F9FA]">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <Hourglass
+              className="w-12 h-12 mx-auto mb-6"
+              style={{ color: colors.mid }}
+              strokeWidth={1.5}
+            />
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+              We&apos;re putting the finishing touches on this service
+            </h2>
+            <p className="text-base text-muted leading-relaxed mb-8">
+              Our {category.name.toLowerCase()} offering is launching soon. If you&apos;d like to
+              be first in line — or have an enquiry we can help with today — get in touch and
+              the Ilot team will follow up directly.
+            </p>
+            <WhatsAppCTA
+              serviceName={category.name}
+              customMessage={`Hi Ilot 👋 I'd like to be notified when your *${category.name}* services launch. Can you keep me posted?`}
+              size="lg"
+              label={`Contact us about ${category.name}`}
+              className="justify-center"
+            />
+          </div>
+        </section>
+      </>
+    )
+  }
+
   const visibleSubCategories = category.sub_categories.filter(
     (sc) => sc.services.length > 0
   )
@@ -47,26 +113,21 @@ export default async function CategoryPage({ params }: Props) {
   )
 
   const subCatCount = visibleSubCategories.length
-  const colors = getCategoryColor(category.slug)
   const latestPosts = await getLatestPostsByCategory(slug, 3)
 
   return (
     <CategoryServicesProvider subCategories={visibleSubCategories}>
       {/* Hero with banner image + color overlay */}
       <section className="relative overflow-hidden">
-        {/* Background image */}
-        {colors.banner && (
-          <Image
-            src={colors.banner}
-            alt={category.name}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
+        {/* Sanity coverImage when uploaded, else brand gradient */}
+        {category.image_url ? (
+          <>
+            <Image src={category.image_url} alt={category.name} fill className="object-cover" sizes="100vw" priority />
+            <div className="absolute inset-0" style={{ backgroundColor: colors.accent, opacity: 0.8 }} />
+          </>
+        ) : (
+          <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(135deg, ${colors.accent}, ${colors.mid})` }} />
         )}
-        {/* Color overlay */}
-        <div className="absolute inset-0" style={{ backgroundColor: colors.accent, opacity: 0.85 }} />
 
         <div className="relative z-10 pt-14 pb-16 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="text-sm mb-8 flex items-center gap-2">

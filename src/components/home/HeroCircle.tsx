@@ -56,14 +56,15 @@ const SERVICE_COLORS = [
   'from-emerald-900 via-emerald-900/80',
 ]
 
-const SERVICE_IMAGES = [
-  '1589829085413-56de8ae18c73',
-  '1556761175-5973dc0f32d7',
-  '1454165804606-c3d57bc86b40',
-  '1505664194779-8beaceb93744',
-  '1600880292203-757bb62b4baf',
-  '1521791136064-7986c2920216',
-  '1554224155-8d04cb21cd6c',
+// Solid brand tile colors — used when a category has no CMS image_url.
+const SERVICE_BG = [
+  'bg-blue-900',
+  'bg-slate-900',
+  'bg-teal-900',
+  'bg-amber-900',
+  'bg-indigo-900',
+  'bg-purple-900',
+  'bg-emerald-900',
 ]
 
 function useWindowSize() {
@@ -84,7 +85,7 @@ function ServiceCard({
   card,
   progress,
   color,
-  imageId,
+  bg,
   containerWidth,
   windowHeight,
   cardWidth,  // resolved by parent after height-constraint
@@ -95,7 +96,7 @@ function ServiceCard({
   card: HeroCard
   progress: MotionValue<number>
   color: string
-  imageId: string
+  bg: string
   containerWidth: number
   windowHeight: number
   cardWidth: number
@@ -139,10 +140,6 @@ function ServiceCard({
   const x = useTransform(progress, [0.05, 0.6], [xInitial, xFinal])
   const y = useTransform(progress, [0.05, 0.6], [yInitial, yFinal])
 
-  const imageSrc =
-    card.imageUrl ??
-    `https://images.unsplash.com/photo-${imageId}?q=80&w=800&auto=format&fit=crop`
-
   return (
     <motion.div
       style={{
@@ -156,13 +153,17 @@ function ServiceCard({
       className="absolute top-1/2 left-1/2 rounded-[2rem] overflow-hidden shadow-2xl pointer-events-auto group"
     >
       <Link href={`/${card.slug}`} className="block w-full h-full">
-        <Image
-          src={imageSrc}
-          alt={card.name}
-          fill
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          sizes="220px"
-        />
+        {card.imageUrl ? (
+          <Image
+            src={card.imageUrl}
+            alt={card.name}
+            fill
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            sizes="220px"
+          />
+        ) : (
+          <div className={`absolute inset-0 ${bg}`} />
+        )}
         <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-80`} />
         <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
           <h3 className="text-white font-bold text-sm md:text-lg leading-tight">{card.name}</h3>
@@ -177,9 +178,6 @@ function MobileHero({ cards }: { cards: HeroCard[] }) {
   return (
     <section className="bg-[#F4F4F0] md:hidden">
       <div className="px-5 pt-10 pb-6">
-        <div className="inline-flex items-center bg-white border border-gray-200 px-3 py-1 rounded-full text-[11px] font-medium text-gray-600 mb-4 shadow-sm">
-          Trusted legal services, Nationwide
-        </div>
         <h1 className="text-3xl font-bold text-[#0B0B1A] tracking-tight leading-[1.15] mb-3">
           Clear Legal Support.<br />
           Confident Decisions.
@@ -206,10 +204,8 @@ function MobileHero({ cards }: { cards: HeroCard[] }) {
 
       <div className="px-5 grid grid-cols-2 gap-3 pb-8">
         {cards.slice(0, TOTAL).map((card, i) => {
-          const imageSrc =
-            card.imageUrl ??
-            `https://images.unsplash.com/photo-${SERVICE_IMAGES[i]}?q=80&w=600&auto=format&fit=crop`
           const color = SERVICE_COLORS[i] ?? SERVICE_COLORS[0]
+          const bg = SERVICE_BG[i] ?? SERVICE_BG[0]
           return (
             <Link
               key={card.slug}
@@ -220,13 +216,17 @@ function MobileHero({ cards }: { cards: HeroCard[] }) {
                   : 'aspect-square'
               }`}
             >
-              <Image
-                src={imageSrc}
-                alt={card.name}
-                fill
-                className="object-cover transition-transform duration-500 group-active:scale-105"
-                sizes="45vw"
-              />
+              {card.imageUrl ? (
+                <Image
+                  src={card.imageUrl}
+                  alt={card.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-active:scale-105"
+                  sizes="45vw"
+                />
+              ) : (
+                <div className={`absolute inset-0 ${bg}`} />
+              )}
               <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-75`} />
               <div className="absolute inset-0 p-4 flex flex-col justify-end">
                 <h3 className="text-white font-bold text-[15px] leading-tight">{card.name}</h3>
@@ -319,9 +319,6 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
             height so ResizeObserver captures the real content size.
           */}
           <div ref={textContentRef} className="text-center w-full max-w-4xl px-4">
-            <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 mb-5 shadow-sm">
-              <span>Trusted legal services, Nationwide</span>
-            </div>
             <h1 className="font-bold text-[#0B0B1A] tracking-tight leading-[1.1] mb-4" style={{ fontSize: 'clamp(2.75rem, 4.5vw, 5.5rem)' }}>
               Clear Legal Support.<br />
               Confident Decisions.
@@ -330,15 +327,8 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
               Elite legal, visa, and business solutions for global investors and expatriates.
               Secure your residency and protect your assets with one-touch efficiency.
             </p>
-            <div className="flex items-center justify-center space-x-8">
+            <div className="flex items-center justify-center">
               <WhatsAppCTA size="lg" label="Get your free quote" />
-              <Link
-                href="/visa"
-                className="group flex items-center space-x-2 text-[#0B0B1A] font-bold hover:text-gray-600 transition-colors border-b-2 border-[#0B0B1A] pb-1"
-              >
-                <span>View our offerings</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
             </div>
           </div>
         </motion.div>
@@ -355,9 +345,6 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
           style={{ opacity: centerTextOpacity, scale: centerTextScale, x: '-50%', y: '-50%' }}
           className="absolute top-1/2 left-1/2 text-center w-full max-w-md px-4 z-20 pointer-events-none"
         >
-          <div className="inline-flex items-center space-x-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full text-xs font-medium text-gray-600 mb-6 shadow-sm">
-            <span>COMPREHENSIVE SERVICES</span>
-          </div>
           <h2 className="font-bold text-[#0B0B1A] leading-tight" style={{ fontSize: 'clamp(2rem, 3.5vw, 4rem)' }}>
             Everything you need to <br />grow in Indonesia
           </h2>
@@ -373,8 +360,8 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
                 total={TOTAL}
                 card={card}
                 progress={scrollYProgress}
-                color={SERVICE_COLORS[i]   ?? SERVICE_COLORS[0]}
-                imageId={SERVICE_IMAGES[i] ?? SERVICE_IMAGES[0]}
+                color={SERVICE_COLORS[i] ?? SERVICE_COLORS[0]}
+                bg={SERVICE_BG[i]        ?? SERVICE_BG[0]}
                 containerWidth={containerWidth}
                 windowHeight={height}
                 cardWidth={cardWidth}

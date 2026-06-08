@@ -3,18 +3,19 @@ import Image from 'next/image'
 export function AboutSection() {
   return (
     <section className="py-12 md:py-24 bg-white text-gray-900">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-16">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-16">
         <div className="md:w-1/3">
-          <div className="w-48 h-48 bg-gray-200 rounded-lg overflow-hidden relative">
+          <div className="w-full max-w-md md:max-w-none aspect-square rounded-2xl overflow-hidden relative">
             <Image
-              src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"
-              alt="Building"
+              src="/About_Ilot.webp"
+              alt="About Ilot"
               fill
-              className="w-full h-full object-cover opacity-80"
-              sizes="192px"
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              priority
             />
           </div>
-          <p className="text-sm text-gray-500 mt-6 leading-relaxed">
+          <p className="text-sm text-gray-500 mt-6 leading-relaxed text-center">
             Since inception, we have significantly invested in and developed our legal and corporate assets globally.
           </p>
         </div>

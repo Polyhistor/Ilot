@@ -8,7 +8,7 @@ export function CTABanner() {
 
   return (
     <section className="pt-12 pb-10 md:pt-32 md:pb-16 bg-white overflow-hidden relative flex flex-col items-center justify-center">
-      <div className="max-w-[1200px] w-full mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="bg-[#1b1f27] rounded-2xl md:rounded-[2rem] p-8 md:p-20 text-center flex flex-col items-center shadow-2xl">
           <MessageSquare className="w-6 h-6 md:w-8 md:h-8 text-white mb-4 md:mb-6" strokeWidth={1.5} />
           <h2 className="text-xl md:text-5xl font-bold text-white mb-3 md:mb-6 tracking-tight">
