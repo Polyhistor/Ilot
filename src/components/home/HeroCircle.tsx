@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
+import { motion, useScroll, useTransform, useReducedMotion, MotionValue } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
@@ -66,6 +66,16 @@ const SERVICE_BG = [
   'bg-purple-900',
   'bg-emerald-900',
 ]
+
+// On-load stagger for the hero headline → description → CTA.
+const HERO_TEXT_CONTAINER = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.14, delayChildren: 0.1 } },
+}
+const HERO_TEXT_ITEM = {
+  hidden: { opacity: 0, y: 22 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 0.61, 0.36, 1] as const } },
+}
 
 function useWindowSize() {
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -150,25 +160,34 @@ function ServiceCard({
         marginLeft: -cardWidth / 2,
         marginTop:  -cardWidth / 2,
       }}
-      className="absolute top-1/2 left-1/2 rounded-[2rem] overflow-hidden shadow-2xl pointer-events-auto group"
+      className="absolute top-1/2 left-1/2 pointer-events-auto"
     >
-      <Link href={`/${card.slug}`} className="block w-full h-full">
-        {card.imageUrl ? (
-          <Image
-            src={card.imageUrl}
-            alt={card.name}
-            fill
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            sizes="220px"
-          />
-        ) : (
-          <div className={`absolute inset-0 ${bg}`} />
-        )}
-        <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-80`} />
-        <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
-          <h3 className="text-white font-bold text-sm md:text-lg leading-tight">{card.name}</h3>
-        </div>
-      </Link>
+      {/* Inner wrapper handles the on-load fade-in-down so it doesn't collide
+          with the scroll-driven x/y transform on the parent. */}
+      <motion.div
+        className="relative w-full h-full rounded-[2rem] overflow-hidden shadow-2xl group"
+        initial={{ opacity: 0, y: -28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 + index * 0.09, ease: [0.22, 0.61, 0.36, 1] }}
+      >
+        <Link href={`/${card.slug}`} className="block w-full h-full">
+          {card.imageUrl ? (
+            <Image
+              src={card.imageUrl}
+              alt={card.name}
+              fill
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              sizes="220px"
+            />
+          ) : (
+            <div className={`absolute inset-0 ${bg}`} />
+          )}
+          <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-80`} />
+          <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end">
+            <h3 className="text-white font-bold text-sm md:text-lg leading-tight">{card.name}</h3>
+          </div>
+        </Link>
+      </motion.div>
     </motion.div>
   )
 }
@@ -206,32 +225,36 @@ function MobileHero({ cards }: { cards: HeroCard[] }) {
         {cards.slice(0, TOTAL).map((card, i) => {
           const color = SERVICE_COLORS[i] ?? SERVICE_COLORS[0]
           const bg = SERVICE_BG[i] ?? SERVICE_BG[0]
+          const isWide = i === cards.slice(0, TOTAL).length - 1 && TOTAL % 2 !== 0
           return (
-            <Link
+            <motion.div
               key={card.slug}
-              href={`/${card.slug}`}
-              className={`rounded-2xl overflow-hidden relative group ${
-                i === cards.slice(0, TOTAL).length - 1 && TOTAL % 2 !== 0
-                  ? 'col-span-2 aspect-[2/1]'
-                  : 'aspect-square'
-              }`}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.07, ease: [0.22, 0.61, 0.36, 1] }}
+              className={isWide ? 'col-span-2 aspect-[2/1]' : 'aspect-square'}
             >
-              {card.imageUrl ? (
-                <Image
-                  src={card.imageUrl}
-                  alt={card.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-active:scale-105"
-                  sizes="45vw"
-                />
-              ) : (
-                <div className={`absolute inset-0 ${bg}`} />
-              )}
-              <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-75`} />
-              <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                <h3 className="text-white font-bold text-[15px] leading-tight">{card.name}</h3>
-              </div>
-            </Link>
+              <Link
+                href={`/${card.slug}`}
+                className="block w-full h-full rounded-2xl overflow-hidden relative group"
+              >
+                {card.imageUrl ? (
+                  <Image
+                    src={card.imageUrl}
+                    alt={card.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-active:scale-105"
+                    sizes="45vw"
+                  />
+                ) : (
+                  <div className={`absolute inset-0 ${bg}`} />
+                )}
+                <div className={`absolute inset-0 bg-gradient-to-t ${color} to-transparent opacity-75`} />
+                <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                  <h3 className="text-white font-bold text-[15px] leading-tight">{card.name}</h3>
+                </div>
+              </Link>
+            </motion.div>
           )
         })}
       </div>
@@ -243,6 +266,7 @@ function MobileHero({ cards }: { cards: HeroCard[] }) {
 function DesktopHero({ cards }: { cards: HeroCard[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const textContentRef = useRef<HTMLDivElement>(null)
+  const reduceMotion = useReducedMotion()
   const { width, height } = useWindowSize()
 
   // Track the exact rendered height of the text block via ResizeObserver.
@@ -318,19 +342,25 @@ function DesktopHero({ cards }: { cards: HeroCard[] }) {
             Inner wrapper is what we measure. It has its natural (shrink-wrapped)
             height so ResizeObserver captures the real content size.
           */}
-          <div ref={textContentRef} className="text-center w-full max-w-4xl px-4">
-            <h1 className="font-bold text-[#0B0B1A] tracking-tight leading-[1.1] mb-4" style={{ fontSize: 'clamp(2.75rem, 4.5vw, 5.5rem)' }}>
+          <motion.div
+            ref={textContentRef}
+            className="text-center w-full max-w-4xl px-4"
+            variants={reduceMotion ? undefined : HERO_TEXT_CONTAINER}
+            initial={reduceMotion ? undefined : 'hidden'}
+            animate={reduceMotion ? undefined : 'show'}
+          >
+            <motion.h1 variants={reduceMotion ? undefined : HERO_TEXT_ITEM} className="font-bold text-[#0B0B1A] tracking-tight leading-[1.1] mb-4" style={{ fontSize: 'clamp(2.75rem, 4.5vw, 5.5rem)' }}>
               Clear Legal Support.<br />
               Confident Decisions.
-            </h1>
-            <p className="text-gray-600 mb-6 max-w-2xl leading-relaxed mx-auto" style={{ fontSize: 'clamp(1rem, 1.25vw, 1.25rem)' }}>
+            </motion.h1>
+            <motion.p variants={reduceMotion ? undefined : HERO_TEXT_ITEM} className="text-gray-600 mb-6 max-w-2xl leading-relaxed mx-auto" style={{ fontSize: 'clamp(1rem, 1.25vw, 1.25rem)' }}>
               Elite legal, visa, and business solutions for global investors and expatriates.
               Secure your residency and protect your assets with one-touch efficiency.
-            </p>
-            <div className="flex items-center justify-center">
+            </motion.p>
+            <motion.div variants={reduceMotion ? undefined : HERO_TEXT_ITEM} className="flex items-center justify-center">
               <WhatsAppCTA size="lg" label="Get your free quote" />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
 
         {/* ── Ghost row — reserves card space, keeps text bounded above ──── */}

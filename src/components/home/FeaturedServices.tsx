@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
 import { getCategoryColor } from '@/lib/category-colors'
+import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
 
 interface FeaturedService {
   slug: string
@@ -36,7 +37,7 @@ function MobileServiceCard({ service, colors }: { service: FeaturedService; colo
   return (
     <Link
       href={`/${service.categorySlug}/${service.slug}`}
-      className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col"
+      className="bg-white border border-gray-100 rounded-2xl p-4 flex flex-col h-full"
     >
       {service.target_client && (
         <span className="block bg-white border border-gray-200 px-2 py-0.5 rounded-full text-[10px] font-medium text-gray-500 self-start mb-2 truncate max-w-full">
@@ -125,18 +126,22 @@ function ServiceGroupSection({ group }: { group: ServiceGroup }) {
       </div>
 
       {/* Mobile: 2-column grid */}
-      <div className="grid grid-cols-2 gap-3 pb-4 md:hidden">
+      <RevealGroup className="grid grid-cols-2 gap-3 pb-4 md:hidden" stagger={0.07}>
         {group.services.map((service) => (
-          <MobileServiceCard key={service.slug} service={service} colors={colors} />
+          <RevealItem key={service.slug} className="h-full">
+            <MobileServiceCard service={service} colors={colors} />
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
 
       {/* Desktop: grid with show more */}
-      <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4">
+      <RevealGroup className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-4" stagger={0.08}>
         {visible.map((service) => (
-          <DesktopServiceCard key={service.slug} service={service} />
+          <RevealItem key={service.slug} className="h-full">
+            <DesktopServiceCard service={service} />
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
 
       {/* Show more / less — desktop only */}
       {hasMore && (
@@ -159,14 +164,18 @@ export function FeaturedServices({ groups }: FeaturedServicesProps) {
   return (
     <section className="py-12 md:py-20 bg-[#F8F9FA]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 md:mb-14">
-          <h2 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">
-            Popular Services
-          </h2>
-          <p className="text-muted text-sm md:text-base mt-3 max-w-xl mx-auto hidden md:block">
-            Explore the services our clients request most — from visa applications to company setup and compliance.
-          </p>
-        </div>
+        <RevealGroup className="text-center mb-8 md:mb-14">
+          <RevealItem>
+            <h2 className="text-2xl md:text-4xl font-bold text-foreground tracking-tight">
+              Popular Services
+            </h2>
+          </RevealItem>
+          <RevealItem>
+            <p className="text-muted text-sm md:text-base mt-3 max-w-xl mx-auto hidden md:block">
+              Explore the services our clients request most, from visa applications to company setup and compliance.
+            </p>
+          </RevealItem>
+        </RevealGroup>
 
         <div className="space-y-8 md:space-y-14 divide-y divide-gray-200 md:divide-y-0 [&>*]:pt-8 md:[&>*]:pt-0 [&>*:first-child]:pt-0">
           {groups.map((group) => (

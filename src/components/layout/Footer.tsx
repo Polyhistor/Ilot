@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Instagram, Facebook, Linkedin, MapPin } from 'lucide-react'
 
 const SERVICES = [
   { href: '/visa', label: 'Visa & Immigration' },
@@ -14,14 +15,24 @@ const SERVICES = [
 const LEGAL_LINKS = [
   { href: '/terms', label: 'Terms & Conditions' },
   { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/cookies', label: 'Cookies Policy' },
+]
+
+// PLACEHOLDER hrefs — replace with the client's real social profile URLs.
+const SOCIALS = [
+  { Icon: Instagram, label: 'Instagram', href: '#' },
+  { Icon: Facebook, label: 'Facebook', href: '#' },
+  { Icon: Linkedin, label: 'LinkedIn', href: '#' },
+]
+
+const OFFICES = [
+  'Jl. Subak Sari, Gg Sri Khayangan Tibuneneng, Canggu 80361 Bali',
 ]
 
 export function Footer() {
   return (
     <footer className="bg-dark text-white pt-16 pb-8">
       <div className="container-site px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div>
             <Image
@@ -34,6 +45,22 @@ export function Footer() {
             <p className="text-muted text-sm leading-relaxed">
               Clear Legal Support. Confident Decisions.
             </p>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-3 mt-5">
+              {SOCIALS.map(({ Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/40 transition-colors"
+                >
+                  <Icon className="w-4 h-4" strokeWidth={1.75} />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Services */}
@@ -63,6 +90,21 @@ export function Footer() {
                   <Link href={href} className="text-sm text-gray-400 hover:text-white transition-colors">
                     {label}
                   </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Offices */}
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-muted mb-4">
+              Office
+            </h3>
+            <ul className="space-y-4">
+              {OFFICES.map((address) => (
+                <li key={address} className="flex gap-2.5 text-sm text-gray-400 leading-relaxed">
+                  <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-gray-500" strokeWidth={1.75} />
+                  <span>{address}</span>
                 </li>
               ))}
             </ul>

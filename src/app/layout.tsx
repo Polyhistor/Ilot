@@ -16,8 +16,8 @@ const siteUrl =
 
 export const metadata: Metadata = {
   title: {
-    default: 'Ilot — Clear Legal Support. Confident Decisions.',
-    template: '%s — Ilot',
+    default: 'Ilot | Clear Legal Support. Confident Decisions.',
+    template: '%s | Ilot',
   },
   description:
     'Premium legal, visa, and corporate structuring solutions for global investors and expatriates in Indonesia.',

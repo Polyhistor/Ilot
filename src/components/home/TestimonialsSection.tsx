@@ -16,6 +16,8 @@ const TESTIMONIALS = [
   },
 ]
 
+import { RevealGroup, RevealItem } from '@/components/ui/Reveal'
+
 // Initials from a display name, e.g. "Sarah Jenkins" → "SJ", "Marcus V." → "MV"
 function initials(name: string) {
   return name
@@ -30,16 +32,18 @@ export function TestimonialsSection() {
   return (
     <section className="py-12 md:py-32 bg-[#F8F9FA]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 md:mb-16 text-left">
-          <h2 className="text-2xl md:text-6xl font-medium text-[#0B0B1A] tracking-tight leading-[1.1]">
-            Don&apos;t take our word for it!<br />
-            Hear it from our partners.
-          </h2>
-        </div>
+        <RevealGroup className="mb-8 md:mb-16 text-left">
+          <RevealItem>
+            <h2 className="text-2xl md:text-6xl font-medium text-[#0B0B1A] tracking-tight leading-[1.1]">
+              Don&apos;t take our word for it!<br />
+              Hear it from our partners.
+            </h2>
+          </RevealItem>
+        </RevealGroup>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <RevealGroup className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {TESTIMONIALS.map(({ quote, name, role }) => (
-            <div key={name} className="bg-white p-5 md:p-10 rounded-2xl md:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col h-full">
+            <RevealItem key={name} className="bg-white p-5 md:p-10 rounded-2xl md:rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col h-full">
               <div
                 className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full mb-4 md:mb-8 text-white font-bold text-sm md:text-base"
                 style={{ backgroundImage: 'linear-gradient(135deg, #09314e, #e6b630)' }}
@@ -54,9 +58,9 @@ export function TestimonialsSection() {
                 <h4 className="font-[Caveat] text-2xl md:text-3xl text-[#0B0B1A] mb-1">{name}</h4>
                 <p className="text-[10px] md:text-xs text-gray-500">{role}</p>
               </div>
-            </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   )

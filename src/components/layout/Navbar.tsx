@@ -25,7 +25,7 @@ export async function Navbar() {
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-surface">
       <nav className="container-site flex items-center justify-between h-16 px-6 md:px-12">
         {/* Logo */}
-        <Link href="/" className="flex items-center" aria-label="Ilot — home">
+        <Link href="/" className="flex items-center" aria-label="Ilot home">
           <Image
             src="/logos/Ilot-Logo.svg"
             alt="Ilot"
@@ -40,6 +40,15 @@ export async function Navbar() {
         <ul className="hidden md:flex items-center gap-8">
           <li>
             <ServicesDropdown categories={navCategories} />
+          </li>
+
+          <li>
+            <Link
+              href="/about"
+              className="text-sm font-medium text-muted hover:text-foreground transition-colors"
+            >
+              About
+            </Link>
           </li>
 
           <li>

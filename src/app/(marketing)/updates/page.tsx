@@ -5,7 +5,7 @@ import { UpdateCard } from '@/components/updates/UpdateCard'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Regulatory Updates — Indonesia Business & Visa Law',
+  title: 'Regulatory Updates: Indonesia Business & Visa Law',
   description:
     'Stay current with the latest regulatory changes affecting visas, company setup, and business compliance in Indonesia.',
 }
@@ -27,7 +27,7 @@ export default async function UpdatesPage() {
           </h1>
           <p className="text-muted text-lg max-w-2xl">
             The latest regulatory changes affecting visas, company setup, and business
-            compliance — tracked and explained by the Ilot team.
+            compliance, tracked and explained by the Ilot team.
           </p>
         </div>
 

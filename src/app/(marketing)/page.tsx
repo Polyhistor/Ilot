@@ -52,7 +52,7 @@ const FEATURED_GROUPS = [
     id: 'compliance',
     title: 'Business Compliance & Reporting',
     description:
-      'We help businesses stay legally compliant after setup — from mandatory investment reports to legal document review.',
+      'We help businesses stay legally compliant after setup, from mandatory investment reports to legal document review.',
     categorySlug: 'legal',
     slugs: [
       'bkpm-reports-lkpm',

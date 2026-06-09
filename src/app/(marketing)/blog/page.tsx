@@ -12,7 +12,7 @@ import Link from 'next/link'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Blog — Insights on Business & Legal in Indonesia',
+  title: 'Blog: Insights on Business & Legal in Indonesia',
   description:
     'Expert guides, updates, and advice on visa, legal, company setup, and more from the Ilot team.',
 }

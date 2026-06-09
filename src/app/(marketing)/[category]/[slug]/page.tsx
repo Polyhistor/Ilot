@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       service.meta_description ??
       service.description ??
-      `${service.name} — professional service by Ilot in Indonesia.`,
+      `${service.name}: professional service by Ilot in Indonesia.`,
     alternates: {
       canonical: `${siteUrl}/${service.category.slug}/${service.slug}`,
     },

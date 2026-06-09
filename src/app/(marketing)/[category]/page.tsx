@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: category.name,
     description:
       category.tagline ??
-      `Expert ${category.name} services in Indonesia — handled by Ilot.`,
+      `Expert ${category.name} services in Indonesia, handled by Ilot.`,
   }
 }
 
@@ -87,7 +87,7 @@ export default async function CategoryPage({ params }: Props) {
             </h2>
             <p className="text-base text-muted leading-relaxed mb-8">
               Our {category.name.toLowerCase()} offering is launching soon. If you&apos;d like to
-              be first in line — or have an enquiry we can help with today — get in touch and
+              be first in line, or have an enquiry we can help with today, get in touch and
               the Ilot team will follow up directly.
             </p>
             <WhatsAppCTA

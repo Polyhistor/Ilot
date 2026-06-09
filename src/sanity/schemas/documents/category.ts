@@ -21,7 +21,7 @@ export const category = defineType({
       name: 'iconName',
       title: 'Icon (Lucide name)',
       type: 'string',
-      description: 'Exact name from lucide.dev — e.g. "Plane", "Scale", "Building2".',
+      description: 'Exact name from lucide.dev, e.g. "Plane", "Scale", "Building2".',
     }),
     defineField({ name: 'coverImage', title: 'Cover Image', type: 'image', options: { hotspot: true } }),
     defineField({
