@@ -5,8 +5,9 @@
 > demonstrate commitment by emailing required documents. The bot
 > verifies the email arrived, then — and only then — assigns an agent.
 
-> **Status:** Design proposal for review.
-> **Replaces:** Layer 4 "department admin handoff" in `docs/whatsapp-setup/STATUS.md`.
+> **Status:** Built and running. The gate itself works end to end; what breaks
+> immediately after it is the agent handoff — see [`HUMAN_AGENT_HANDOFF.md`](./HUMAN_AGENT_HANDOFF.md).
+> **Replaces:** Layer 4 "department admin handoff" in `docs/archive/whatsapp-setup/STATUS.md`.
 
 ---
 

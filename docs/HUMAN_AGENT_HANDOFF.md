@@ -245,7 +245,7 @@ carry the **old sandbox** `phoneNumberId` `1063131786890917`, and there is **no 
 for `Ilot - Assign Agent (#5)` — the workflow you need to fix is not in the repo. Live n8n is
 the source of truth. Export from n8n; do not edit these files and expect anything to happen.
 
-### `docs/whatsapp-setup/` is stale (14 May)
+### `docs/archive/whatsapp-setup/` is stale (14 May)
 
 Different lineage, pre-cutover. It documents the sandbox number as the live target and
 references a "Prod WABA" that does not appear in Business Settings.

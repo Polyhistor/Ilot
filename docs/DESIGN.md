@@ -10,7 +10,7 @@ Scope: the public marketing site (`src/app/(marketing)/**`). Sanity Studio uses 
 
 ## 1. Design tokens
 
-Defined once in [`src/app/globals.css`](src/app/globals.css) under `@theme`, consumed everywhere as
+Defined once in [`src/app/globals.css`](../src/app/globals.css) under `@theme`, consumed everywhere as
 Tailwind utilities (e.g. `bg-surface`, `text-accent`, `rounded-card`).
 
 | Token | Value | Tailwind class | Use |
@@ -31,7 +31,7 @@ secondary). `#1b1f27` appears as an alternate dark panel (CTA banner) — prefer
 
 ## 2. Typography
 
-Fonts loaded in [`src/app/layout.tsx`](src/app/layout.tsx) via `next/font/google`:
+Fonts loaded in [`src/app/layout.tsx`](../src/app/layout.tsx) via `next/font/google`:
 
 - **Inter** → `--font-inter`, exposed as `font-sans` (the body default). All UI text.
 - **Caveat** → `--font-caveat`, the `.font-caveat` utility (also seen as `font-[Caveat]`). Decorative
@@ -54,7 +54,7 @@ Scale & weights (observed conventions):
 ## 3. Layout & spacing
 
 **Standard section container** (use this for every new section — see
-[the homepage sections](src/components/home)):
+[the homepage sections](../src/components/home)):
 
 ```tsx
 <section className="py-12 md:py-24 bg-…">
@@ -77,7 +77,7 @@ Scale & weights (observed conventions):
 ## 4. Color usage & the category system
 
 Each of the 7 service pillars has its own identity in
-[`src/lib/category-colors.ts`](src/lib/category-colors.ts): `{ accent, tint, mid }`.
+[`src/lib/category-colors.ts`](../src/lib/category-colors.ts): `{ accent, tint, mid }`.
 
 - `accent` — dark saturated hue (hero overlays, the `w-1.5 h-6` accent bar, borders).
 - `tint` — very light wash (e.g. service-detail CTA card background).
@@ -112,7 +112,7 @@ rounded frame. Never leave a bare `border-t border-l` matrix with square outer c
 ⚠️ The clipping element must be `position: relative` for `overflow-hidden`+rounding to clip absolutely
 positioned children — see Gotchas.
 
-**Primary CTA** — [`WhatsAppCTA`](src/components/ui/WhatsAppCTA.tsx). Always the conversion action.
+**Primary CTA** — [`WhatsAppCTA`](../src/components/ui/WhatsAppCTA.tsx). Always the conversion action.
 - `variant`: `primary` (`bg-accent text-foreground`, default) | `ghost` (outlined accent).
 - `size`: `sm` | `md` | `lg`. Pill shape (`rounded-full`).
 - Pass `serviceName`/`customMessage` to pre-fill the WhatsApp message; `label` for the button text.
@@ -133,13 +133,13 @@ small `uppercase tracking-[0.2em] text-accent` line is the lightest acceptable f
 
 Built on `framer-motion`. Two layers:
 
-**Scroll-reveal stagger** — [`src/components/ui/Reveal.tsx`](src/components/ui/Reveal.tsx):
+**Scroll-reveal stagger** — [`src/components/ui/Reveal.tsx`](../src/components/ui/Reveal.tsx):
 - `<RevealGroup>` wraps a block and orchestrates `staggerChildren` (default `0.12s`), firing once when
   scrolled into view (`viewport={{ once: true }}`).
 - `<RevealItem>` is each cascading element: fade + 26px rise, `duration 0.6`.
 - Apply to a heading group and to each card grid so children cascade in sequence.
 
-**On-load entrances** (hero only, [`HeroCircle.tsx`](src/components/home/HeroCircle.tsx)):
+**On-load entrances** (hero only, [`HeroCircle.tsx`](../src/components/home/HeroCircle.tsx)):
 - Hero text staggers headline → description → CTA (`staggerChildren 0.14`, item fade + 22px rise).
 - The 7 hero cards **fade-in-down** (`y: -28` desktop / `-20` mobile), staggered by `index * 0.09`/`0.07`.
 
@@ -152,11 +152,11 @@ static (no transform) when the user opts out. Any new animation must do the same
 
 ## 7. Imagery & icons
 
-- **Logos** live in [`public/logos/`](public/logos): `Ilot-Logo.svg` (navy — for light backgrounds,
+- **Logos** live in [`public/logos/`](../public/logos): `Ilot-Logo.svg` (navy — for light backgrounds,
   e.g. navbar), `Ilot-Logo-Light.svg` (for dark backgrounds, e.g. footer), plus `Logomark` variants
   (icon-only).
 - **No external image hosts.** Unsplash was removed; do not reintroduce remote stock images. Allowed
-  remote host (see [`next.config.ts`](next.config.ts)): `cdn.sanity.io`.
+  remote host (see [`next.config.ts`](../next.config.ts)): `cdn.sanity.io`.
 - **Category / service heroes:** render the client-uploaded Sanity `coverImage` (`image_url`) when
   present, otherwise fall back to a **brand gradient** `linear-gradient(135deg, accent, mid)`. Never a
   blank or stock fallback.
@@ -176,7 +176,7 @@ static (no transform) when the user opts out. Any new animation must do the same
 5. Pull real data (categories/services) from Sanity via the `src/lib/db/*` helpers rather than
    hardcoding, so names/slugs/links stay accurate.
 
-[`src/app/(marketing)/about/page.tsx`](src/app/(marketing)/about/page.tsx) is a complete worked example
+[`src/app/(marketing)/about/page.tsx`](<../src/app/(marketing)/about/page.tsx>) is a complete worked example
 of all of the above.
 
 ---
@@ -188,9 +188,9 @@ of all of the above.
   block — give it `position: relative`. (This caused the hero cards to render with sharp corners.)
 - **Don't stack `max-w-*` utilities** on one element — they fight; the cascade winner is unpredictable.
 - **Sanity empty object fields** (`localizedString`/`localizedText`) must be **absent**, not `null` —
-  see [`CLAUDE.md`](CLAUDE.md). Run `npm run fix:sanity` if Studio shows "Invalid property value".
+  see [`CLAUDE.md`](../CLAUDE.md). Run `npm run fix:sanity` if Studio shows "Invalid property value".
 - **GROQ ↔ types:** projections rename camelCase Sanity fields → snake_case to match
-  [`src/lib/db/types.ts`](src/lib/db/types.ts). Update both together.
+  [`src/lib/db/types.ts`](../src/lib/db/types.ts). Update both together.
 - **Dev port is 3003** (3000 is taken by another project).
 
 ---

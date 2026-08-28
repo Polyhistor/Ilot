@@ -31,7 +31,7 @@ The files that just landed in the repo:
 | File | Purpose |
 |---|---|
 | `Dockerfile` | Multi-stage build: deps → build → runner. Emits the standalone Next.js server on port 3000 as user `nextjs`. |
-| `.dockerignore` | Keeps `node_modules`, `.next`, `.env*`, `docs/`, `tests/`, `supabase/`, `.claude/`, `.superpowers/` out of the build context. |
+| `.dockerignore` | Keeps `node_modules`, `.next`, `.env*`, `docs/`, `tests/`, `.claude/`, `.superpowers/` out of the build context. |
 | `next.config.ts` | Adds `output: 'standalone'` — required for the Dockerfile to find `.next/standalone/server.js`. |
 
 ```bash

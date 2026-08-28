@@ -4,7 +4,7 @@
 - Next.js 15 App Router + React 19
 - Sanity CMS (private dataset) — all content served via GROQ
 - Tailwind CSS v4, Lucide React icons
-- No Supabase in active use (Sanity is the source of truth)
+- No Supabase — removed entirely; Sanity is the source of truth
 - Dev port: **3003** (port 3000 is occupied by another project)
 
 ## Data Import Workflow
@@ -52,7 +52,9 @@ no auto-generation from names.
 
 The `*bold*` service name lets the WhatsApp bot reliably identify the service.
 If a row has a value in `whatsapp_message`, it is used as-is (manual override).
-All 106 services always have a message written to Sanity — never null.
+All 100 services always have a message written to Sanity — never null.
+(`docs/seed-data-raw.json` holds 101 rows: 100 services plus one category-only
+placeholder row for Property Advisory, which has no service yet.)
 
 ### Null fields
 Optional object-type fields (`localizedString`, `localizedText`) must be **absent** from the
@@ -68,3 +70,12 @@ This unsets null object fields and fixes slug conflicts on soft-disabled orphan 
   `src/lib/db/types.ts`. Do not change field names in queries without updating types.
 - Localized fields: `coalesce(field.en, null)` — English only for now.
 - Cache tags: `category`, `subCategory`, `service` — used for on-demand revalidation.
+
+## Docs layout
+- `docs/` — current. `DESIGN.md`, `DEPLOY_COOLIFY.md`, `HUMAN_AGENT_HANDOFF.md`,
+  `WHATSAPP_CUTOVER_STATUS.md`, `commitment-gate-flow.md`, `client/editing-content.md`.
+- `docs/archive/` — historical only. Superseded runbooks, landed phase plans, the client
+  proposal. Do not treat anything in there as describing the current system; see its README.
+- Seed inputs live in `docs/`: `seed-data-raw.json` (primary) and
+  `docs/seed-data/legacy-categories.sql` (fallback for the 4 partially-delivered categories,
+  read by both import and cleanup scripts). There is no `supabase/` folder any more.
