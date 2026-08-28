@@ -15,7 +15,7 @@ point to the official Coolify docs that were used to design it.
 
 - Coolify is already installed, TLS on `coolify.<your-domain>` works, and the
   `*.<your-domain>` wildcard DNS points to the VPS IP.
-  (All of this is the Phase 0 work in `docs/NEXT_STEPS.md`.)
+  (All of this is the Phase 0 work in `docs/next-steps.md`.)
 - GitHub repository `Shahab-hsni/Ilot` is reachable either as a public repo
   or via Coolify's **GitHub App** / **Deploy Key** integration.
 - A Sanity project exists and you have a read token
@@ -35,7 +35,7 @@ The files that just landed in the repo:
 | `next.config.ts` | Adds `output: 'standalone'` — required for the Dockerfile to find `.next/standalone/server.js`. |
 
 ```bash
-git add Dockerfile .dockerignore next.config.ts docs/DEPLOY_COOLIFY.md
+git add Dockerfile .dockerignore next.config.ts docs/deploy-coolify.md
 git commit -m "chore(deploy): add Coolify Dockerfile + standalone output"
 git push origin main
 ```
@@ -112,7 +112,7 @@ Docs: <https://coolify.io/docs/knowledge-base/persistent-storage>
 
 Set the primary domain, e.g. `https://ilot.id`. Coolify's Traefik proxy
 will request a Let's Encrypt cert automatically on the first request
-(same flow as `n8n.ilot.example` in your existing `NEXT_STEPS.md`).
+(same flow as `n8n.ilot.example` in your existing `next-steps.md`).
 
 If you want `www.ilot.id` to redirect to the apex, set
 **Direction = "Allow www & non-www"** in the General tab → **Set Direction**.

@@ -11,7 +11,7 @@
 
 Whenever the client's service data changes, the full workflow is:
 
-1. Update `docs/seed-data-raw.json` (or re-run `scripts/generate-seed.py`)
+1. Update `docs/seed-data/raw.json` (or re-run `scripts/generate-seed.py`)
 2. Dry-run the import to verify:
    ```
    npm run import:sanity:dry
@@ -39,7 +39,7 @@ outside that set (hard-delete where possible, `isActive: false` where references
 - Sub-categories: `subCategory-{categorySlug}-{subSlug}`
 - Services:       `service-{categorySlug}-{subCategorySlug}-{serviceSlug}`
 
-## Seed Data Format (`docs/seed-data-raw.json`)
+## Seed Data Format (`docs/seed-data/raw.json`)
 Snake_case fields: `category_slug`, `sub_category_slug`, `service_slug`, `category_sort_order`,
 `sub_category_sort_order`, `service_sort_order`, `description`, `target_client`,
 `key_deliverables`, `estimated_timeline`, `real_time_work`, `note`, `whatsapp_message` (optional).
@@ -53,7 +53,7 @@ no auto-generation from names.
 The `*bold*` service name lets the WhatsApp bot reliably identify the service.
 If a row has a value in `whatsapp_message`, it is used as-is (manual override).
 All 100 services always have a message written to Sanity — never null.
-(`docs/seed-data-raw.json` holds 101 rows: 100 services plus one category-only
+(`docs/seed-data/raw.json` holds 101 rows: 100 services plus one category-only
 placeholder row for Property Advisory, which has no service yet.)
 
 ### Null fields
@@ -72,10 +72,11 @@ This unsets null object fields and fixes slug conflicts on soft-disabled orphan 
 - Cache tags: `category`, `subCategory`, `service` — used for on-demand revalidation.
 
 ## Docs layout
-- `docs/` — current. `DESIGN.md`, `DEPLOY_COOLIFY.md`, `HUMAN_AGENT_HANDOFF.md`,
-  `WHATSAPP_CUTOVER_STATUS.md`, `commitment-gate-flow.md`, `client/editing-content.md`.
+- `docs/` — current. `design.md`, `deploy-coolify.md`, `human-agent-handoff.md`,
+  `whatsapp-cutover-status.md`, `commitment-gate-flow.md`, `client/editing-content.md`.
 - `docs/archive/` — historical only. Superseded runbooks, landed phase plans, the client
   proposal. Do not treat anything in there as describing the current system; see its README.
-- Seed inputs live in `docs/`: `seed-data-raw.json` (primary) and
-  `docs/seed-data/legacy-categories.sql` (fallback for the 4 partially-delivered categories,
-  read by both import and cleanup scripts). There is no `supabase/` folder any more.
+- Both seed inputs live in `docs/seed-data/`: `raw.json` (primary) and
+  `legacy-categories.sql` (fallback for the 4 partially-delivered categories, read by both
+  the import and cleanup scripts). There is no `supabase/` folder any more.
+- File naming in `docs/` is kebab-case throughout; `README.md` is the only exception.

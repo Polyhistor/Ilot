@@ -5,7 +5,7 @@
 > gate is currently dropped. No human is ever notified.
 > **Scope:** this document covers the *human agent handoff* only. The WhatsApp number cutover
 > is finished and documented separately in
-> [`WHATSAPP_CUTOVER_STATUS.md`](./WHATSAPP_CUTOVER_STATUS.md) — read that first for the
+> [`whatsapp-cutover-status.md`](./whatsapp-cutover-status.md) — read that first for the
 > Meta/WABA context, it is accurate.
 
 If you read nothing else, read [The defect](#the-defect) and
@@ -249,7 +249,7 @@ the source of truth. Export from n8n; do not edit these files and expect anythin
 
 Different lineage, pre-cutover. It documents the sandbox number as the live target and
 references a "Prod WABA" that does not appear in Business Settings.
-`WHATSAPP_CUTOVER_STATUS.md` supersedes it for anything number/WABA related.
+`whatsapp-cutover-status.md` supersedes it for anything number/WABA related.
 
 ### Other
 
@@ -289,7 +289,7 @@ Verified live on 28 August 2026:
 
 - **Live node parameters of `Ez08kr0HLdziPPwy`.** The n8n session in the available browser was
   logged out, so the node analysis above comes from a local backup taken **18 Aug**
-  (`~/ilot-wa-cutover/backup/`). `WHATSAPP_CUTOVER_STATUS.md` states the `phoneNumberId` was
+  (`~/ilot-wa-cutover/backup/`). `whatsapp-cutover-status.md` states the `phoneNumberId` was
   repointed to `1231024886758816` and published; the `REPLACE_WITH_OPS_FALLBACK_NUMBER`
   placeholder and the WhatsApp-based notify design are recorded there as still outstanding.
   **Re-read the live workflow before editing.**

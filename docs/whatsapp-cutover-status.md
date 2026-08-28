@@ -257,7 +257,7 @@ while the stored value was really `6282339941015`. Do not trust it, and do not d
   **This node has never worked.** Pre-existing, unrelated to the cutover.
 - **Secrets in the build env:** `SANITY_API_WRITE_TOKEN` and `SANITY_API_READ_TOKEN` are
   present and **identical** 180-char values, so the build carries write access. Worth review.
-- **`docs/archive/whatsapp-setup/STATUS.md` is stale** (14 May) — different lineage; this file is the
+- **`docs/archive/whatsapp-setup/status.md` is stale** (14 May) — different lineage; this file is the
   source of truth.
 
 ---

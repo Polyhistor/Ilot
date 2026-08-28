@@ -37,7 +37,7 @@ intake silently stores nothing).
 | `npm test` / `npm run test:watch` | Vitest |
 | `npm run lint` | ESLint |
 | `npm run import:sanity:dry` | Preview a content import — **always run this first** |
-| `npm run import:sanity` | Import `docs/seed-data-raw.json` into Sanity |
+| `npm run import:sanity` | Import `docs/seed-data/raw.json` into Sanity |
 | `npm run cleanup:sanity:dry` / `npm run cleanup:sanity` | Remove orphaned Sanity docs — **always run after an import** |
 | `npm run fix:sanity` | Unset null object fields and resolve slug conflicts |
 
@@ -55,10 +55,10 @@ production. See [`scripts/dev/README.md`](scripts/dev/README.md).
 
 | | |
 |---|---|
-| [`docs/DESIGN.md`](docs/DESIGN.md) | Design tokens, components, motion — derived from the code |
-| [`docs/DEPLOY_COOLIFY.md`](docs/DEPLOY_COOLIFY.md) | Deployment runbook |
-| [`docs/HUMAN_AGENT_HANDOFF.md`](docs/HUMAN_AGENT_HANDOFF.md) | Agent handoff — **open production defect** |
-| [`docs/WHATSAPP_CUTOVER_STATUS.md`](docs/WHATSAPP_CUTOVER_STATUS.md) | WhatsApp number cutover (complete) |
+| [`docs/design.md`](docs/design.md) | Design tokens, components, motion — derived from the code |
+| [`docs/deploy-coolify.md`](docs/deploy-coolify.md) | Deployment runbook |
+| [`docs/human-agent-handoff.md`](docs/human-agent-handoff.md) | Agent handoff — **open production defect** |
+| [`docs/whatsapp-cutover-status.md`](docs/whatsapp-cutover-status.md) | WhatsApp number cutover (complete) |
 | [`docs/commitment-gate-flow.md`](docs/commitment-gate-flow.md) | Commitment gate, end to end |
 | [`docs/client/editing-content.md`](docs/client/editing-content.md) | Written for the client — how to edit content in Studio |
 | [`docs/archive/`](docs/archive/) | Historical only. Does not describe the current system. |
