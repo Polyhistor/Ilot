@@ -52,7 +52,7 @@ describe('parseSeedSqlCategories', () => {
         'legal',
         'company-setup',
         'insurance',
-        'property',
+        'property-advisory',
         'hr-payroll',
         'accounting-tax',
       ])
