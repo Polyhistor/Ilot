@@ -3,7 +3,7 @@
 # Not a production deployment. It exists so n8n workflows can be built and
 # tested off-production, instead of being edited live in the n8n UI.
 #
-#   docker compose -f docker-compose.dev.yml up -d
+#   docker compose -f scripts/dev/docker-compose.yml up -d
 #
 # Everything uses the bundled SQLite. No PostgreSQL, no external services.
 # Mattermost and the Meta WhatsApp Cloud API are not run here — outbound calls
@@ -16,12 +16,12 @@ services:
   # n8n — http://localhost:5678
   #
   # PIN NOTE: the tag below must match the production n8n version. Production's
-  # exact version is unconfirmed; HUMAN_AGENT_HANDOFF.md only records the floor
+  # exact version is unconfirmed; docs/human-agent-handoff.md only records the floor
   # ("2.10.2+", where the draft / activeVersion split was introduced). The
   # default here is the current 2.x release, not a confirmed match. Read the
   # version from the production n8n UI (Help -> About) and re-pin:
   #
-  #   N8N_VERSION=<production version> docker compose -f docker-compose.dev.yml up -d
+  #   N8N_VERSION=<production version> docker compose -f scripts/dev/docker-compose.yml up -d
   #
   # This matters because draft-vs-activeVersion behaviour is version dependent,
   # and that is the exact trap this stack exists to avoid.
@@ -46,7 +46,7 @@ services:
       - n8n_data:/home/node/.n8n
       # Read-only so an import can never write local table IDs back into the
       # repo snapshots. Patch imported copies inside n8n, never these files.
-      - ./n8n-workflows:/workflows:ro
+      - ../../n8n-workflows:/workflows:ro
 
   # --------------------------------------------------------------------------
   # NocoDB — http://localhost:8080
@@ -80,7 +80,7 @@ services:
     working_dir: /app
     command: ["node", "/app/webhook-catcher.mjs"]
     volumes:
-      - ./scripts/dev:/app:ro
+      - .:/app:ro
 
 volumes:
   n8n_data:

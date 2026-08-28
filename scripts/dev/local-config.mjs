@@ -1,4 +1,4 @@
-// Shared settings for the local dev stack (docker-compose.dev.yml).
+// Shared settings for the local dev stack (docker-compose.yml).
 // None of these are secrets — they only ever reach containers on this machine.
 
 export const NOCODB_URL = process.env.NOCODB_URL || 'http://localhost:8080'

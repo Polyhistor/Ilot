@@ -1,4 +1,4 @@
-// Seeds the local NocoDB (docker-compose.dev.yml) with the tables the n8n
+// Seeds the local NocoDB (docker-compose.yml) with the tables the n8n
 // workflows expect, plus a few sample rows.
 //
 //   node scripts/dev/seed-nocodb.mjs
@@ -64,7 +64,7 @@ const checkbox = (title) => ({ title, uidt: 'Checkbox' })
 const ID_COLUMN = { title: 'Id', uidt: 'ID' }
 
 // Columns are taken from what the workflows actually read and write:
-//   Agents  — HUMAN_AGENT_HANDOFF.md
+//   Agents  — docs/human-agent-handoff.md
 //   Clients — "Create lead in NocoDB" node + docs/commitment-gate-flow.md
 //   FAQs    — "Fetch active FAQs" filter + "Format as documents" code node
 const TABLES = [

@@ -6,11 +6,14 @@ work that was never published.
 
 ## Run order
 
+Run these from the repo root, not from this folder — the compose file's mounts
+are resolved relative to itself, but the `node` paths below are not.
+
 ```bash
-docker compose -f docker-compose.dev.yml up -d          # n8n :5678, NocoDB :8080, catcher :4000
-node scripts/dev/seed-nocodb.mjs                        # tables + sample rows, prints local IDs
+docker compose -f scripts/dev/docker-compose.yml up -d   # n8n :5678, NocoDB :8080, catcher :4000
+node scripts/dev/seed-nocodb.mjs                         # tables + sample rows, prints local IDs
 docker exec ilot-n8n n8n import:workflow --separate --input=/workflows
-node scripts/dev/patch-n8n-local.mjs                    # wire the imported copies to the local stack
+node scripts/dev/patch-n8n-local.mjs                     # wire the imported copies to the local stack
 ```
 
 First run of `seed-nocodb.mjs` signs up the NocoDB super admin. n8n asks for
@@ -21,6 +24,7 @@ as `local-config.mjs` or the scripts will not be able to log in.
 
 | File | Purpose |
 |---|---|
+| `docker-compose.yml` | The stack itself — n8n, NocoDB, webhook-catcher |
 | `local-config.mjs` | URLs, logins, and the WhatsApp HMAC secret shared by the scripts |
 | `seed-nocodb.mjs` | Creates the `Agents`, `Clients`, `FAQs` tables and sample rows |
 | `patch-n8n-local.mjs` | Points the imported workflows at local IDs and at webhook-catcher |

@@ -180,7 +180,7 @@ async function main() {
       // has to be non-empty to satisfy validation.
       //
       // Whether production hits this depends on the n8n version it runs — see
-      // the pin note in docker-compose.dev.yml. Confirm before assuming the
+      // the pin note in docker-compose.yml. Confirm before assuming the
       // snapshot is broken in production too.
       if (
         node.type === '@n8n/n8n-nodes-langchain.vectorStoreInMemory' &&
