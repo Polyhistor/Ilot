@@ -52,3 +52,6 @@ next-env.d.ts
 # local AI agent tooling (Codex notes, skills) — keep local, do not commit
 .agents/
 AGENTS.md
+
+# local AI agent scratch dirs — keep local, do not commit
+.superpowers/
