@@ -156,7 +156,7 @@ static (no transform) when the user opts out. Any new animation must do the same
   e.g. navbar), `Ilot-Logo-Light.svg` (for dark backgrounds, e.g. footer), plus `Logomark` variants
   (icon-only).
 - **No external image hosts.** Unsplash was removed; do not reintroduce remote stock images. Allowed
-  remote hosts (see [`next.config.ts`](next.config.ts)): `cdn.sanity.io`, `*.supabase.co`.
+  remote host (see [`next.config.ts`](next.config.ts)): `cdn.sanity.io`.
 - **Category / service heroes:** render the client-uploaded Sanity `coverImage` (`image_url`) when
   present, otherwise fall back to a **brand gradient** `linear-gradient(135deg, accent, mid)`. Never a
   blank or stock fallback.

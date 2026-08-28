@@ -20,7 +20,6 @@
     "@sanity/client": "^7.22.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.22.0",
-    "@supabase/supabase-js": "^2.99.2",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
     "next": "^15.5.14",
