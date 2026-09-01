@@ -6,8 +6,15 @@
 #   docker compose -f scripts/dev/docker-compose.yml up -d
 #
 # Everything uses the bundled SQLite. No PostgreSQL, no external services.
-# Mattermost and the Meta WhatsApp Cloud API are not run here — outbound calls
-# are pointed at webhook-catcher instead (see scripts/dev/webhook-catcher.mjs).
+# The Meta WhatsApp Cloud API is not run here — outbound sends are pointed at
+# webhook-catcher instead (see scripts/dev/webhook-catcher.mjs).
+#
+# Chatwoot ran here briefly while a shared inbox was evaluated, and was not
+# adopted: the handoff is staffed by a single PIC on the company admin number, so
+# there is no multi-agent routing to solve. The findings were worth keeping and
+# live in docs/archive/chatwoot-evaluation.md — including the one that matters
+# beyond Chatwoot, that a Cloud API number cannot also be used in the WhatsApp
+# Business app.
 
 name: ilot-dev
 

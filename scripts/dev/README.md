@@ -16,10 +16,6 @@ docker exec ilot-n8n n8n import:workflow --separate --input=/workflows
 node scripts/dev/patch-n8n-local.mjs                     # wire the imported copies to the local stack
 ```
 
-First run of `seed-nocodb.mjs` signs up the NocoDB super admin. n8n asks for
-owner setup on first visit to <http://localhost:5678>; use the same credentials
-as `local-config.mjs` or the scripts will not be able to log in.
-
 ## Files
 
 | File | Purpose |
@@ -29,7 +25,7 @@ as `local-config.mjs` or the scripts will not be able to log in.
 | `seed-nocodb.mjs` | Creates the `Agents`, `Clients`, `FAQs` tables and sample rows |
 | `patch-n8n-local.mjs` | Points the imported workflows at local IDs and at webhook-catcher |
 | `send-inbound.mjs` | Signs and posts `fixtures/whatsapp-inbound.json` at the WhatsApp trigger |
-| `webhook-catcher.mjs` | Prints any request it receives; stands in for Mattermost and WhatsApp sends |
+| `webhook-catcher.mjs` | Prints any request it receives; stands in for WhatsApp sends |
 
 ## Local IDs never go in the repo
 
@@ -45,11 +41,26 @@ else.
   contains the WhatsApp *trigger* fails with `Invalid Client ID` — activation
   calls Meta's Graph API to check the app's webhook subscription, so that node
   cannot be activated without a real Meta app.
-- **Google Gemini.** Without an API key the AI Agent, the embeddings, and the
-  vector store branches do not run. That blocks the inbound workflow and the FAQ
-  reindex, but not the assign-agent work.
-- **Gmail trigger** for the Commitment Gate, and **Assign Agent (#5)**, which is
-  not in this repo.
+- **The inbound AI Agent.** Production runs **OpenAI** (`lmChatOpenAi`), so the
+  inbound workflow needs an OpenAI key to answer. The assign-agent and
+  commitment-gate work does not touch it. (The Gemini / vector-store wiring that
+  this note used to describe was only ever in a stale snapshot, now in
+  `n8n-workflows/archive/`.)
+- **Gmail trigger** for the Commitment Gate. Assign Agent (#5) *is* in the repo
+  now — exported from production on 31 Aug as `ilot-assign-agent.json`.
+
+## Chatwoot is gone
+
+A Chatwoot shared inbox ran in this stack while it was evaluated. It worked and
+was **not adopted** — the handoff is staffed by one PIC on the company admin
+number, so there is no multi-agent routing to solve. Agents are notified by a
+WhatsApp UTILITY template instead (`scripts/wa-template.mjs`).
+
+The findings are kept in
+[`docs/archive/chatwoot-evaluation.md`](../../docs/archive/chatwoot-evaluation.md),
+including the one that outlives the decision: **a Cloud API number cannot also be
+used in the WhatsApp Business app.** Recover the stack from git history if the
+team ever outgrows a single PIC.
 
 ## The draft / activeVersion trap
 

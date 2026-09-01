@@ -66,6 +66,7 @@ const ID_COLUMN = { title: 'Id', uidt: 'ID' }
 // Columns are taken from what the workflows actually read and write:
 //   Agents  — docs/human-agent-handoff.md
 //   Clients — "Create lead in NocoDB" node + docs/commitment-gate-flow.md
+//   processed_emails — the three "Log Processed" nodes in the Commitment Gate
 //   FAQs    — "Fetch active FAQs" filter + "Format as documents" code node
 const TABLES = [
   {
@@ -79,10 +80,17 @@ const TABLES = [
       text('slack_id'), // repurposed for the Mattermost user/channel
       number('open_cases'),
     ],
+    // One active agent per department the production AI Agent can emit. Any
+    // department with no active row falls to the false branch, which is the
+    // broken ops alert — so a gap here reproduces the production defect.
     rows: [
       { name: 'Dewi Pratama', phone: '6281200000001', department: 'visa', active: true, slack_id: 'dewi', open_cases: 0 },
-      { name: 'Andi Wijaya', phone: '6281200000002', department: 'legal', active: true, slack_id: 'andi', open_cases: 0 },
-      { name: 'Sari Kusuma', phone: '6281200000003', department: 'company-setup', active: true, slack_id: 'sari', open_cases: 0 },
+      { name: 'Sari Kusuma', phone: '6281200000002', department: 'company', active: true, slack_id: 'sari', open_cases: 0 },
+      { name: 'Andi Wijaya', phone: '6281200000003', department: 'legal', active: true, slack_id: 'andi', open_cases: 0 },
+      { name: 'Rina Halim', phone: '6281200000004', department: 'tax', active: true, slack_id: 'rina', open_cases: 0 },
+      { name: 'Budi Santoso', phone: '6281200000005', department: 'property', active: true, slack_id: 'budi', open_cases: 0 },
+      { name: 'Maya Iskandar', phone: '6281200000006', department: 'hr', active: true, slack_id: 'maya', open_cases: 0 },
+      { name: 'Tomi Wibowo', phone: '6281200000007', department: 'insurance', active: true, slack_id: 'tomi', open_cases: 0 },
     ],
   },
   {
@@ -123,6 +131,33 @@ const TABLES = [
         'Created At': new Date().toISOString(),
         commitment_status: 'in_conversation',
         takeover: false,
+      },
+    ],
+  },
+  {
+    // Idempotency log for the Commitment Gate. Columns are the field lists the
+    // production nodes actually write — "Log Processed (committed)",
+    // "(rejected)" and "(no match)" — plus the read in "Already Processed?".
+    //
+    // Production has a unique constraint on message_id. NocoDB's meta API does
+    // not expose one here, so a duplicate will be accepted locally where
+    // production would reject it. Do not use this stack to prove idempotency.
+    title: 'processed_emails',
+    columns: [
+      ID_COLUMN,
+      text('message_id'),
+      text('from_email'),
+      text('token'),
+      text('result'),
+      text('processed_at'),
+    ],
+    rows: [
+      {
+        message_id: 'seed-message-id-0001',
+        from_email: 'sample@ilot.local',
+        token: 'seed-token-0001',
+        result: 'committed',
+        processed_at: new Date().toISOString(),
       },
     ],
   },

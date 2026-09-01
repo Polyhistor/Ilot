@@ -117,6 +117,57 @@ function toCatcherNode(node) {
   }
 }
 
+// An emailSend node becomes an HTTP Request to webhook-catcher. Local runs must
+// never reach a real mailbox, and the production credential is not present here
+// anyway — but a missing credential fails loudly, which hides the wiring under a
+// credential error instead of showing what would have been sent.
+function emailToCatcherNode(node) {
+  const p = node.parameters ?? {}
+  return {
+    ...node,
+    type: 'n8n-nodes-base.httpRequest',
+    typeVersion: 4.2,
+    credentials: undefined,
+    parameters: {
+      method: 'POST',
+      url: `${CATCHER_INTERNAL_URL}/email-send`,
+      sendBody: true,
+      contentType: 'json',
+      specifyBody: 'keypair',
+      bodyParameters: {
+        parameters: [
+          { name: 'stand_in_for', value: `${node.type} (${node.name})` },
+          { name: 'to', value: p.toEmail ? `=${String(p.toEmail).replace(/^=/, '')}` : '' },
+          { name: 'subject', value: p.subject ? `=${String(p.subject).replace(/^=/, '')}` : '' },
+          { name: 'body', value: p.message ? `=${String(p.message).replace(/^=/, '')}` : '' },
+        ],
+      },
+      options: {},
+    },
+  }
+}
+
+// An HTTP Request already aimed at Meta gets its URL swung to webhook-catcher.
+// The body and expressions are left exactly as production has them, so what the
+// catcher prints is what Meta would have received — which is the whole point.
+function graphToCatcherNode(node) {
+  return {
+    ...node,
+    credentials: undefined,
+    parameters: {
+      ...node.parameters,
+      url: `${CATCHER_INTERNAL_URL}/graph-send`,
+      authentication: 'none',
+      nodeCredentialType: undefined,
+    },
+  }
+}
+
+const isGraphCall = (node) =>
+  node.type === 'n8n-nodes-base.httpRequest' &&
+  typeof node.parameters?.url === 'string' &&
+  node.parameters.url.includes('graph.facebook.com')
+
 async function main() {
   const nc = await nocodb()
   console.log(`NocoDB base ${nc.baseId}`)
@@ -137,11 +188,19 @@ async function main() {
   })
   console.log(`credentials ready: ${nocoCred.name}, ${waTriggerCred.name}`)
 
-  // Which local table each NocoDB node should point at, by node name.
-  const TABLE_FOR_NODE = {
-    'Fetch active FAQs': nc.tables.FAQs,
-    'Create lead in NocoDB': nc.tables.Clients,
+  // Which local table replaces each PRODUCTION table id.
+  //
+  // Keyed on the table id, not the node name. The refreshed snapshots hold ten
+  // NocoDB nodes across three workflows with names like "Increment Agent Open
+  // Cases" and "Log Processed (rejected)"; names get edited in the n8n UI, the
+  // table id in the snapshot does not.
+  const TABLE_FOR_PROD_TABLE = {
+    m1q8u8q393tf6ej: nc.tables.Clients,
+    mcgjknbniocnvk7: nc.tables.Agents,
+    mx9k2n7fxp1zax1: nc.tables.processed_emails,
+    miltd46do8tcznj: nc.tables.FAQs,
   }
+  const LOCAL_TABLE_IDS = new Set(Object.values(nc.tables))
 
   const { json: wfList } = await req(`${N8N_URL}/rest/workflows`, { headers: auth })
   for (const summary of wfList.data || wfList) {
@@ -151,9 +210,13 @@ async function main() {
 
     const nodes = wf.nodes.map((node) => {
       if (node.type === 'n8n-nodes-base.nocoDb') {
-        const table = TABLE_FOR_NODE[node.name]
+        const current = node.parameters?.table
+        // Already pointing at a local table: this is a re-run, not a miss.
+        if (LOCAL_TABLE_IDS.has(current)) return node
+
+        const table = TABLE_FOR_PROD_TABLE[current]
         if (!table) {
-          changes.push(`! ${node.name}: no local table mapped — left alone`)
+          changes.push(`! ${node.name}: production table ${current} not mapped — left alone`)
           return node
         }
         changes.push(`${node.name}: table -> ${table}`)
@@ -179,9 +242,12 @@ async function main() {
       // supplies the query at run time, so the value here is never read. It only
       // has to be non-empty to satisfy validation.
       //
-      // Whether production hits this depends on the n8n version it runs — see
-      // the pin note in docker-compose.yml. Confirm before assuming the
-      // snapshot is broken in production too.
+      // PRODUCTION DOES NOT HAVE THIS NODE. Read live on 31 Aug 2026: the
+      // production inbound workflow has 14 nodes, uses OpenAI, and reads FAQs
+      // through a `Search FAQs` toolCode node. There is no vector store and no
+      // Gemini anywhere in production. This branch now only matters for the
+      // archived snapshot in n8n-workflows/archive/, and is kept so that file
+      // can still be imported.
       if (
         node.type === '@n8n/n8n-nodes-langchain.vectorStoreInMemory' &&
         node.parameters?.mode === 'load' &&
@@ -194,6 +260,18 @@ async function main() {
       if (node.type === 'n8n-nodes-base.whatsApp') {
         changes.push(`${node.name}: -> HTTP Request to webhook-catcher`)
         return toCatcherNode(node)
+      }
+
+      if (node.type === 'n8n-nodes-base.emailSend') {
+        changes.push(`${node.name}: emailSend -> webhook-catcher`)
+        return emailToCatcherNode(node)
+      }
+
+      // Must come after the two above: the repair turned a WhatsApp node into a
+      // Graph API call, and letting that through would message a real number.
+      if (isGraphCall(node)) {
+        changes.push(`${node.name}: graph.facebook.com -> webhook-catcher`)
+        return graphToCatcherNode(node)
       }
 
       return node
