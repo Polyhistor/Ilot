@@ -18,3 +18,16 @@ export const CATCHER_INTERNAL_URL = 'http://webhook-catcher:4000'
 // HMAC-SHA256(rawBody, clientSecret). send-inbound.mjs signs with this, and
 // patch-n8n-local.mjs stores it as the local whatsAppTriggerApi credential.
 export const WHATSAPP_CLIENT_SECRET = 'ilot-local-dev-secret'
+
+// The seven departments the production AI Agent is allowed to emit, read from its
+// system prompt in n8n-workflows/ilot-inbound-whatsapp.json.
+//
+// This list is the whole contract between the bot and the Agents table. The lookup
+// in "Get Active Agents (dept)" is an exact-equality match on a free-text column:
+//
+//   =(department,eq,{{ $json.department }})~and(active,eq,true)
+//
+// so a value that is not on this list can never match a lead, and it fails down a
+// branch that looks healthy. A local seed once used "company-setup" where
+// production uses "company", which is exactly that bug.
+export const DEPARTMENTS = ['visa', 'company', 'legal', 'tax', 'property', 'hr', 'insurance']
