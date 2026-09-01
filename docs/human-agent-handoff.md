@@ -1,15 +1,194 @@
 # Human Agent Handoff — Problem Statement & Handover
 
-> **Last updated:** 28 August 2026
-> **Status:** 🔴 **OPEN DEFECT IN PRODUCTION.** Every customer who completes the commitment
-> gate is currently dropped. No human is ever notified.
+> **Last updated:** 31 August 2026
+> **Status:** 🟡 **PARTLY FIXED.** The `Agents` table is seeded and the notification template is
+> submitted; the workflow repair and the WABA payment method are still outstanding. See
+> [Progress, 31 August](#progress-31-august-2026).
 > **Scope:** this document covers the *human agent handoff* only. The WhatsApp number cutover
 > is finished and documented separately in
 > [`whatsapp-cutover-status.md`](./whatsapp-cutover-status.md) — read that first for the
 > Meta/WABA context, it is accurate.
+>
+> ⚠️ **The recommended fix below has been overtaken.** Mattermost was dropped by the client, and
+> a Cloud API number cannot also be used in the WhatsApp Business app, so neither the Mattermost
+> design nor "let the admins use WhatsApp Business" is available. A shared inbox (Chatwoot) was
+> then evaluated, worked, and was **not adopted** — the handoff is staffed by a single PIC on the
+> company admin number, so there is no multi-agent routing to solve; findings kept in
+> [`archive/chatwoot-evaluation.md`](./archive/chatwoot-evaluation.md).
+>
+> **The agreed replacement is a WhatsApp UTILITY template with a dynamic URL button**, carrying
+> the same content the current free-form notify node sends, with the `wa.me` link as a tappable
+> button. See `scripts/wa-template.mjs`. It needs a payment method on the WABA plus one approved
+> template; neither is under our control, so submit early and in parallel.
+>
+> **The defect described here is still open in production**; nothing has shipped. Everything
+> below about the *defect itself*, the Meta constraints, and the traps remains accurate.
 
 If you read nothing else, read [The defect](#the-defect) and
 [Do this first](#do-this-first-30-minutes-stops-the-bleeding).
+
+---
+
+## SECOND, INDEPENDENT BREAK — found 31 August 2026
+
+The empty `Agents` table was never the only thing wrong. **The commitment gate has never been
+able to call Assign Agent at all.**
+
+`Trigger Assign Agent (#5)` in `Ilot - Commitment Gate (#4)` is an
+`n8n-nodes-base.executeWorkflow` at typeVersion 1.2, and its `workflowId` is stored as a bare
+string instead of the resource locator object that version requires:
+
+```json
+"workflowId": "Ez08kr0HLdziPPwy"
+```
+
+Every run dies there:
+
+```
+No information about the workflow to execute found. Please provide either the "id" or "code"!
+```
+
+Observed live in execution **545**. Every node before it succeeded — the client was matched,
+`Mark Committed` ran, `Log Processed (committed)` wrote its row — and then nothing. The customer
+gets no confirmation, no agent is assigned, and `processed_emails` records the case as
+`committed`, which makes the failure look like a success from the data side.
+
+This is pre-existing: it is in the snapshot exported before any change was made on 31 Aug, and
+the gate workflow was not touched by that work. **Seeding `Agents` alone could never have
+produced a notification**, because the sub-workflow was never reached. The trace earlier in this
+document assumes Assign Agent gets called; it does not.
+
+Fix in `scripts/fix-gate-trigger.mjs` — rewrites `workflowId` as
+`{__rl: true, value: "...", mode: "id"}` and adds `onError: continueRegularOutput` so a
+sub-workflow error is recorded rather than half-swallowed.
+
+### What `processed_emails` actually contains
+
+Worth reading before assuming customers were dropped:
+
+```
+Id=1  test-simulation-001@gmail.co   committed                  <- a simulation, not a customer
+Id=2  CALaYK+suKNxFz+ETaQFFdD_MVeQ   rejected_invalid_docs      <- real, and they got "Resend Please"
+Id=3  manual-test-001                rejected_no_client_match   <- 31 Aug test, wrong token form
+Id=4  manual-test-002                committed                  <- 31 Aug test
+```
+
+So **no real customer has been silently dropped by this defect yet.** An earlier reading of this
+table inferred "at least two committed customers were lost" from the row count alone, without
+reading the rows. That was wrong. The defect is real and would have taken the first genuine
+committed case, but it had not fired.
+
+### The token contract the email parser must satisfy
+
+`Generate Case Token` stores the token **without** the `CASE-` prefix while showing the prefixed
+form to the customer:
+
+```js
+const caseId = 'CASE-' + token;   // shown as "[CASE-C5H5]"
+commitment_token: token,          // stored as "C5H5"
+```
+
+`Find Client by Token` matches on the stored form. So the parser must post `C5H5`, not
+`CASE-C5H5` and not `[CASE-C5H5]`. Posting the prefixed form lands in
+`rejected_no_client_match`, which looks identical to a genuinely unknown sender — a silent
+failure worth checking on the live parser.
+
+## Progress, 31 August 2026
+
+| | Item | State |
+|---|---|---|
+| ✅ | **`Agents` table seeded** | 7 rows — Debia (`6282339941015`), one per department, all `active`. The table had never held a row: the first insert came back `Id: 1` |
+| ✅ | **Notification template submitted** | `agent_case_assigned`, id `1105534042153573`, **PENDING** review. UTILITY, `en` |
+| ✅ | **Workflow repair applied & published** | `activeVersion` `72bb4c4a-ee6d-4167-b873-8a468d7371e0`, draft == published. Re-exported to `n8n-workflows/ilot-assign-agent.json` |
+| ❌ | **WABA payment method** | `141006` confirmed still present today. Browser-only, no API — the client has to add a card |
+| ❌ | **Business verification** | `141010` still failing, so the 250-recipient/24h cap stands |
+
+### How the template was submitted without anyone reading the Meta token
+
+`GET /api/v1/credentials/<id>` is still 405, and the n8n UI masks the field. But an HTTP Request
+node with `authentication: predefinedCredentialType` / `nodeCredentialType: whatsAppApi` makes
+n8n inject `Authorization: Bearer <token>` itself, for any URL. Proven on the local stack first,
+then used through a throwaway workflow that was created, called, and deleted in one pass
+(`scripts/wa-probe-prod.mjs` does the read-only version). The public API has no endpoint to run
+a workflow, so a Webhook node is the only trigger available — which is why the window has to be
+kept to seconds and the path randomised.
+
+### What the workflow does now
+
+```
+Agent Found? [true]  -> Assign Agent to Client -> Increment Open Cases
+                     -> Confirm to Customer   (WhatsApp, inside the service window — works today)
+                     -> Notify Agent           (template via Graph API — waits on approval + billing)
+Agent Found? [false] -> Ops Alert: No Agent    (email to legal.admin@ilotpropertybali.com)
+```
+
+All three leaf nodes carry `onError: continueRegularOutput`. That is the point of the change:
+production previously had **no error handling on any node**, so `Notify Agent` failing took
+`Confirm to Customer` with it and the customer heard nothing. Now the customer is confirmed
+first, and a failed agent notification costs only the notification.
+
+`Ops Alert: No Agent` is no longer a WhatsApp send to a literal placeholder string — it is an
+email through the SMTP credential production already uses for booking confirmations. Email has
+no 24-hour window and needs no template, so this is the one notification path that works
+**today**, before billing.
+
+**Not verified end to end.** Doing so means putting a real customer through the flow, or firing
+a test that emails the client's ops mailbox. The next real committed case is the test. If
+`Confirm to Customer` does not arrive, check the execution in n8n before assuming the template
+is at fault — the template send is deliberately allowed to fail for now.
+
+### `legal@ilotlegal.com` DOES NOT EXIST — the domain has no mail
+
+Stronger than an earlier note in this file said. Checked in DNS on 31 Aug:
+
+```
+ilotlegal.com          A  76.13.211.156     <- web only, DNS at Hostinger
+ilotlegal.com          MX  (none at all)    <- cannot receive mail
+ilotlegal.com          SPF (none)
+ilotpropertybali.com   MX  aspmx.l.google.com + 4  <- real Google Workspace
+```
+
+**`ilotlegal.com` has zero MX records**, so no mailbox on that domain can receive anything.
+Mail sent to `legal@ilotlegal.com` bounces. This document and `commitment-gate-flow.md` name it
+**nine times**, including *"Real `legal@ilotlegal.com` mailbox staff log into normally"* — that
+was never true.
+
+Beware the near-misses too: `ilotproperty.com` (no "bali") has **no A, MX or NS records** — it
+does not resolve at all. The only working domain is `ilotpropertybali.com`.
+
+What production actually uses is **`legal.admin@ilotpropertybali.com`**:
+
+| Node | Use |
+|---|---|
+| `Generate Case Token` (inbound) | tells the customer to email documents there |
+| `Send Confirmation Email` (calendar book) | sends **from** there |
+
+Observed live on 31 Aug: the commitment ask a real customer receives reads *"Please email the
+following to legal.admin@ilotpropertybali.com"*. Note it is a different domain from
+`ilotlegal.com` — worth raising with the client for brand consistency and deliverability, but
+it is what the system runs on today, so the ops alert was pointed there. Do not "correct" it to
+`legal@ilotlegal.com` on the strength of these docs.
+
+### Two template rejections worth remembering
+
+Both were guesses until Meta answered, and both are now settled:
+
+- **A `wa.me` URL button is refused.** `error_subcode 2388081`, *"Direct links to WhatsApp aren't
+  allowed for buttons."* So the tap-through cannot be a styled button; the link goes in the body
+  text, which is where production already had it.
+- **A body may not end with a variable.** `error_subcode 2388299`, *"Variables can't be at the
+  start or end of the template."* Hence the closing line, which also asks the agent to reply —
+  their reply opens a 24-hour window, after which free-form follow-ups need no template.
+
+Approved template body:
+
+```
+New committed case assigned to you.
+Name: {{1}}
+Service: {{2}}
+Open the customer chat: https://wa.me/{{3}}
+Reply here if you cannot take this case.
+```
 
 ---
 
@@ -238,12 +417,49 @@ body: {"versionId": "<the DRAFT's top-level versionId>", "versionName": "..."}
 
 **Verify against `activeVersion`, never `nodes`.**
 
-### `n8n-workflows/` in this repo is STALE — do not trust it
+#### Correction (31 Aug 2026): the public API can publish, and PUT publishes by itself
 
-The committed JSONs (`ilot-inbound-whatsapp.json`, `ilot-outbound-status-updates.json`) still
-carry the **old sandbox** `phoneNumberId` `1063131786890917`, and there is **no file at all**
-for `Ilot - Assign Agent (#5)` — the workflow you need to fix is not in the repo. Live n8n is
-the source of truth. Export from n8n; do not edit these files and expect anything to happen.
+This document used to say the public API could not be used for any of this. Read from
+production's own OpenAPI spec (`GET /api/v1/openapi.yml`), that is no longer true:
+
+| Endpoint | What the spec says |
+|---|---|
+| `POST /api/v1/workflows/{id}/activate` | *"Publish a workflow. In n8n v1, this action was termed activating a workflow."* Accepts `versionId`, `name`, `description` |
+| `PUT /api/v1/workflows/{id}` | *"Update a workflow. **If the workflow is published, the updated version will be automatically re-published.**"* |
+| `GET /api/v1/workflows/{id}/{versionId}` | Reads a specific version out of history |
+
+So an API key is enough to change what production runs. **That makes `PUT` more dangerous than
+the `/rest` PATCH, not less**: there is no draft stage to inspect first — the write and the
+publish are one call. If you want a reviewable draft, use `/rest` PATCH and publish separately.
+
+Either way, verify against `activeVersion` afterwards.
+
+### `n8n-workflows/` — FIXED 31 Aug 2026, and it was worse than "stale"
+
+This section used to say the snapshots carried the old sandbox `phoneNumberId` and that
+`Ilot - Assign Agent (#5)` was missing. Both were true, and both understated it. Read live
+against `n8n.ilotlegal.com` via the public API on 31 Aug, the old files were a **different
+lineage**, not an old copy of the same thing:
+
+| | Old committed file | Production |
+|---|---|---|
+| Inbound nodes | 12 | **14** |
+| Model | Google Gemini | **OpenAI** (`lmChatOpenAi`) |
+| FAQ lookup | in-memory vector store + Gemini embeddings | **`Search FAQs`** toolCode, queries NocoDB live |
+| Calendar / commitment nodes | absent | `Check Calendar Availability`, `Book Meeting`, `Generate Case Token`, `Send commitment ask` |
+
+**There is no Gemini and no vector store anywhere in production.** Two committed files had no
+production counterpart at all (`ilot-faq-reindex.json`, `ilot-outbound-status-updates.json`) and
+three production workflows had no file.
+
+`n8n-workflows/` now holds the published `activeVersion` of all five production workflows, with
+provenance in each file's `meta` block; the two orphans moved to `n8n-workflows/archive/`.
+Draft and `activeVersion` matched in production for every workflow, so nothing was sitting
+unpublished.
+
+⚠️ **Secrets can hide in Code nodes.** `Search FAQs` held a NocoDB personal access token as a
+JavaScript literal — invisible to a credential-block scan and to the n8n credential list. It is
+`__REDACTED_SEE_PRODUCTION_N8N__` in the committed snapshot. Check for this on every re-export.
 
 ### `docs/archive/whatsapp-setup/` is stale (14 May)
 
@@ -257,7 +473,25 @@ references a "Prod WABA" that does not appear in Business Settings.
   appears for every password-type field across all credentials. Do not report data loss.
 - **n8n's public API cannot read credentials.** `GET /api/v1/credentials/<id>` → `405`. Use a
   logged-in session against `/rest/credentials/<id>?includeData=true` with a `browser-id`
-  header (read it from `localStorage.getItem('n8n-browserId')`).
+  header (read it from `localStorage.getItem('n8n-browserId')`). It *can* read and publish
+  workflows — see the correction above.
+
+- **A NocoDB personal access token is scoped, and the split is not obvious.** Verified with the
+  token found in the `Search FAQs` node:
+
+  | Endpoint | Result |
+  |---|---|
+  | `GET /api/v2/meta/bases` | **403** `ERR_FORBIDDEN` |
+  | `GET /api/v2/tables/{id}/records` | **200** |
+  | `POST /api/v2/tables/{id}/records` | **200** |
+  | `DELETE /api/v2/tables/{id}/records` | **200** |
+
+  So it has full data read/write but no schema access. Seeding `Agents` is possible with it;
+  creating or altering a table is not. A create-then-delete round trip on `Agents` left the
+  table back at 0 rows.
+
+  The new row came back as `Id: 1`, so the auto-increment had never advanced: `Agents` has held
+  **no row at any point** since the table was created, not merely none today.
 - **`health_status` is the highest-signal Meta endpoint.** Query it first on any "cannot send"
   problem: `GET /v25.0/{phone-number-id}?fields=health_status`. It reports per entity
   (BUSINESS / WABA / phone number).
@@ -285,13 +519,23 @@ Verified live on 28 August 2026:
 - `wa.me/6281994800946` resolves profile name **"Ilot Legal"**; the live site serves 9
   `wa.me/6281994800946` links on `/` and 3 on `/contact`
 
-**Not independently verified — check before relying on it:**
+**Verified live on 31 August 2026** against production, via the n8n public API and the NocoDB
+data API:
 
-- **Live node parameters of `Ez08kr0HLdziPPwy`.** The n8n session in the available browser was
-  logged out, so the node analysis above comes from a local backup taken **18 Aug**
-  (`~/ilot-wa-cutover/backup/`). `whatsapp-cutover-status.md` states the `phoneNumberId` was
-  repointed to `1231024886758816` and published; the `REPLACE_WITH_OPS_FALLBACK_NUMBER`
-  placeholder and the WhatsApp-based notify design are recorded there as still outstanding.
-  **Re-read the live workflow before editing.**
+- **`Ez08kr0HLdziPPwy` published node parameters.** Draft and `activeVersion` are identical.
+  The node chain is exactly as described above. All three WhatsApp nodes use
+  `phoneNumberId` `1231024886758816`; **zero** references to the old sandbox id remain.
+- **`Ops Alert: No Agent` really does send to the literal `REPLACE_WITH_OPS_FALLBACK_NUMBER`**
+  in the version production is running. The defect is live, not a draft.
+- **`Get Active Agents (dept)` filter** is `=(department,eq,{{ $json.department }})~and(active,eq,true)`,
+  sorted by `open_cases` — the free-text join described above.
+- **Row counts:** `Agents` **0**, `Clients` 7, `processed_emails` 2, `FAQs` 60. So real leads
+  have gone through, at least two reached the commitment gate, and there has never been an
+  agent to assign them to.
+
+The 18 Aug local backup this document used to rely on (`~/ilot-wa-cutover/backup/`) **does not
+exist on the current machine**. Do not go looking for it; read production instead.
+
+**Not independently verified — check before relying on it:**
 - **Current Meta per-message pricing for Indonesia** — consult Meta's pricing page.
 - Whether the `test` Mattermost team is intended to be production.

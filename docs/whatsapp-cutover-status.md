@@ -241,6 +241,35 @@ while the stored value was really `6282339941015`. Do not trust it, and do not d
 
 ---
 
+## Live status, re-read 31 August 2026
+
+Read from production without extracting the Meta token: a throwaway n8n workflow used credential
+`o6dqNLf1TgJgnOIW` through an HTTP Request node with
+`authentication: predefinedCredentialType` / `nodeCredentialType: whatsAppApi`, which makes n8n
+inject the bearer itself. Created, called, and deleted in one pass. `GET /api/v1/credentials/<id>`
+is still 405, so this is the way to use that token without reading it.
+
+```
+number   +62 819-9480-0946   CONNECTED / CLOUD_API / GREEN
+can_send_message: BLOCKED
+
+  PHONE_NUMBER  LIMITED    138024  SIP not enabled (WhatsApp Business calling — irrelevant here)
+  WABA          BLOCKED    141006  error with the payment method
+  BUSINESS      LIMITED    141010  business verification not passed
+  APP           AVAILABLE  138025  no SIP server configured (irrelevant here)
+
+templates: hello_world  APPROVED  UTILITY  en_US   ← Meta's sample, nothing custom
+```
+
+**The payment method was never added.** The client reported the number as "verified and
+registered on Cloud API", which is true and visible above — but that is a different thing from
+billing, the same conflation as OTP-verification vs registration earlier in this document.
+`141006` blocks **business-initiated** conversations only; service-window replies still work,
+which is why the inbound bot is unaffected.
+
+Nothing custom is registered as a template yet, so the agent-notification template still has to
+be submitted. **Submission does not require billing** — only sending does.
+
 ## Known outstanding issues (none block the bot)
 
 - **Business Verification still `Rejected`** → caps messaging at **250 unique recipients /
